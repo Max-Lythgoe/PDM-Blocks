@@ -9,6 +9,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 import Edit from './edit';
 import save from './save';
+import deprecated from './deprecated';
 import metadata from './block.json';
 import { TabsLogo } from '../components';
 
@@ -19,4 +20,5 @@ registerBlockType( metadata.name, {
 	icon: TabsLogo,
 	edit: Edit,
 	save,
+	deprecated,
 } );

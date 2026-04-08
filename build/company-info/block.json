@@ -27,7 +27,12 @@
     },
     "typography": {
       "fontSize": true,
-      "textAlign": true
+      "lineHeight": true,
+      "fontStyle": true,
+      "fontWeight": true,
+      "letterSpacing": true,
+      "textTransform": true,
+      "textDecoration": true
     },
     "color": {
       "text": true,

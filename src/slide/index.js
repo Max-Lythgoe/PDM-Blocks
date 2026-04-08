@@ -20,6 +20,7 @@ import './style.scss';
 import Edit from './edit';
 import metadata from './block.json';
 import save from './save';
+import deprecated from './deprecated';
 import icon from './icon';
 
 /**
@@ -30,5 +31,6 @@ import icon from './icon';
 registerBlockType( metadata.name, {
 	icon: icon.svg,
 	edit: Edit,
-	save: save
+	save: save,
+	deprecated,
 } );
