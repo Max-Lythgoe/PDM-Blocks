@@ -1,0 +1,95 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .wp-block-pdm-cards::after {
+	border-radius: 4px!important;
+	outline-offset: 4px!important;
+}
+
+.wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    display: flex;
+    gap: var(--desktop-gap);
+    flex-wrap: wrap;
+}
+
+.wp-block-pdm-cards.is-selected {
+    outline: 2px solid var(--wp-admin-theme-color);
+	outline-offset: 4px;
+}
+
+.wp-block-pdm-cards.is-selected .wp-block-pdm-card {
+	outline: 2px solid var(--wp-admin-theme-color)!important;
+}
+
+.wp-block-pdm-cards:hover .wp-block-pdm-card {
+	outline: 2px solid color-mix(in srgb, var(--wp-admin-theme-color) 50%, transparent)!important;
+}
+
+.wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout>.wp-block-pdm-card,
+.wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout>.block-list-appender {
+	width: calc((100% / var(--desktop-columns, 3)) - (var(--desktop-gap) - (var(--desktop-gap) / var(--desktop-columns, 3))));
+	box-sizing: border-box;
+}
+
+// appender 
+.wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout>.block-list-appender {
+    position: relative!important;
+}
+
+// vertical alignment
+.wp-block-pdm-cards.is-vertically-aligned-top>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    align-items: flex-start;
+}
+.wp-block-pdm-cards.is-vertically-aligned-center>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    align-items: center;
+}
+.wp-block-pdm-cards.is-vertically-aligned-bottom>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    align-items: flex-end;
+}
+.wp-block-pdm-cards.is-vertically-aligned-stretch>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    align-items: stretch;
+}
+
+// horizontal justification
+.wp-block-pdm-cards.is-justified-left>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    justify-content: flex-start;
+}
+.wp-block-pdm-cards.is-justified-center>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    justify-content: center;
+}
+.wp-block-pdm-cards.is-justified-right>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    justify-content: flex-end;
+}
+.wp-block-pdm-cards.is-justified-space-between>.block-editor-inner-blocks>.block-editor-block-list__layout {
+    justify-content: space-between;
+}
+
+// image fix 
+.wp-block-pdm-card .pdm-card-image .components-resizable-box__container {
+    width: 100%!important;
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+@media (max-width: 1024px) {
+    .wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout>.wp-block-pdm-card {
+		width: calc((100% / var(--tablet-columns, 3)) - (var(--tablet-gap) - (var(--tablet-gap) / var(--tablet-columns, 3))));
+	}
+
+    .wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout {
+        gap: var(--tablet-gap);
+    }
+}
+
+@media (max-width: 768px) {
+    .wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout>.wp-block-pdm-card {
+		width: calc((100% / var(--mobile-columns, 3)) - (var(--mobile-gap) - (var(--mobile-gap) / var(--mobile-columns, 3))));
+	}
+
+    .wp-block-pdm-cards>.block-editor-inner-blocks>.block-editor-block-list__layout {
+        gap: var(--mobile-gap);
+    }
+}

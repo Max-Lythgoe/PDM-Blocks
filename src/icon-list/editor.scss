@@ -1,0 +1,22 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.pdm-icon-list {
+	display: flex;
+	flex-direction: column;
+	
+	// Apply gap to the InnerBlocks container in the editor
+	> .block-editor-inner-blocks > .block-editor-block-list__layout {
+		gap: var(--wp--style--block-gap, 1em);
+	}
+}
+
+.wp-block-pdm-icon-list.is-selected>.block-list-appender,
+.wp-block-pdm-icon-list.has-child-selected>.block-list-appender{
+    width: 100%;
+    position: relative!important;
+    display: block;
+}

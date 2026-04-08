@@ -1,0 +1,59 @@
+/**
+ * Scroll List Block Styles
+ * Two-column layout with sticky content/image on one side, scrolling items on other
+ */
+
+.scroll-list-section {
+	display: flex;
+	gap: 50px;
+	padding: 30px;
+	position: relative;
+}
+
+/* Sticky content side with image */
+.scroll-list-sticky {
+	width: 50%;
+}
+
+.scroll-list-image {
+	width: 100%;
+	height: auto;
+	aspect-ratio: var(--scroll-list-aspect-ratio, 1/1);
+	border-radius: var(--scroll-list-border-radius, 15px);
+	position: sticky;
+	top: 50px;
+	max-height: 700px;
+	object-fit: cover;
+}
+
+/* Scrolling items side */
+.scroll-list-items {
+	width: 50%;
+}
+
+/* Switched sides layout */
+.scroll-list-section.is-switched {
+	flex-direction: row-reverse;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+	.scroll-list-section {
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.scroll-list-sticky {
+		display: none;
+	}
+	
+	.scroll-list-items {
+		width: 100%;
+	}
+	
+	.scroll-list-static-content {
+		position: relative;
+		top: 0;
+		text-align: center;
+	}
+}

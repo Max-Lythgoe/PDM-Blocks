@@ -1,0 +1,55 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/accordion",
+	"version": "0.1.0",
+	"title": "Accordion",
+	"category": "pdm-blocks",
+	"description": "Accordion item for use within an Accordions block.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "accordion",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"parent": [ "pdm/accordions" ],
+	"attributes": {
+		"accordionTitle": {
+			"type": "string"
+		},
+		"iconPosition": { "type": "string", "default": "right" },
+		"iconOpen": { "type": "string", "default": "plus" },
+		"customIconUrlOpen": { "type": "string" },
+		"customIconSvgOpen": { "type": "string" },
+		"iconClose": { "type": "string", "default": "minus" },
+		"customIconUrlClose": { "type": "string" },
+		"customIconSvgClose": { "type": "string" },
+		"iconSize": { "type": "number", "default": 25 },
+		"iconColor": { "type": "string", "default": "currentColor" },
+		"useCustomColor": { "type": "boolean", "default": false }
+	},
+	"usesContext": [
+		"pdm/toggleBg",
+		"pdm/toggleGradient",
+		"pdm/panelBg",
+		"pdm/panelGradient",
+		"pdm/toggleColor",
+		"pdm/panelColor",
+		"pdm/iconColor",
+		"pdm/useCustomColor",
+		"pdm/iconSize",
+		"pdm/iconOpen",
+		"pdm/customIconUrlOpen",
+		"pdm/customIconSvgOpen",
+		"pdm/iconClose",
+		"pdm/customIconUrlClose",
+		"pdm/customIconSvgClose",
+		"pdm/iconPosition",
+		"pdm/bottomBorderEnabled",
+		"pdm/bottomBorderThickness",
+		"pdm/bottomBorderColor",
+		"pdm/shadowEnabled"
+	]
+}

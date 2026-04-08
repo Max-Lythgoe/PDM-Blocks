@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/full-scroll-item",
+  "version": "0.1.0",
+  "title": "Full Scroll Item",
+  "category": "pdm-blocks",
+  "icon": "format-image",
+  "description": "An individual content item for the Full Scroll block with image and content sections.",
+  "example": {},
+  "parent": [
+    "pdm/full-scroll"
+  ],
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "attributes": {
+    "imageFit": {
+      "type": "string",
+      "default": "cover"
+    },
+    "imageURL": {
+      "type": "string"
+    },
+    "imageID": {
+      "type": "number"
+    },
+    "customAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "customTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "focalPoint": {
+      "type": "object",
+      "default": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "usesContext": [
+    "pdm/full-scroll/backgroundOverlay",
+    "pdm/full-scroll/overlayOpacity",
+    "pdm/full-scroll/blurAmount",
+    "pdm/full-scroll/aspectRatio",
+    "pdm/full-scroll/borderRadius"
+  ],
+  "textdomain": "full-scroll-item",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/icon",
+  "version": "0.1.0",
+  "title": "Icon",
+  "category": "pdm-blocks",
+  "icon": "smiley",
+  "description": "Display a customizable icon with adjustable size, color, and alignment.",
+  "example": {},
+  "keywords": [
+    "icon",
+    "custom icon",
+    "SVG icon"
+  ],
+  "supports": {
+    "html": false,
+    "color": {
+      "background": true,
+      "text": false
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "width": true,
+      "style": true
+    }
+  },
+  "attributes": {
+    "selectedIcon": {
+      "type": "string",
+      "default": "check"
+    },
+    "customIconUrl": {
+      "type": "string"
+    },
+    "customIconSvg": {
+      "type": "string"
+    },
+    "iconSize": {
+      "type": "number",
+      "default": 75
+    },
+    "iconColor": {
+      "type": "string",
+      "default": "currentColor"
+    },
+    "useCustomColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "iconAlign": {
+      "type": "string",
+      "default": "center"
+    },
+    "url": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a",
+      "attribute": "href"
+    },
+    "linkTarget": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a",
+      "attribute": "target"
+    },
+    "rel": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a",
+      "attribute": "rel"
+    }
+  },
+  "textdomain": "icon",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

@@ -1,0 +1,47 @@
+/**
+ * Frontend and editor styles for content-slideshow block.
+ *
+ * Registered in the style property of the block.json.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+
+.wp-block-pdm-content-slideshow {
+	position: relative;
+
+	.splide {
+		height: var(--slider-height, 50vh);
+
+		.splide__track {
+			height: 100%;
+		}
+
+		.splide__list {
+			height: 100%;
+		}
+
+		.splide__slide {
+			height: 100%;
+			
+			// Ensure content wrapper fills the slide
+			> .wp-block-pdm-content-slide {
+				height: 100%;
+			}
+		}
+	}
+
+	// Ensure pagination and arrows are visible
+	.splide__pagination {
+		position: absolute;
+		bottom: 1em;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 10;
+	}
+
+	.splide__arrows {
+		.splide__arrow {
+			z-index: 10;
+		}
+	}
+}

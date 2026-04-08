@@ -1,0 +1,116 @@
+.wp-block-pdm-comparison-slider {
+	overflow: hidden;
+	width: 100%;
+	
+	.comparison-slider__container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.comparison-slider__before,
+	.comparison-slider__after {
+		margin: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+
+		img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.comparison-slider__after {
+		position: relative;
+	}
+
+	.comparison-slider__before {
+		clip-path: inset(0 50% 0 0);
+		z-index: 2;
+	}
+
+	.comparison-slider__input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		opacity: 0;
+		cursor: ew-resize;
+		z-index: 3;
+	}
+
+	.comparison-slider__handle {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 4px;
+		height: 100%;
+		background: white;
+		transform: translateX(-50%);
+		pointer-events: none;
+		z-index: 4;
+		box-shadow: 0 0 10px rgba(0,0,0,0.3);
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 40px;
+			height: 40px;
+			background: white;
+			border-radius: 50%;
+			transform: translate(-50%, -50%);
+			box-shadow: 0 0 10px rgba(0,0,0,0.3);
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 20px;
+			height: 20px;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath fill='%23333' d='M502.6 438.6L598.6 342.6C611.1 330.1 611.1 309.8 598.6 297.3L502.6 201.3C490.1 188.8 469.8 188.8 457.3 201.3C444.8 213.8 444.8 234.1 457.3 246.6L498.7 288L141.2 288L182.6 246.6C195.1 234.1 195.1 213.8 182.6 201.3C170.1 188.8 149.8 188.8 137.3 201.3L41.3 297.3C35.3 303.3 31.9 311.4 31.9 319.9C31.9 328.4 35.3 336.5 41.3 342.5L137.3 438.5C149.8 451 170.1 451 182.6 438.5C195.1 426 195.1 405.7 182.6 393.2L141.2 351.8L498.7 351.8L457.3 393.2C444.8 405.7 444.8 426 457.3 438.5C469.8 451 490.1 451 502.6 438.5z'/%3E%3C/svg%3E");
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			z-index: 1;
+		}
+	}
+
+	.comparison-slider__label {
+		position: absolute;
+		top: 20px;
+		padding: 8px 16px;
+		background: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-size: 14px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		z-index: 5;
+		pointer-events: none;
+		transition: opacity 0.2s ease;
+		border-radius: 7px;
+
+		&--before {
+			left: 20px;
+		}
+
+		&--after {
+			right: 20px;
+		}
+	}
+}

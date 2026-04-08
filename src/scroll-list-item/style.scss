@@ -1,0 +1,54 @@
+/**
+ * Scroll List Item Block Styles
+ * Individual scrollable items with active state transitions
+ */
+
+.scroll-list-item {
+	display: block;
+	margin-bottom: 20px;
+	padding: 20px;
+	transform: scale(0.95);
+	transition: transform 0.6s ease;
+	transform-origin: left;
+	position: relative;
+}
+
+.scroll-list-item:hover {
+	filter:brightness(120%);
+}
+
+/* Active state */
+.scroll-list-item.is-active {
+	opacity: 1;
+	transform: scale(1);
+	background-color: var(--scroll-list-active-background)!important;
+	color: var(--scroll-list-active-text)!important;
+	transition-timing-function: linear(
+		0, 0.528 7%, 0.921 14.4%, 1.07 18.3%, 1.19 22.4%, 
+		1.28 26.7%, 1.34 31.2%, 1.366 34.5%, 1.378 38%, 
+		1.377 41.7%, 1.363 45.6%, 1.308 53.3%, 1.13 71.3%, 
+		1.059 80.1%, 1.013 89.7%, 1
+	);
+}
+
+.is-active .scroll-item-title {
+	color: var(--scroll-list-active-text)!important;
+}
+
+/* Switched sides layout */
+.scroll-list-section.is-switched .scroll-list-item {
+	transform-origin: right;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+	.scroll-list-item {
+		transform-origin: center;
+	}
+	
+}
+
+
+.scroll-list-item svg {
+	fill: currentColor!important;
+}

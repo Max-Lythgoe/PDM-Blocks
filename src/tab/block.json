@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "pdm/tab",
+    "title": "Tab",
+    "description": "A single tab within a tabs block.",
+    "category": "pdm-blocks",
+    "parent": [
+        "pdm/tabs"
+    ],
+    "attributes": {
+        "tabname": {
+            "type": "string"
+        },
+        "tabId": {
+            "type": "string"
+        },
+        "tabIcon": {
+            "type": "string"
+        }
+    },
+    "supports": {
+        "html": false
+    },
+    "textdomain": "pdm-blocks",
+    "editorScript": "file:./index.js",
+    "render": "file:./render.php"
+}

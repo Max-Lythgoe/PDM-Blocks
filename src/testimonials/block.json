@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/testimonials",
+	"version": "0.1.0",
+	"title": "Testimonials",
+	"category": "pdm-blocks",
+	"icon": "format-quote",
+	"description": "Display testimonials in a slider or grid layout.",
+	"example": {},
+	"keywords": ["testimonial", "reviews", "quotes", "slider"],
+	"attributes": {
+		"displayMode": {
+			"type": "string",
+			"default": "slider"
+		}
+	},
+	"supports": {
+		"html": false,
+		"spacing": {
+			"padding": true,
+			"margin": true
+		},
+		"align": ["wide", "full"]
+	},
+	"textdomain": "testimonials",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

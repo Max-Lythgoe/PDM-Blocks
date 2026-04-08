@@ -1,0 +1,131 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-logo-ticker {
+	/* Editor controls */
+	.ticker-editor-controls {
+		margin-bottom: 12px;
+		display: flex;
+		gap: 8px;
+	}
+
+	/* Static preview in editor mode */
+	.ticker-logos-preview {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		align-items: center;
+		padding: 20px;
+		background: #f8f9fa;
+		border-radius: 4px;
+		justify-content: center;
+	}
+
+	.ticker-logo-item {
+		height: var(--logo-size, 100px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			max-height: 100%;
+			max-width: 300px;
+			width: auto;
+			height: auto;
+			object-fit: contain;
+			display: block;
+			transition: filter 0.3s ease, opacity 0.3s ease;
+		}
+	}
+
+	/* Grayscale effect in editor - only when class is present */
+	&.is-grayscale {
+		.ticker-logo-item img {
+			filter: grayscale(100%);
+			opacity: 0.7;
+
+			&:hover {
+				filter: grayscale(0%);
+				opacity: 1;
+			}
+		}
+	}
+
+	/* Preview mode - uses same styles as frontend */
+	.logo-ticker-preview {
+		overflow: hidden;
+		position: relative;
+		padding: 20px 0;
+
+		.logo-ticker-wrapper {
+			position: relative;
+			width: 100%;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+		}
+
+		.logo-ticker-track {
+			display: flex;
+			gap: 60px;
+			align-items: center;
+			animation: ticker-scroll var(--ticker-speed, 30s) linear infinite;
+			will-change: transform;
+		}
+
+		.logo-ticker-item {
+			flex-shrink: 0;
+			height: var(--logo-size, 100px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			img {
+				max-height: 100%;
+				max-width: 300px;
+				width: auto;
+				height: auto;
+				object-fit: contain;
+				display: block;
+				transition: filter 0.3s ease, opacity 0.3s ease;
+			}
+		}
+
+		@keyframes ticker-scroll {
+			0% {
+				transform: translateX(0);
+			}
+			100% {
+				transform: translateX(-33.333%);
+			}
+		}
+
+		&.pause-on-hover .logo-ticker-wrapper:hover .logo-ticker-track {
+			animation-play-state: paused;
+		}
+	}
+
+	/* Grayscale in preview */
+	&.is-grayscale .logo-ticker-preview {
+		.logo-ticker-item img {
+			filter: grayscale(100%);
+			opacity: 0.7;
+		}
+
+		.logo-ticker-item:hover img {
+			filter: grayscale(0%);
+			opacity: 1;
+		}
+	}
+
+	/* Fade effect in preview */
+	&.has-fade .logo-ticker-preview {
+		.logo-ticker-wrapper {
+			mask-image: linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent);
+			-webkit-mask-image: linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent);
+		}
+	}
+}

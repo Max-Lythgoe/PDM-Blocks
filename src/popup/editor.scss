@@ -1,0 +1,19 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-popup {
+	position: relative;
+	display: block;
+	margin-inline: auto;
+	
+	.pdm-popup-close {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 10;
+		pointer-events: none;
+	}
+}

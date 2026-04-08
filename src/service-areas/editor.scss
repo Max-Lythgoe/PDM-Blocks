@@ -1,0 +1,38 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-service-areas {
+	.service-areas-container {
+		max-height: 450px;
+		overflow-y: auto;
+	}
+
+	.service-areas-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin: 0;
+	}
+
+	.service-area-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		white-space: nowrap;
+
+		.location-marker {
+			width: 1.3em;
+			height: 1.3em;
+			flex-shrink: 0;
+		}
+
+		a {
+			pointer-events: none;
+			text-decoration: none;
+		}
+	}
+
+}

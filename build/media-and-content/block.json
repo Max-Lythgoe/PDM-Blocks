@@ -1,0 +1,156 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/media-and-content",
+  "version": "0.1.0",
+  "title": "Media And Content",
+  "category": "pdm-blocks",
+  "description": "A block to display media (image or video) alongside text content.",
+  "example": {},
+  "keywords": [
+    "media",
+    "content",
+    "ita",
+    "image text area"
+  ],
+  "supports": {
+    "html": false,
+    "spacing": {
+      "align": [
+        "wide",
+        "full"
+      ],
+      "padding": true,
+      "margin": true
+    },
+    "color": {
+      "background": true,
+      "text": true,
+      "gradient": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
+    "customClassName": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "textdomain": "media-and-content",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "attributes": {
+    "verticalAlignment": {
+      "type": "string",
+      "default": "center"
+    },
+    "mediaType": {
+      "type": "string",
+      "default": "image"
+    },
+    "mediaSide": {
+      "type": "string",
+      "default": "row"
+    },
+    "mediaStack": {
+      "type": "string",
+      "default": "column"
+    },
+    "stretchMedia": {
+      "type": "boolean",
+      "default": false
+    },
+    "imageFit": {
+      "type": "string",
+      "default": "cover"
+    },
+    "imageURL": {
+      "type": "string"
+    },
+    "imageID": {
+      "type": "number"
+    },
+    "customAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "customTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "defaultAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "defaultTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "focalPoint": {
+      "type": "object",
+      "default": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "videoURL": {
+      "type": "string",
+      "default": ""
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "16/9"
+    },
+    "maxWidth": {
+      "type": "number",
+      "default": 800
+    },
+    "customIframe": {
+      "type": "string",
+      "default": ""
+    },
+    "customAspectRatio": {
+      "type": "string",
+      "default": ""
+    },
+    "videoAutoplay": {
+      "type": "boolean",
+      "default": false
+    },
+    "imageAspectRatio": {
+      "type": "string",
+      "default": "16/9"
+    },
+    "imageMaxHeight": {
+      "type": "number",
+      "default": 500
+    },
+    "mediaBorderRadius": {
+      "type": "object",
+      "default": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomLeft": "0px",
+        "bottomRight": "0px"
+      }
+    },
+    "enableLightbox": {
+      "type": "boolean",
+      "default": false
+    },
+    "loadFacade": {
+      "type": "boolean",
+      "default": true
+    },
+    "gap": {
+      "type": "string",
+      "default": "40px"
+    }
+  }
+}

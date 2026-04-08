@@ -1,0 +1,30 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-full-scroll-item {
+	display: flex;
+	gap: 50px;
+	padding: 20px;
+	align-items: center;
+}
+
+.wp-block-pdm-full-scroll-item>* {
+	width: 50%!important;
+}
+
+.editor-scroll-image-wrap .seo-image-container {
+	position: relative;
+	width: 40em;
+	height: 40em;
+	min-height: 0px;
+	height: 100%;
+}
+
+.editor-scroll-image-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

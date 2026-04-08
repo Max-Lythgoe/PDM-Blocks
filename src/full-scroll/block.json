@@ -1,0 +1,66 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/full-scroll",
+	"version": "0.1.0",
+	"title": "Full Scroll",
+	"category": "pdm-blocks",
+	"description": "A scroll-triggered image showcase with sticky visual and scrollable content sections.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["full"],
+		"color": {
+			"background": true,
+			"text": true,
+			"gradients": true,
+			"link": true
+		}
+	},
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "full"
+		},
+		"backgroundOverlay": {
+			"type": "boolean",
+			"default": false
+		},
+		"overlayOpacity": {
+			"type": "number",
+			"default": 50
+		},
+		"blurAmount": {
+			"type": "number",
+			"default": 10
+		},
+		"buttonAnimation": {
+			"type": "boolean",
+			"default": false
+		},
+		"switchSides": {
+			"type": "boolean",
+			"default": false
+		},
+		"aspectRatio": {
+			"type": "string",
+			"default": "1/1"
+		},
+		"borderRadius": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"providesContext": {
+		"pdm/full-scroll/backgroundOverlay": "backgroundOverlay",
+		"pdm/full-scroll/overlayOpacity": "overlayOpacity",
+		"pdm/full-scroll/blurAmount": "blurAmount",
+		"pdm/full-scroll/aspectRatio": "aspectRatio",
+		"pdm/full-scroll/borderRadius": "borderRadius"
+	},
+	"textdomain": "full-scroll",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

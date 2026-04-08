@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/content-slide",
+  "version": "0.1.0",
+  "title": "Content Slide",
+  "category": "pdm-blocks",
+  "description": "A content slide for use within a content slideshow. Supports background media and custom content.",
+  "parent": [
+    "pdm/content-slideshow"
+  ],
+  "attributes": {
+    "layout": {
+      "type": "object",
+      "default": {
+        "type": "constrained"
+      }
+    },
+    "verticalAlignment": {
+      "type": "string",
+      "default": "center"
+    },
+    "opacity": {
+      "type": "number",
+      "default": 50
+    },
+    "mixBlendMode": {
+      "type": "string",
+      "default": "normal"
+    },
+    "imageFit": {
+      "type": "string",
+      "default": "cover"
+    },
+    "imageURL": {
+      "type": "string",
+      "default": ""
+    },
+    "customAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "customTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "defaultAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "defaultTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "focalPoint": {
+      "type": "object",
+      "default": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "imageID": {
+      "type": "number",
+      "default": null
+    },
+    "videoURL": {
+      "type": "string",
+      "default": ""
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|50",
+            "bottom": "var:preset|spacing|50",
+            "left": "var:preset|spacing|50",
+            "right": "var:preset|spacing|50"
+          }
+        }
+      }
+    }
+  },
+  "supports": {
+    "html": false,
+    "layout": {
+      "allowSizingOnChildren": true,
+      "default": {
+        "type": "constrained"
+      }
+    },
+    "spacing": {
+      "padding": true,
+      "margin": false,
+      "__experimentalDefaultControls": {
+        "padding": true
+      }
+    },
+    "color": {
+      "background": true,
+      "text": true,
+      "link": true,
+      "gradients": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    }
+  },
+  "textdomain": "content-slide",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

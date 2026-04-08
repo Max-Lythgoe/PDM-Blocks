@@ -1,0 +1,42 @@
+/**
+ * Styles for the Icon block (frontend and editor)
+ */
+
+.wp-block-pdm-icon {
+	display: flex;
+	
+	// When the block itself is a link
+	&:where(a) {
+		text-decoration: none;
+		color: inherit;
+	}
+	
+	.pdm-icon-display {
+		display: inline-flex;
+		flex-shrink: 0;
+		
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+		
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+		
+		// Only apply color overrides when explicitly requested via class
+		&.use-custom-color svg {
+			path,
+			circle,
+			rect,
+			polygon,
+			polyline,
+			ellipse,
+			line {
+				fill: currentColor;
+			}
+		}
+	}
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/scroll-list",
+  "version": "0.1.0",
+  "title": "Scroll List",
+  "category": "pdm-blocks",
+  "description": "A scroll-triggered list with sticky content section and dynamic image display based on active items.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": false
+  },
+  "attributes": {
+    "switchSides": {
+      "type": "boolean",
+      "default": false
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "1/1"
+    },
+    "borderRadius": {
+      "type": "number",
+      "default": 0
+    },
+    "activeBackgroundColor": {
+      "type": "string",
+      "default": "var(--wp--preset--color--contrast)"
+    },
+    "activeTextColor": {
+      "type": "string",
+      "default": "var(--wp--preset--color--base)"
+    }
+  },
+  "providesContext": {
+    "pdm/scroll-list/aspectRatio": "aspectRatio",
+    "pdm/scroll-list/borderRadius": "borderRadius",
+    "pdm/scroll-list/activeBackgroundColor": "activeBackgroundColor",
+    "pdm/scroll-list/activeTextColor": "activeTextColor"
+  },
+  "textdomain": "scroll-list",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

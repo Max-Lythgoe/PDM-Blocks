@@ -1,0 +1,46 @@
+/**
+ * Editor styles for testimonials block
+ */
+
+.wp-block-pdm-testimonials {
+	.testimonials-editor-container {
+		height: 600px;
+		min-height: 160px;
+		resize: vertical;
+		overflow-y: auto;
+		padding: 10px;
+		
+		> .block-editor-inner-blocks > .block-editor-block-list__layout {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 20px;
+			
+			@media (max-width: 1200px) {
+				grid-template-columns: repeat(3, 1fr);
+			}
+			
+			@media (max-width: 768px) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			
+			@media (max-width: 576px) {
+				grid-template-columns: 1fr;
+			}
+		}
+	}
+
+	.block-list-appender {
+		position: relative!important;
+		inset: auto!important;
+	}
+	
+}
+
+.wp-block-pdm-testimonials .block-list-appender__toggle {
+    width: 100%!important;
+    height: 100%!important;
+    background: none!important;
+    color: var(--wp-admin-theme-color)!important;
+    box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color)!important;
+    min-height: 150px;
+}

@@ -1,0 +1,67 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/content-slideshow",
+	"version": "0.1.0",
+	"title": "Content Slideshow",
+	"category": "pdm-blocks",
+	"description": "Content slideshow block to display a series of content slides with background media support.",
+	"supports": {
+		"html": false,
+		"spacing": {
+			"padding": true,
+			"margin": true
+		},
+		"customClassName": true,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "full"
+		},
+		"interval": {
+			"type": "number",
+			"default": 7
+		},
+		"autoplay": {
+			"type": "boolean",
+			"default": true
+		},
+		"pauseOnHover": {
+			"type": "boolean",
+			"default": false
+		},
+		"pagination": {
+			"type": "boolean",
+			"default": true
+		},
+		"arrows": {
+			"type": "boolean",
+			"default": true
+		},
+		"isPreview": {
+			"type": "boolean",
+			"default": false
+		},
+		"loop": {
+			"type": "boolean",
+			"default": true
+		},
+		"sliderHeight": {
+			"type": "number",
+			"default": 50
+		}
+	},
+	"keywords": [
+		"slideshow",
+		"carousel",
+		"slider",
+		"content"
+	],
+	"textdomain": "content-slideshow",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

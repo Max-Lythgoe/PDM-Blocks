@@ -1,0 +1,76 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.pdm-split-columns {
+	display: flex;
+	flex-direction: var(--row-direction);
+	gap: var(--v-gap) var(--h-gap);
+	flex-wrap: wrap;
+}
+
+// vertical alignment
+.pdm-split-columns.is-vertically-aligned-top {
+	align-items: flex-start;
+}
+
+.pdm-split-columns.is-vertically-aligned-center {
+	align-items: center;
+}
+
+.pdm-split-columns.is-vertically-aligned-bottom {
+	align-items: flex-end;
+}
+
+.pdm-split-columns.is-vertically-aligned-stretch {
+	align-items: stretch;
+}
+
+// column sizing
+
+.pdm-split-columns .wp-block-pdm-split-column:nth-of-type(odd) {
+	width: calc(var(--column-sizing) - (var(--h-gap) / 2));
+}
+
+.pdm-split-columns .wp-block-pdm-split-column:nth-of-type(even) {
+	width: calc(calc(100% - var(--column-sizing)) - (var(--h-gap) / 2));
+}
+
+// vertical stacking
+@media(max-width: 1550px) {
+	.pdm-split-columns.stack-1550 {
+		flex-direction: var(--stack-order);
+	}
+	.pdm-split-columns.stack-1550 .wp-block-pdm-split-column {
+		width: 100%!important;
+	}
+}
+
+@media(max-width: 1250px) {
+	.pdm-split-columns.stack-1250 {
+		flex-direction: var(--stack-order);
+	}
+	.pdm-split-columns.stack-1250 .wp-block-pdm-split-column {
+		width: 100%!important;
+	}
+}
+
+@media(max-width: 1024px) {
+	.pdm-split-columns.stack-1024 {
+		flex-direction: var(--stack-order);
+	}
+	.pdm-split-columns.stack-1024 .wp-block-pdm-split-column {
+		width: 100%!important;
+	}
+}
+
+@media(max-width: 768px) {
+	.pdm-split-columns.stack-768 {
+		flex-direction: var(--stack-order);
+	}
+	.pdm-split-columns.stack-768 .wp-block-pdm-split-column {
+		width: 100%!important;
+	}
+}

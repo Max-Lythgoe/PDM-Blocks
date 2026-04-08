@@ -1,0 +1,67 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-service-areas {
+
+.service-areas-container {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.service-areas-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0;
+}
+
+    .service-area-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+
+        .location-marker {
+            width: 1.3em;
+            height: 1.3em;
+            flex-shrink: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+    }
+
+    .county-group {
+		margin-bottom: 20px;
+        margin-top: 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		.county-title {
+            margin-top: 0;
+            color: currentColor;
+            font-size: 1.3em;
+		}
+	}
+}
+
+.style-pill {
+    .service-area-item {
+        background-color: var(--wp--preset--color--base);
+        box-shadow: var(--wp--preset--shadow--natural);
+        padding: .3em .6em;
+        border-radius: 30em;
+    }
+
+    .service-areas-grid {
+        padding: 10px;
+    }
+}

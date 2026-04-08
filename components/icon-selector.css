@@ -1,0 +1,91 @@
+.icon-selector {
+    padding: 16px;
+}
+
+.icon-selector-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.icon-selector-grid-wrapper {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background: #fff;
+}
+
+.icon-selector-grid {
+    display: grid !important;
+}
+
+.icon-selector-button {
+    aspect-ratio: 1;
+    padding: 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    color: black;
+}
+
+.icon-selector-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-selector-button.is-selected {
+    border-color: var(--wp-admin-theme-color);
+}
+
+.icon-selector-upload {
+    padding: 24px;
+    text-align: center;
+    border: 2px dashed #ddd;
+    border-radius: 4px;
+}
+
+.icon-selector-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-selector-preview img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.icon-selector-grid-wrapper {
+    .icon-selector-button {
+        border: 0;
+        box-shadow: none;
+        color: black;
+    }
+
+    .components-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Global CSS to force SVG fills to use currentColor for icon color control - only when custom color is enabled */
+.pdm-icon-display.use-custom-color svg,
+.accordion-icon.use-custom-color svg,
+.icon-list-icon.use-custom-color svg,
+.custom-svg-inline.use-custom-color svg {
+    width: 100%;
+    height: 100%;
+    path,
+    circle,
+    rect,
+    polygon,
+    polyline,
+    ellipse,
+    line {
+        fill: currentColor;
+    }
+}

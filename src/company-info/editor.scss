@@ -1,0 +1,28 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-company-info {
+	.company-address,
+	.company-phone,
+	.company-email,
+	.company-custom,
+	.company-socials,
+	.company-map {
+		margin-bottom: 0;
+	}
+
+	iframe {
+		pointer-events: none;
+	}
+}
+
+.company-info-item a {
+	pointer-events: none;
+}
+
+.wp-block-pdm-company-info:has(.map-default) {
+    width: fit-content;
+}

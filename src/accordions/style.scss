@@ -1,0 +1,34 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .pdm-accordions {
+	max-width: var(--accordion-max-width)!important;
+	margin-inline: auto;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 10px;
+	width: 100%;
+ }
+
+  .pdm-accordions.accord-columns-1 {
+	grid-template-columns: 1fr;
+ }
+
+ .pdm-accordions.accord-columns-2 {
+	grid-template-columns: 1fr 1fr;
+ }
+
+ .accordion-container {
+	container-type: inline-size;
+	width: 100%;
+ }
+
+ @container(max-width: 600px) {
+	.pdm-accordions.accord-columns-2 {
+		grid-template-columns: 1fr;
+	}
+}

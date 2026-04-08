@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/split-columns",
+  "version": "0.1.0",
+  "title": "Split Columns",
+  "category": "pdm-blocks",
+  "description": "A block to create split columns layout with adjustable width settings.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "keywords": [
+    "columns",
+    "split",
+    "two columns"
+  ],
+  "textdomain": "split-columns",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "verticalAlignment": {
+      "type": "string",
+      "default": "stretch"
+    },
+    "columnSizing": {
+      "type": "number",
+      "default": 50
+    },
+    "horizontalGap": {
+      "type": "string",
+      "default": "40px"
+    },
+    "verticalGap": {
+      "type": "string",
+      "default": "20px"
+    },
+    "rowDirection": {
+      "type": "boolean",
+      "default": false
+    },
+    "verticalStack": {
+      "type": "number",
+      "default": 1024
+    },
+    "stackOrder": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

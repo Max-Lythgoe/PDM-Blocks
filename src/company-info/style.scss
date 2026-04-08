@@ -1,0 +1,128 @@
+/**
+ * Company Info Block Styles
+ * Based on original ACF block styling
+ */
+
+.wp-block-pdm-company-info {
+	overflow: hidden;
+
+	// Make block fit-content when using default width map
+	&.map-default {
+		width: fit-content;
+		max-width: 100%;
+	}
+
+	// Company info item - this is the actual flex container for icon, content, and line
+	.company-info-item {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.company-info-item >* {
+		margin: 0;
+		width: 100%;
+		display: block;
+	}
+
+	// Company icon styles
+	.company-icon {
+		display: flex;
+		gap: 10px;
+		align-items: flex-start;
+		margin-right: 0;
+		color: inherit;
+	}
+
+	// Address styling
+	.company-address {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		p {
+			font-size: inherit;
+			margin: inherit;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	// Phone and email styling
+	.company-phone,
+	.company-email {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		p {
+			font-size: inherit;
+			margin: inherit;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	// Map styling
+	.company-map {
+		
+		iframe {
+			border: 0;
+			max-width: 100%;
+			display: block;
+		}
+
+		// Map size variations
+		&.map-default iframe {
+			width: 100%;
+			max-width: 400px;
+			height: 400px;
+		}
+
+		&.map-full {
+			width: 100%;
+			max-width: none;
+			flex: 1 1 100%;
+			
+			iframe {
+				width: 100%;
+				max-width: none;
+				height: 450px;
+			}
+		}
+	}
+
+	// Ensure full width maps break out of flex constraints
+	&.map-full .company-info-flex {
+		width: 100%;
+	}
+
+	&.map-full .company-info-item {
+		width: 100%;
+	}
+
+	// Responsive adjustments
+	@media (max-width: 768px) {
+		.company-map {
+			&.map-default iframe,
+			&.map-full iframe {
+				max-width: 100%;
+				height: 300px;
+			}
+		}
+	}
+}

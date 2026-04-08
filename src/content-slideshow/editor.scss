@@ -1,0 +1,76 @@
+/**
+ * Editor-specific styles for content-slideshow block.
+ *
+ * These styles are only applied in the editor.
+ */
+
+.wp-block-pdm-content-slideshow {
+	// In edit mode (not preview), display slides full-width like normal sections
+	> .wp-block-block-editor-inner-blocks {
+		> .block-editor-block-list__layout {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+	}
+
+	// Full-width appender button
+	.content-slideshow-appender {
+		margin-top: 1rem;
+		
+		.block-list-appender {
+			width: 100%;
+			
+			button {
+				width: 100%;
+				justify-content: center;
+			}
+		}
+	}
+
+	// In preview mode, maintain the same equal height structure
+	.splide {
+		height: var(--slider-height, 50vh);
+
+		.splide__track {
+			height: 100%;
+		}
+
+		.splide__list {
+			height: 100%;
+
+			// Preview mode specific
+			&.preview-mode {
+				// Make the inner blocks list behave like slides
+				> .block-editor-block-list__layout {
+					display: flex;
+					height: 100%;
+					width: 100%;
+					
+					// Each content-slide in preview
+					> .wp-block {
+						flex-shrink: 0;
+						width: 100%;
+						height: 100%;
+						
+						// Ensure the actual content-slide block fills space
+						> .wp-block-pdm-content-slide {
+							width: 100%;
+							height: 100%;
+						}
+					}
+				}
+			}
+		}
+
+		.splide__slide {
+			height: 100%;
+		}
+	}
+}
+
+// Apply parent's slider height to child slides in editor (not nested)
+.wp-block-pdm-content-slide {
+	height: var(--slider-height, 50vh);
+	overflow-y: auto;
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/gallery",
+  "version": "0.1.0",
+  "title": "Gallery",
+  "category": "pdm-blocks",
+  "icon": "smiley",
+  "description": "Easily create a grid of images with option to change columns, border radius and toggle lightbox.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "customClassName": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    },
+    "columns": {
+      "type": "number",
+      "default": 4
+    },
+    "borderRadius": {
+      "type": "number",
+      "default": 0
+    },
+    "enableLightbox": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableMasonry": {
+      "type": "boolean",
+      "default": false
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "1/1"
+    },
+    "customAspectRatio": {
+      "type": "string",
+      "default": ""
+    },
+    "images": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "textdomain": "gallery",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

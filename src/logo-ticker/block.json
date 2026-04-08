@@ -1,0 +1,59 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/logo-ticker",
+	"version": "0.1.0",
+	"title": "Logo Ticker",
+	"category": "pdm-blocks",
+	"icon": "smiley",
+	"description": "Scrolling logo ticker with customizable speed and logo size.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"spacing": {
+			"padding": true,
+			"margin": true
+		},
+		"customClassName": true,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "full"
+		},
+		"logos": {
+			"type": "array",
+			"default": []
+		},
+		"logoSize": {
+			"type": "number",
+			"default": 100
+		},
+		"speed": {
+			"type": "number",
+			"default": 30
+		},
+		"grayscale": {
+			"type": "boolean",
+			"default": false
+		},
+		"pauseOnHover": {
+			"type": "boolean",
+			"default": true
+		},
+		"showFade": {
+			"type": "boolean",
+			"default": true
+		},
+		"isPreview": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"textdomain": "logo-ticker",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

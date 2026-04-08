@@ -1,0 +1,39 @@
+/**
+ * Frontend and editor styles for content-slide block.
+ *
+ * Registered in the style property of the block.json.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+
+.wp-block-pdm-content-slide {
+	position: relative;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	&.has-bg-image {
+		.content-wrapper {
+			position: relative;
+			z-index: 2;
+		}
+	}
+
+	.content-wrapper {
+		position: relative;
+	}
+
+	// Vertical alignment support
+	&.is-vertically-aligned-top {
+		justify-content: flex-start;
+	}
+
+	&.is-vertically-aligned-center {
+		justify-content: center;
+	}
+
+	&.is-vertically-aligned-bottom {
+		justify-content: flex-end;
+	}
+}

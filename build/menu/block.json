@@ -1,0 +1,131 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/menu",
+  "version": "0.1.0",
+  "title": "Menu",
+  "category": "pdm-blocks",
+  "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"Layer_1\" version=\"1.1\" viewBox=\"0 0 500 500\"><defs><style>.st0 { fill: currentColor; }</style></defs><path class=\"st0\" d=\"M250,60c-104.93,0-190,85.07-190,190s85.07,190,190,190,190-85.07,190-190S354.93,60,250,60ZM162.1,327.1c0,9.47-7.68,17.14-17.14,17.14s-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14s17.14,7.68,17.14,17.14h0ZM162.1,250c0,9.47-7.68,17.14-17.14,17.14s-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14s17.14,7.68,17.14,17.14h0ZM162.1,172.9c0,9.47-7.68,17.14-17.14,17.14s-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14s17.14,7.68,17.14,17.14h0ZM372.19,327.1c0,9.47-7.68,17.14-17.14,17.14h-147.77c-9.47,0-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14h147.77c9.47,0,17.14,7.68,17.14,17.14h0ZM372.19,250c0,9.47-7.68,17.14-17.14,17.14h-147.77c-9.47,0-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14h147.77c9.47,0,17.14,7.68,17.14,17.14h0ZM372.19,172.9c0,9.47-7.68,17.14-17.14,17.14h-147.77c-9.47,0-17.14-7.68-17.14-17.14h0c0-9.47,7.68-17.14,17.14-17.14h147.77c9.47,0,17.14,7.68,17.14,17.14h0Z\"/></svg>",
+  "description": "Menu block using the classic menu system with mobile and desktop styles.",
+  "keywords": [
+    "menu",
+    "navigation",
+    "nav"
+  ],
+  "attributes": {
+    "menuId": {
+      "type": "number",
+      "default": 0
+    },
+    "menuJustify": {
+      "type": "string",
+      "default": "flex-start"
+    },
+    "maxWidth": {
+      "type": "number",
+      "default": 1200
+    },
+    "menuRadius": {
+      "type": "string",
+      "default": "0px"
+    },
+    "submenuBackgroundColor": {
+      "type": "string"
+    },
+    "submenuBackgroundGradient": {
+      "type": "string"
+    },
+    "submenuHoverBackgroundColor": {
+      "type": "string"
+    },
+    "submenuHoverBackgroundGradient": {
+      "type": "string"
+    },
+    "submenuTextColor": {
+      "type": "string"
+    },
+    "submenuHoverTextColor": {
+      "type": "string"
+    },
+    "iconOpen": {
+      "type": "string",
+      "default": "bars"
+    },
+    "customIconUrlOpen": {
+      "type": "string"
+    },
+    "iconClose": {
+      "type": "string",
+      "default": "xmark"
+    },
+    "customIconUrlClose": {
+      "type": "string"
+    },
+    "iconSize": {
+      "type": "number",
+      "default": 45
+    },
+    "iconColor": {
+      "type": "string",
+      "default": "currentColor"
+    },
+    "useCustomColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "mobileBreakpoint": {
+      "type": "number",
+      "default": 1024
+    },
+    "menuItemImageMaxWidth": {
+      "type": "number",
+      "default": 100
+    },
+    "mobileImageFirst": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "example": {
+    "attributes": {
+      "menuId": 1,
+      "menuJustify": "justify-start",
+      "maxWidth": 1200
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": false,
+    "className": true,
+    "color": {
+      "link": true,
+      "background": true,
+      "text": true,
+      "gradients": true,
+      "__experimentalDefaultControls": {
+        "background": false,
+        "text": false
+      }
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalFontFamily": true,
+      "__experimentalFontWeight": true,
+      "__experimentalFontStyle": true,
+      "__experimentalTextTransform": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalLetterSpacing": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true,
+        "lineHeight": true
+      }
+    }
+  },
+  "textdomain": "pdm-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

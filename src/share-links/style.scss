@@ -1,0 +1,54 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+/* share links */
+
+.wp-block-pdm-share-links {
+	display: flex;
+	max-width: 800px;
+	gap: 5px;
+}
+
+.share-link {
+	flex-grow: 1;
+	color: white;
+	text-align: center;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.share-link:hover {
+	color: white;
+	opacity: .7;
+}
+
+.share-link svg {
+	width: 24px;
+	height: 24px;
+	vertical-align: middle;
+	fill: white;
+}
+
+.link-fb {
+	background: #1e7cf2;
+}
+
+.link-x {
+	background: black;
+}
+
+.link-li {
+	background: #0a78b5;
+}
+
+.link-mail {
+	background: #999999;
+}
+
+.link-pinterest {
+	background: #e60023;
+}

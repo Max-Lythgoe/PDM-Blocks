@@ -1,0 +1,81 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/scroll-list-item",
+	"version": "0.1.0",
+	"title": "Scroll List Item",
+	"category": "pdm-blocks",
+	"icon": "format-aside",
+	"description": "An individual scrollable item with customizable styling and content for the Scroll List block.",
+	"example": {},
+	"parent": [ "pdm/scroll-list" ],
+	"supports": {
+		"html": false,
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"layout": {
+			"allowSwitching": false,
+			"allowInheriting": false,
+			"allowVerticalAlignment": false,
+			"allowedValues": ["left", "center", "right"],
+			"default": {
+				"type": "flex",
+				"orientation": "vertical"
+			}
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"shadow": true,
+		"spacing": {
+			"padding": true,
+			"margin": true,
+			"blockGap": true
+		}
+	},
+	"attributes": {
+		"imageURL": {
+			"type": "string"
+		},
+		"imageID": {
+			"type": "number"
+		},
+		"customAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"customTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"focalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		},
+		"url": {
+			"type": "string"
+		},
+		"linkTarget": {
+			"type": "string",
+			"default": "_self"
+		},
+		"rel": {
+			"type": "string"
+		}
+	},
+	"usesContext": [
+		"pdm/scroll-list/aspectRatio",
+		"pdm/scroll-list/borderRadius",
+		"pdm/scroll-list/activeBackgroundColor",
+		"pdm/scroll-list/activeTextColor"
+	],
+	"textdomain": "scroll-list-item",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

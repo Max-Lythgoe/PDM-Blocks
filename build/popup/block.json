@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/popup",
+  "version": "0.1.0",
+  "title": "Popup",
+  "parent": [
+    "core/post-content"
+  ],
+  "category": "pdm-blocks",
+  "description": "Create a simple popup, with options to determine when it appears.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
+    "shadow": true,
+    "spacing": {
+      "padding": true
+    },
+    "color": {
+      "background": true,
+      "text": true,
+      "link": true,
+      "gradients": true
+    }
+  },
+  "attributes": {
+    "triggerType": {
+      "type": "string",
+      "default": "on-load",
+      "enum": [
+        "on-load",
+        "after-delay"
+      ]
+    },
+    "delayTime": {
+      "type": "number",
+      "default": 3
+    },
+    "overlayBackgroundColor": {
+      "type": "string",
+      "default": "rgba(0, 0, 0, 0.5)"
+    },
+    "popupWidth": {
+      "type": "number",
+      "default": 400
+    },
+    "contentPosition": {
+      "type": "string",
+      "default": "center center"
+    }
+  },
+  "textdomain": "popup",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

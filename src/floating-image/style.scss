@@ -1,0 +1,56 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-floating-image {
+	pointer-events: none;
+	
+	&.floating-image-block-wrapper {
+		position: relative;
+		width: 100%;
+		max-width: 100%!important;
+		height: 0;
+		pointer-events: none;
+		z-index: 999;
+		
+		* {
+			pointer-events: auto;
+		}
+	}
+
+	// Overflow container to prevent horizontal scrolling
+	.floating-image-overflow-container {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		max-width: 100%!important;
+		height: 100vh; 
+		overflow: hidden; 
+		pointer-events: none;
+		z-index: 999;
+		
+		* {
+			pointer-events: auto;
+		}
+	}
+
+	.floating-image {
+		position: absolute;
+		pointer-events: none;
+		z-index: 999;
+		line-height: 1;
+
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+			object-fit: contain;
+			max-width: 100%;
+		}
+	}
+
+}

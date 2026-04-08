@@ -1,0 +1,80 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/slideshow",
+  "version": "0.1.0",
+  "title": "Slideshow",
+  "category": "pdm-blocks",
+  "description": "Slideshow block to display a series of slides.",
+  "supports": {
+    "html": false,
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "customClassName": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    },
+    "interval": {
+      "type": "number",
+      "default": 7
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "pauseOnHover": {
+      "type": "boolean",
+      "default": false
+    },
+    "pagination": {
+      "type": "boolean",
+      "default": true
+    },
+    "arrows": {
+      "type": "boolean",
+      "default": true
+    },
+    "isPreview": {
+      "type": "boolean",
+      "default": false
+    },
+    "slidesPerView": {
+      "type": "number",
+      "default": 1
+    },
+    "gap": {
+      "type": "string",
+      "default": "20px"
+    },
+    "loop": {
+      "type": "boolean",
+      "default": true
+    },
+    "sliderHeight": {
+      "type": "string",
+      "default": "50"
+    }
+  },
+  "keywords": [
+    "slideshow",
+    "carousel",
+    "slider"
+  ],
+  "textdomain": "slideshow",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": [
+    "file:./style-index.css",
+    "file:./frontend.css"
+  ],
+  "viewScript": "file:frontend.js"
+}

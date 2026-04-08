@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/card",
+  "version": "0.1.0",
+  "title": "Card",
+  "category": "pdm-blocks",
+  "description": "Card block to display content in a card layout. Used within the Cards block.",
+  "example": {},
+  "parent": [
+    "pdm/cards"
+  ],
+  "supports": {
+    "html": false,
+    "spacing": {
+      "padding": true
+    },
+    "color": {
+      "background": true,
+      "text": true,
+      "gradients": true,
+      "link": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
+    "shadow": true
+  },
+  "attributes": {
+    "url": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a.pdm-card-link",
+      "attribute": "href"
+    },
+    "linkTarget": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a.pdm-card-link",
+      "attribute": "target"
+    },
+    "rel": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "a.pdm-card-link",
+      "attribute": "rel"
+    },
+    "verticalAlignment": {
+      "type": "string",
+      "default": "top"
+    }
+  },
+  "textdomain": "card",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

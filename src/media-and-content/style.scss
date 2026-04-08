@@ -1,0 +1,372 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.mc-flex {
+	display: flex;
+	flex-direction: var(--mediaSide, row);
+	gap: var(--itaGap, 40px);
+}
+
+.mc-media, .mc-content {
+	flex-grow: 1;
+	width: 50%;
+	position: relative;
+}
+
+.mc-media {
+	overflow: hidden;
+}
+
+.mc-media {
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-media-image .mc-media img {
+    height: auto;
+    max-height: var(--imageMaxHeight, 500px);
+    max-width: 100%;
+    object-fit: var(--imageFit, contain)!important;
+    width: 100%;
+    aspect-ratio: var(--imageAspect, auto);
+    border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-flex.stretch-media {
+	align-items: stretch;
+}
+
+.mc-flex.stretch-media .mc-media img {
+	width: 100%;
+	height: 100%;
+}
+
+// vertical alignment
+.mc-flex.is-vertically-aligned-top {
+	align-items: flex-start;
+}
+
+.mc-flex.is-vertically-aligned-center {
+	align-items: center;
+}
+
+.mc-flex.is-vertically-aligned-bottom {
+	align-items: flex-end;
+}
+
+.mc-flex.is-vertically-aligned-stretch {
+	align-items: stretch;
+}
+
+// stretched image 
+.is-vertically-aligned-stretch .mc-media img {
+	height: 100%;
+	width: 100%;
+	max-height: var(--imageMaxHeight, 100%);
+	max-width: 100%;
+	position: absolute;
+	border-radius: var(--mediaBorderRadius, 0);
+	inset: 0;
+}
+
+// video styles
+.mc-media-video .mc-media {
+	display: flex;
+	justify-content: center;
+}
+
+.mc-media-video.is-vertically-aligned-stretch iframe, 
+.mc-media-video.is-vertically-aligned-stretch .mc-video-facade-trigger {
+	position: absolute;
+	inset: 0;
+	height: 100%;
+	width: 100%;
+}
+
+/* Video Facade styles */
+.mc-video-facade-trigger {
+	all: unset;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background: #000;
+	transition: all 0.3s ease;
+	border-radius: var(--mediaBorderRadius, 0);
+	overflow: hidden;
+	
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+	
+	&:hover {
+		.mc-video-facade-play-button {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1.1);
+		}
+		
+		.mc-video-facade-thumbnail {
+			transform: scale(1.05);
+		}
+	}
+}
+
+.mc-video-facade-thumbnail {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.mc-video-facade-play-button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 68px;
+	height: 48px;
+	opacity: 0.9;
+	transition: all 0.3s ease;
+	pointer-events: none;
+	z-index: 10;
+	drop-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	
+	svg {
+		width: 100%;
+		height: 100%;
+		drop-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	}
+}
+
+.mc-video-container {
+	position: relative;
+	width: 100%;
+	max-width: var(--max-width, 800px);
+	border-radius: var(--mediaBorderRadius, 0);
+	overflow: hidden;
+}
+
+.mc-video-container iframe {
+	width: 100%;
+	aspect-ratio: var(--aspect, 16/9);
+	max-width: var(--max-width, 800px);
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-video-placeholder,
+.mc-video-error {
+	aspect-ratio: var(--aspect, 16/9);
+	max-width: var(--max-width, 800px);
+	background: #f0f0f0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed #ccc;
+	color: #666;
+	text-align: center;
+	padding: 20px;
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-video-error p {
+	margin: 0;
+	font-weight: bold;
+}
+
+// Custom iframe styles
+.mc-custom-iframe {
+	position: relative;
+	width: 100%;
+	border-radius: var(--mediaBorderRadius, 0);
+	overflow: hidden;
+	display: flex;
+    justify-content: center;
+}
+
+.mc-custom-iframe iframe {
+	width: 100%;
+	height: 100%;
+	max-width: 100%;
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-custom-iframe > div {
+	position: relative;
+	width: 100%;
+}
+
+.mc-custom-iframe > div iframe {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.mc-custom-placeholder {
+	background: #f0f0f0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed #ccc;
+	color: #666;
+	text-align: center;
+	padding: 40px 20px;
+	min-height: 200px;
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+@media(max-width: 1024px) {
+	.mc-flex {
+		flex-direction: var(--mediaStack, column);
+	}
+
+	.mc-media, .mc-content {
+		width: 100%;
+	}
+
+	.is-vertically-aligned-stretch .mc-media img {
+		height: auto;
+		width: 100%;
+		max-width: 100%;
+		max-height: var(--imageMaxHeight, 500px);
+		position: relative;
+		display: block;
+		border-radius: var(--mediaBorderRadius, 0);
+		aspect-ratio: var(--imageAspect, auto);
+	}
+
+	.mc-media-video.is-vertically-aligned-stretch iframe, 
+	.mc-media-video.is-vertically-aligned-stretch .mc-video-facade-trigger {
+		position: relative;
+		height: auto;
+		width: 100%;
+		max-width: 100%;
+		aspect-ratio: var(--aspect, 16/9);
+	}
+}
+
+/* Lightbox styles */
+.mc-lightbox-trigger {
+	all: unset;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	
+	img {
+		pointer-events: none;
+	}
+	
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+	
+	&:hover .mc-lightbox-overlay-icon {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1.1);
+	}
+}
+
+.mc-lightbox-overlay-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 48px;
+	height: 48px;
+	background: rgba(0, 0, 0, 0.7);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	opacity: 0;
+	transition: all 0.3s ease;
+	pointer-events: none;
+	z-index: 10;
+	
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.mc-lightbox-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.95);
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	
+	&.active {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.mc-lightbox-content {
+	max-width: 90%;
+	max-height: 90%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.mc-lightbox-image {
+	max-width: 100%;
+	max-height: 90vh;
+	height: auto;
+	width: auto;
+	object-fit: contain;
+	display: block;
+}
+
+.mc-lightbox-close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: rgba(255, 255, 255, 0.1);
+	border: 2px solid rgba(255, 255, 255, 0.5);
+	color: white;
+	font-size: 40px;
+	line-height: 1;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	z-index: 100000;
+	
+	&:hover {
+		background: rgba(255, 255, 255, 0.2);
+		border-color: white;
+		transform: scale(1.1);
+	}
+	
+	&:focus-visible {
+		outline: 2px solid white;
+		outline-offset: 2px;
+	}
+}

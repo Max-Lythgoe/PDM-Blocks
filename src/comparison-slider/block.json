@@ -1,0 +1,96 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/comparison-slider",
+	"version": "0.1.0",
+	"title": "Comparison Slider",
+	"category": "pdm-blocks",
+	"description": "Create before/after comparison slider with images.",
+	"example": {},
+	"keywords": ["compare", "before after", "slider"],
+	"attributes": {
+		"beforeImageID": {
+			"type": "number",
+			"default": null
+		},
+		"beforeImageURL": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeCustomAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeCustomTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeDefaultAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeDefaultTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeFocalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		},
+		"afterImageID": {
+			"type": "number",
+			"default": null
+		},
+		"afterImageURL": {
+			"type": "string",
+			"default": ""
+		},
+		"afterCustomAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"afterCustomTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"afterDefaultAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"afterDefaultTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"afterFocalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		},
+		"showLabels": {
+			"type": "boolean",
+			"default": true
+		},
+		"aspectRatio": {
+			"type": "string",
+			"default": "16/9"
+		},
+		"maxWidth": {
+			"type": "number",
+			"default": 800
+		}
+	},
+	"supports": {
+		"html": false,
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"shadow": true
+	},
+	"textdomain": "comparison-slider",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

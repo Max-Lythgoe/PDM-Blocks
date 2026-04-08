@@ -1,0 +1,71 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/company-info",
+	"version": "0.1.0",
+	"title": "Company Info",
+	"category": "pdm-blocks",
+	"description": "Display company information from configured locations.",
+	"keywords": ["company", "contact", "address", "phone", "email"],
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"className": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"typography": {
+			"fontSize": true,
+			"textAlign": true
+		},
+		"color": {
+			"text": true,
+			"link": true,
+			"background": true,
+			"gradients": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		}
+	},
+	"attributes": {
+		"infoType": {
+			"type": "string",
+			"default": "address"
+		},
+		"hoursFormat": {
+			"type": "string",
+			"default": "list"
+		},
+		"locationIndex": {
+			"type": "number",
+			"default": 0
+		},
+		"mapWidth": {
+			"type": "string",
+			"default": "map-default"
+		},
+		"customText": {
+			"type": "string",
+			"default": ""
+		},
+		"customLink": {
+			"type": "object",
+			"default": {}
+		},
+		"showLocationName": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"textdomain": "company-info",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

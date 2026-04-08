@@ -1,0 +1,29 @@
+/**
+ * The following styles get applied only in the editor.
+ *
+ * These styles ensure the editor view matches the frontend.
+ */
+
+.wp-block-pdm-menu {
+	// Disable pointer events for menu items in editor to prevent navigation
+	.menu-desktop a,
+	.menu-mobile a {
+		pointer-events: none;
+		cursor: default;
+	}
+
+	.block-menu-toggle svg {
+		height: var(--iconSize);
+		width: var(--iconSize);
+	}
+
+	// Warning/info message styles for when no menu is selected
+	.menu-preview {
+		text-align: center;
+		padding: 10px;
+
+		.menu-location-warning {
+			margin: 0;
+		}
+	}
+}

@@ -1,0 +1,78 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-slideshow {
+
+	.splide__list {
+		height: fit-content;
+	}
+
+	   .block-editor-block-list__layout {
+		   display: grid;
+		   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		   gap: 12px;
+		   overflow-y: auto;
+		   background: #f0f0f0;
+		   border-radius: 5px;
+		   padding: 10px;
+		   height: 500px;
+		   resize: vertical;
+		   min-height: 160px;
+	   }
+
+	   .block-editor-block-list__layout>* {
+		   width: 100%;
+		   height: auto;
+		   aspect-ratio: 5 / 3;
+		   padding: 10px;
+	   }
+
+	.wp-block-pdm-slide .slide-image-container {
+		height: 100%!important;
+		width: 100%!important;
+	}
+
+	.wp-block-pdm-slide .seo-image-container img {
+		height: 100%!important;
+		width: 100%!important;
+		object-fit: cover!important;
+	}
+
+	.wp-block-pdm-slide .slide-image-container .trash-icon {
+		pointer-events: all;
+		z-index: 5;
+	}
+
+	.wp-block-pdm-slide .block-editor-media-placeholder {
+		height: 100%;
+	}
+
+	.slide-image-container img {
+		height: 100%!important;
+		width: 100%!important;
+		object-fit: cover!important;
+	}
+
+	.block-list-appender {
+		position: relative!important;
+		inset: auto!important;
+	}
+
+	.block-list-appender button {
+		height: 100%;
+	}
+}
+
+// in preview mode
+.splide__slide {
+    position: relative;
+}
+
+.splide__slide img {
+	width: 100%;
+	object-fit: cover;
+	height: var(--slider-height, 50vh);
+}

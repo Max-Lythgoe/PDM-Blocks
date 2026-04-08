@@ -1,0 +1,52 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+
+.wp-block-pdm-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+
+	// Full-size overlay link — sits behind content, makes entire card clickable
+	// without wrapping block-level children in <a> (invalid HTML)
+	.pdm-card-link {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		cursor: pointer;
+	}
+
+	// Interactive elements float above the overlay so they remain clickable
+	a:not(.pdm-card-link),
+	button,
+	[role="button"],
+	.wp-block-button,
+	.wp-block-buttons {
+		position: relative;
+		z-index: 1;
+	}
+
+	&.is-vertically-aligned-top {
+		justify-content: flex-start;
+	}
+
+	&.is-vertically-aligned-center {
+		justify-content: center;
+	}
+
+	&.is-vertically-aligned-bottom {
+		justify-content: flex-end;
+	}
+
+	&.is-vertically-aligned-stretch {
+		justify-content: stretch;
+	}
+
+	.pdm-card-image {
+		width: 100%;
+	}
+}

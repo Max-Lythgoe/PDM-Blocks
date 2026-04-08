@@ -1,0 +1,32 @@
+.wp-block-pdm-split-column {
+	animation: columnIn 1s forwards;
+	transition: outline .3s ease;
+	border-radius: 4px;
+	min-height: 100px;
+}
+
+.wp-block-pdm-split-column::after {
+	border-radius: inherit!important;
+}
+
+.wp-block-pdm-split-column.is-selected {
+	outline: 2px solid var(--wp-admin-theme-color)!important;
+}
+
+.wp-block-pdm-split-column:hover {
+	outline: 2px solid color-mix(in srgb, var(--wp-admin-theme-color) 50%, transparent)!important;
+}
+
+.wp-block-pdm-split-column:focus-within {
+	box-shadow: 0 0 17px color-mix(in srgb, var(--wp-admin-theme-color) 50%, transparent)!important;
+}
+
+@keyframes columnIn {
+	from {
+		outline: 2px solid var(--wp-admin-theme-color);
+	}
+	to {
+		outline: 2px solid transparent;
+	}
+
+}

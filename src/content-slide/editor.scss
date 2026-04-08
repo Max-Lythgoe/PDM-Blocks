@@ -1,0 +1,16 @@
+/**
+ * Editor-specific styles for content-slide block.
+ *
+ * These styles are only applied in the editor.
+ */
+
+.wp-block-pdm-content-slide {
+	position: relative;
+	
+	&.has-bg-image {
+		.content-wrapper {
+			position: relative;
+			z-index: 2;
+		}
+	}
+}

@@ -1,0 +1,54 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.pdm-accordions.accord-columns-1>.block-editor-inner-blocks>.block-editor-block-list__layout {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 10px;
+}
+
+.pdm-accordions.accord-columns-2>.block-editor-inner-blocks>.block-editor-block-list__layout {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr 1fr;
+}
+
+.accordion-container {
+	container-type: inline-size;
+	width: 100%;
+}
+
+@container(max-width: 600px) {
+	.pdm-accordions.accord-columns-2>.block-editor-inner-blocks>.block-editor-block-list__layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.pdm-accordions .block-list-appender {
+	display: none;
+	position: relative;
+	width: 100%;
+	inset: 0;
+	margin: 10px 0;
+}
+
+.pdm-accordions.is-selected .block-list-appender, .pdm-accordions.has-child-selected .block-list-appender {
+	display: block;
+}
+
+.pdm-accordions {
+	max-width: var(--accordion-max-width)!important;
+	margin-inline: auto;
+	width: 100%;
+}
+
+.pdm-icon-grid {
+	width: 100%;
+}
+
+.pdm-icon-grid .components-button {
+	justify-content: center;
+}

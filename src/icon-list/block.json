@@ -1,0 +1,78 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/icon-list",
+	"version": "0.1.0",
+	"title": "Icon List",
+	"category": "pdm-blocks",
+	"icon": "list-view",
+	"description": "A list with customizable icons for each item.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true
+		},
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"layout": {
+			"allowEditing": false,
+			"default": {
+				"type": "flex",
+				"orientation": "vertical"
+			}
+		}
+	},
+	"textdomain": "icon-list",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"attributes": {
+		"style": {
+			"type": "object",
+			"default": {
+				"spacing": {
+					"blockGap": "20px"
+				}
+			}
+		},
+		"selectedIcon": {
+			"type": "string",
+			"default": "check"
+		},
+		"customIconUrl": {
+			"type": "string"
+		},
+		"customIconSvg": {
+			"type": "string"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 24
+		},
+		"iconColor": {
+			"type": "string",
+			"default": "var(--wp--preset--color--primary)"
+		},
+		"useCustomColor": {
+			"type": "boolean",
+			"default": false
+		},
+		"verticalAlignment": {
+			"type": "string",
+			"default": "top"
+		}
+	},
+	"providesContext": {
+		"pdm/iconList/selectedIcon": "selectedIcon",
+		"pdm/iconList/customIconUrl": "customIconUrl",
+		"pdm/iconList/customIconSvg": "customIconSvg",
+		"pdm/iconList/iconSize": "iconSize",
+		"pdm/iconList/iconColor": "iconColor",
+		"pdm/iconList/useCustomColor": "useCustomColor"
+	}
+}

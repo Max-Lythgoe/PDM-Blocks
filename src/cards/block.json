@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/cards",
+	"version": "0.1.0",
+	"title": "Cards",
+	"category": "pdm-blocks",
+	"description": "Cards block to display multiple Card blocks in a row layout.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		}
+	},
+	"textdomain": "cards",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"attributes": {
+		"verticalAlignment": {
+			"type": "string",
+			"default": "stretch"
+		},
+		"justifyContent": {
+			"type": "string",
+			"default": "center"
+		},
+		"align": {
+			"type": "string",
+			"default": "wide"
+		},
+		"desktopColumns": {
+			"type": "number",
+			"default": 4
+		},
+		"tabletColumns": {
+			"type": "number",
+			"default": 2
+		},
+		"mobileColumns": {
+			"type": "number",
+			"default": 1
+		},
+		"desktopGap": {
+			"type": "string",
+			"default": "20px"
+		},
+		"tabletGap": {
+			"type": "string",
+			"default": "20px"
+		},
+		"mobileGap": {
+			"type": "string",
+			"default": "20px"
+		},
+		"alignBottom": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

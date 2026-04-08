@@ -1,0 +1,146 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/accordions",
+	"version": "0.1.0",
+	"title": "Accordions",
+	"category": "pdm-blocks",
+	"description": "Accordions block for containing Accordion items. Can be used for FAQs or other content that requires collapsible sections.",
+	"example": {},
+	"keywords": ["accordion", "faq", "toggle"],
+	"supports": {
+		"html": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"background": true,
+			"text": true,
+			"gradients": true,
+			"__experimentalDefaultControls": {
+				"background": false,
+				"text": false
+			}
+		}
+	},
+	"textdomain": "accordions",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"viewStyle": "file:./style-index.css",
+	"attributes": {
+		"maxWidth": {
+			"type": "number",
+			"default": 800
+		},
+		"toggleBg": {
+			"type": "string",
+			"default": "var(--wp--preset--color--primary)"
+		},
+		"toggleGradient": {
+			"type": "string"
+		},
+		"panelBg": {
+			"type": "string",
+			"default": "var(--wp--preset--color--base)"
+		},
+		"panelGradient": {
+			"type": "string"
+		},
+		"toggleColor": {
+			"type": "string",
+			"default": "var(--wp--preset--color--base)"
+		},
+		"panelColor": {
+			"type": "string",
+			"default": "var(--wp--preset--color--contrast)"
+		},
+		"iconColor": {
+			"type": "string",
+			"default": "var(--wp--preset--color--base)"
+		},
+		"useCustomColor": {
+			"type": "boolean",
+			"default": false
+		},
+		"iconOpen": {
+			"type": "string",
+			"default": "plus"
+		},
+		"customIconUrlOpen": {
+			"type": "string"
+		},
+		"customIconSvgOpen": {
+			"type": "string"
+		},
+		"iconClose": {
+			"type": "string",
+			"default": "minus"
+		},
+		"customIconUrlClose": {
+			"type": "string"
+		},
+		"customIconSvgClose": {
+			"type": "string"
+		},
+		"iconPosition": {
+			"type": "string",
+			"default": "right"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 25
+		},
+		"columns": {
+			"type": "number",
+			"default": 1
+		},
+		"cornerRadius": {
+			"type": "object",
+			"default": {
+				"topLeft": "20px",
+				"topRight": "20px",
+				"bottomLeft": "20px",
+				"bottomRight": "20px"
+			}
+		},
+		"bottomBorderEnabled": {
+			"type": "boolean",
+			"default": false
+		},
+		"bottomBorderThickness": {
+			"type": "number",
+			"default": 1
+		},
+		"bottomBorderColor": {
+			"type": "string",
+			"default": "var(--wp--preset--color--contrast)"
+		},
+		"shadowEnabled": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"providesContext": {
+		"pdm/toggleColor": "toggleColor",
+		"pdm/panelColor": "panelColor",
+		"pdm/iconColor": "iconColor",
+		"pdm/useCustomColor": "useCustomColor",
+		"pdm/iconSize": "iconSize",
+		"pdm/toggleBg": "toggleBg",
+		"pdm/toggleGradient": "toggleGradient",
+		"pdm/panelBg": "panelBg",
+		"pdm/panelGradient": "panelGradient",
+		"pdm/iconOpen": "iconOpen",
+		"pdm/customIconUrlOpen": "customIconUrlOpen",
+		"pdm/customIconSvgOpen": "customIconSvgOpen",
+		"pdm/iconClose": "iconClose",
+		"pdm/customIconUrlClose": "customIconUrlClose",
+		"pdm/customIconSvgClose": "customIconSvgClose",
+		"pdm/iconPosition": "iconPosition",
+		"pdm/bottomBorderEnabled": "bottomBorderEnabled",
+		"pdm/bottomBorderThickness": "bottomBorderThickness",
+		"pdm/bottomBorderColor": "bottomBorderColor",
+		"pdm/shadowEnabled": "shadowEnabled"
+	}
+}

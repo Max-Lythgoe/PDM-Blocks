@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/columns",
+  "version": "0.1.0",
+  "title": "Columns",
+  "category": "pdm-blocks",
+  "description": "Columns block to arrange content in multiple columns.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": [
+        "top",
+        "bottom"
+      ]
+    }
+  },
+  "textdomain": "columns",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "verticalAlignment": {
+      "type": "string",
+      "default": "stretch"
+    },
+    "align": {
+      "type": "string",
+      "default": "wide"
+    },
+    "desktopColumns": {
+      "type": "number",
+      "default": 4
+    },
+    "tabletColumns": {
+      "type": "number",
+      "default": 2
+    },
+    "mobileColumns": {
+      "type": "number",
+      "default": 1
+    },
+    "desktopGap": {
+      "type": "string",
+      "default": "20px"
+    },
+    "tabletGap": {
+      "type": "string",
+      "default": "20px"
+    },
+    "mobileGap": {
+      "type": "string",
+      "default": "20px"
+    }
+  }
+}

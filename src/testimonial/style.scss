@@ -1,0 +1,17 @@
+/**
+ * Styles for individual testimonial block
+ */
+
+.wp-block-pdm-testimonial {
+	&.testimonial-item {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		
+		// Ensure content fills the testimonial container
+		> .block-editor-inner-blocks,
+		> * {
+			flex: 1;
+		}
+	}
+}

@@ -1,0 +1,87 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/section",
+	"version": "0.1.0",
+	"title": "Section",
+	"category": "pdm-blocks",
+	"description": "A customizable section block with background settings. Use it to wrap sections of your content and set background colors to create distinct visual sections.",
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "full"
+		},
+		"layout": {
+			"type": "object",
+			"default": {
+				"type": "constrained"
+			}
+		},
+		"useMinHeight": {
+			"type": "boolean",
+			"default": false
+		},
+		"minHeight": {
+			"type": "number",
+			"default": 50
+		},
+		"moveBehindHeader": {
+			"type": "boolean",
+			"default": false
+		},
+		"verticalAlignment": {
+			"type": "string",
+			"default": "center"
+		},
+		"responsiveBreakpoint": {
+			"type": "number",
+			"default": 0
+		},
+		"backgroundAspectRatio": {
+			"type": "string",
+			"default": "16/9"
+		},
+		"contentOrder": {
+			"type": "string",
+			"default": "below",
+			"enum": ["above", "below"]
+		},
+		"responsiveIgnoreHeader": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"],
+		"layout": {
+			"allowSizingOnChildren": true,
+			"default": {
+				"type": "constrained"
+			}
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		},
+		"color": {
+			"background": true,
+			"text": true,
+			"link": true,
+			"gradients": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"shadow": true
+	},
+	"textdomain": "section",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

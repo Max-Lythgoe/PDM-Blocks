@@ -1,0 +1,132 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .is-vertically-aligned-stretch .mc-media img {
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.is-vertically-aligned-stretch .seo-image-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: block;
+    inset: 0;
+}
+
+.wp-block-pdm-media-and-content .seo-image-container.empty {
+    aspect-ratio: var(--imageAspect, 16/9);
+    max-height: var(--imageMaxHeight, 500px);
+}
+
+// Video preview styles for editor
+.mc-video-preview {
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    cursor: default;
+}
+
+.is-vertically-aligned-stretch .mc-video-preview {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.mc-video-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mc-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease;
+}
+
+.mc-video-overlay:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.mc-video-play-button {
+    margin-bottom: 10px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.mc-video-play-button svg {
+    width: 68px;
+    height: 48px;
+}
+
+.mc-video-label {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+// Custom iframe editor styles
+.mc-custom-placeholder {
+	background: #f0f0f0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed #ccc;
+	color: #666;
+	text-align: center;
+	padding: 40px 20px;
+	min-height: 200px;
+	border-radius: var(--mediaBorderRadius, 0);
+}
+
+.mc-custom-placeholder p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+// Custom iframe preview in editor  
+.mc-custom-iframe {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Direct video preview styles
+.mc-direct-video {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mc-direct-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mc-direct-video .mc-video-overlay {
+    background: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+}
+
+.mc-direct-video .mc-video-overlay .mc-video-label {
+    background: rgba(0, 0, 0, 0.6);
+}

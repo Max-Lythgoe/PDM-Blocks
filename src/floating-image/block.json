@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/floating-image",
+	"version": "0.1.0",
+	"title": "Floating Image",
+	"category": "pdm-blocks",
+	"icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 500\"><path fill=\"currentColor\" d=\"M423.46,91.99H76.54c-21.59,0-39.15,17.56-39.15,39.15v237.73c0,21.59,17.56,39.15,39.15,39.15h346.92c21.59,0,39.15-17.56,39.15-39.15v-237.73c0-21.59-17.56-39.15-39.15-39.15h0ZM423.46,385.5h-22.43l23.32-.05c-.3.02-.59.05-.89.05ZM440.09,356.83l-120.76-159.13c-2.11-2.78-5.4-4.43-8.89-4.45h-.07c-3.47,0-6.74,1.6-8.88,4.33l-111.26,142.67-44.5-65.42c-2-2.94-5.27-4.76-8.82-4.92-3.56-.15-6.97,1.38-9.21,4.14l-67.78,83.22v-226.13c0-9.17,7.46-16.64,16.64-16.64h346.92c9.17,0,16.63,7.46,16.63,16.64v225.7h-.02,0Z\"/></svg>",
+	"description": "Position an image absolutely with visual drag-and-drop controls.",
+	"example": {},
+	"attributes": {
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"offsetX": {
+			"type": "number",
+			"default": 0
+		},
+		"offsetY": {
+			"type": "number",
+			"default": 0
+		},
+		"width": {
+			"type": "number",
+			"default": 300
+		},
+		"hideAt": {
+			"type": "number",
+			"default": 0
+		},
+		"responsiveBehavior": {
+			"type": "string",
+			"default": "hide",
+			"enum": ["hide", "block"]
+		},
+		"blockMaxWidth": {
+			"type": "number",
+			"default": 600
+		},
+		"showOutline": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": false
+	},
+	"textdomain": "floating-image",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

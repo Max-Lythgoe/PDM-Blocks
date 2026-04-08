@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/slide",
+	"version": "0.1.0",
+	"title": "Slide",
+	"category": "pdm-blocks",
+	"description": "Slide block used within the Slideshow block.",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"imageURL": {
+			"type": "string"
+		},
+		"imageID": {
+			"type": "number"
+		},
+		"customAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"customTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"defaultAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"defaultTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"focalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		}
+	},
+	"parent": ["pdm/slideshow"],
+	"textdomain": "slide",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

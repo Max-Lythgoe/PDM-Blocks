@@ -1,0 +1,38 @@
+{
+	"name": "pdm-blocks",
+	"version": "0.1.0",
+	"description": "A collection of custom Gutenberg blocks.",
+	"author": "Max Lythgoe - Performance Driven Marketing",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "cross-env WP_EXPERIMENTAL_MODULES=true wp-scripts build --webpack-copy-php",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"start": "cross-env WP_EXPERIMENTAL_MODULES=true wp-scripts start --webpack-copy-php",
+		"add": "cd src && npx @wordpress/create-block --namespace pdm --category pdm-blocks --variant dynamic --no-plugin",
+		"add-static": "cd src && npx @wordpress/create-block --namespace pdm --category pdm-blocks --no-plugin",
+		"convert-icons": "node scripts/convert-icons.js"
+	},
+	"files": [
+		"build",
+		"pdm-blocks.php",
+		"readme.txt",
+		"block.json"
+	],
+	"devDependencies": {
+		"@wordpress/browserslist-config": "^6.32.0",
+		"@wordpress/scripts": "^31.6.0",
+		"cross-env": "^10.1.0"
+	},
+	"dependencies": {
+		"@splidejs/splide": "^4.1.4",
+		"@wordpress/icons": "^9.28.0",
+		"gsap": "^3.12.5",
+		"lodash": "^4.17.23",
+		"uuid": "^13.0.0"
+	}
+}

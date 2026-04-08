@@ -1,0 +1,95 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-logo-ticker {
+	overflow: hidden;
+	position: relative;
+	padding: 20px 0;
+
+	/* Ticker wrapper */
+	.logo-ticker-wrapper {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	/* Ticker track - the scrolling container */
+	.logo-ticker-track {
+		display: flex;
+		gap: 60px;
+		align-items: center;
+		animation: ticker-scroll var(--ticker-speed, 30s) linear infinite;
+		will-change: transform;
+	}
+
+	/* Individual logo item */
+	.logo-ticker-item {
+		flex-shrink: 0;
+		height: var(--logo-size, 100px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			max-height: 100%;
+			max-width: 300px;
+			width: auto;
+			height: auto;
+			object-fit: contain;
+			display: block;
+			transition: filter 0.3s ease, opacity 0.3s ease;
+		}
+	}
+
+	/* Grayscale effect - only when class is present */
+	&.is-grayscale {
+		.logo-ticker-item img {
+			filter: grayscale(100%);
+			opacity: 0.7;
+		}
+
+		.logo-ticker-item:hover img {
+			filter: grayscale(0%);
+			opacity: 1;
+		}
+	}
+
+	/* Animation keyframes - adjusted for 3x duplication */
+	@keyframes ticker-scroll {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-33.333%);
+		}
+	}
+
+	/* Pause animation on hover - only when class is present */
+	&.pause-on-hover .logo-ticker-wrapper:hover .logo-ticker-track {
+		animation-play-state: paused;
+	}
+
+	/* Fade edges for smooth appearance - only when class is present */
+	&.has-fade .logo-ticker-wrapper {
+		mask-image: linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent);
+		-webkit-mask-image: linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent);
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.logo-ticker-track {
+			gap: 40px;
+		}
+
+		&.has-fade .logo-ticker-wrapper {
+			mask-image: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+			-webkit-mask-image: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+		}
+	}
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/icon-list-item",
+	"version": "0.1.0",
+	"title": "Icon List Item",
+	"category": "pdm-blocks",
+	"icon": "minus",
+	"description": "An individual item in an icon list.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "icon-list-item",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"parent": ["pdm/icon-list"],
+	"usesContext": [
+		"pdm/iconList/selectedIcon",
+		"pdm/iconList/customIconUrl",
+		"pdm/iconList/customIconSvg",
+		"pdm/iconList/iconSize",
+		"pdm/iconList/iconColor",
+		"pdm/iconList/useCustomColor"
+	],
+	"attributes": {
+		"selectedIcon": {
+			"type": "string"
+		},
+		"customIconUrl": {
+			"type": "string"
+		},
+		"customIconSvg": {
+			"type": "string"
+		},
+		"iconSize": {
+			"type": "number"
+		},
+		"iconColor": {
+			"type": "string"
+		},
+		"useCustomColor": {
+			"type": "boolean"
+		}
+	}
+}

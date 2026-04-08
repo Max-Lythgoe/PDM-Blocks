@@ -1,0 +1,175 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-pdm-floating-image {
+	pointer-events: all;
+	
+	&.floating-image-block-wrapper {
+		position: relative;
+		width: 100%;
+		height: 0;
+		pointer-events: none;
+		z-index: 999;
+		
+		&.is-selected {
+			border-top: 2px solid var(--wp-admin-theme-color, #2271b1);
+		}
+	}
+
+	.floating-image-placeholder {
+		text-align: center;
+		padding: 40px 20px;
+		min-height: 100px;
+		border: 2px dashed #ccc;
+		border-radius: 4px;
+		padding: 20px;
+		background: #f9f9f9;
+		pointer-events: all;
+
+		p {
+			margin-top: 10px;
+			color: #666;
+			font-size: 14px;
+		}
+	}
+
+	.floating-image-container {
+		position: absolute;
+		cursor: move;
+		transition: none;
+		z-index: 999;
+		user-select: none;
+		pointer-events: all;
+
+		&.is-dragging,
+		&.is-resizing {
+			cursor: grabbing;
+			opacity: 0.8;
+		}
+
+		&.show-outline {
+			outline: 3px solid #e74c3c;
+			outline-offset: 2px;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+			pointer-events: all;
+			object-fit: contain;
+		}
+
+		&:hover .floating-image-controls {
+			opacity: 1;
+		}
+	}
+
+	// Responsive block mode styles
+	&.floating-image-block-wrapper.responsive-at-2000.responsive-block {
+		@media (max-width: 2000px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+	&.floating-image-block-wrapper.responsive-at-1800.responsive-block {
+		@media (max-width: 1800px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+	&.floating-image-block-wrapper.responsive-at-1500.responsive-block {
+		@media (max-width: 1500px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+	&.floating-image-block-wrapper.responsive-at-1300.responsive-block {
+		@media (max-width: 1300px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+	&.floating-image-block-wrapper.responsive-at-1024.responsive-block {
+		@media (max-width: 1024px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+	&.floating-image-block-wrapper.responsive-at-768.responsive-block {
+		@media (max-width: 768px) {
+			height: auto;
+			padding: 20px;
+		}
+	}
+
+		.floating-image-controls {
+		opacity: 0;
+		transition: opacity 0.2s ease;
+		pointer-events: all;
+
+		.position-indicator {
+			position: absolute;
+			top: -30px;
+			left: 0;
+			background: rgba(0, 0, 0, 0.85);
+			color: white;
+			padding: 4px 12px;
+			border-radius: 4px;
+			font-size: 11px;
+			font-family: monospace;
+			white-space: nowrap;
+			pointer-events: none;
+			z-index: 10;
+		}
+
+		.resize-handle {
+			position: absolute;
+			bottom: -8px;
+			right: -8px;
+			width: 16px;
+			height: 16px;
+			background: var(--admin-primary-color, #eb6a24);
+			border: 2px solid white;
+			border-radius: 50%;
+			cursor: nwse-resize;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+			z-index: 10;
+			pointer-events: all;
+
+			&:hover {
+				background: var(--admin-primary-color, #eb6a24);;
+				transform: scale(1.2);
+			}
+		}
+	}
+
+	// Make the container draggable
+	.is-dragging {
+		.position-indicator {
+			opacity: 1 !important;
+		}
+	}
+}
+
+.floating-image-overflow-container {
+	pointer-events: none;
+}
+
+// Disable pointer events on the wrapper but enable for interactive elements
+.wp-block-pdm-floating-image.floating-image-block-wrapper {
+	pointer-events: none;
+	
+	.floating-image {
+		pointer-events: all;
+	}
+}
+
