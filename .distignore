@@ -1,0 +1,13 @@
+.distignore
+.editorconfig
+.gitignore
+.git
+node_modules
+src
+assets
+components
+js
+scripts
+wire-deprecated.js
+package.json
+package-lock.json

@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.3.0
+ * Version:           1.3.1
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,7 +28,7 @@ $pdm_blocks_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buil
     __FILE__,
     'pdm-blocks'
 );
-$pdm_blocks_update_checker->setBranch('main');
+$pdm_blocks_update_checker->getVcsApi()->enableReleaseAssets();
 
 // Include company info settings
 require_once plugin_dir_path(__FILE__) . 'includes/company-info-settings.php';
