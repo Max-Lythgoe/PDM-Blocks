@@ -196,6 +196,7 @@
 
 /* Horizontal Stacked below 768px */
 @media (max-width: 768px) {
+
 	.pdm-tabs-buttons {
 		flex-wrap: nowrap !important;
 		overflow-x: auto;
@@ -203,6 +204,11 @@
 		// scrollbar-width: none;
 		// -ms-overflow-style: none;
 	}
+
+	// .pdm-tab-container.pdm-tabs__horizontal .pdm-tabs-buttons {
+    //     min-width: fit-content!important;
+    //     justify-content: flex-start;
+    // }
 
 	.is-style-pointing-tabs .pdm-tabs-buttons {
 		padding-bottom: 16px !important;

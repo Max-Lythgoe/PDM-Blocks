@@ -38,7 +38,6 @@ import IconEdit from '../../components/IconEdit';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { selectedIcon, customIconUrl, iconSize, iconColor } = attributes;
 
 	const ALLOWED_BLOCKS = ['pdm/icon-list-item'];
 

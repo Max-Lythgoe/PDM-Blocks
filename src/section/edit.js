@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls, BlockControls, BlockVerticalAlignmentControl } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl, RangeControl, SelectControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { ToggleControl, RangeControl, SelectControl, __experimentalNumberControl as NumberControl, __experimentalToolsPanel as ToolsPanel, __experimentalToolsPanelItem as ToolsPanelItem } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
 /**
@@ -53,87 +53,98 @@ export default function Edit({ attributes, setAttributes }) {
                 />
             </BlockControls>
             <InspectorControls>
-                <PanelBody title={ __( 'Section Settings', 'pdm-blocks' ) }>
-                    <ToggleControl
-                        label={ __( 'Use Minimum Height', 'pdm-blocks' ) }
-                        checked={ useMinHeight }
-                        onChange={ ( value ) => setAttributes( { useMinHeight: value } ) }
-                        help={ __( 'Set a minimum height for this section using viewport height units.', 'pdm-blocks' ) }
-                    />
-                    { useMinHeight && (
-                        <RangeControl
-                            label={ __( 'Minimum Height (vh)', 'pdm-blocks' ) }
-                            value={ minHeight }
-                            onChange={ ( value ) => setAttributes( { minHeight: value } ) }
-                            min={ 10 }
-                            max={ 100 }
-                            step={ 5 }
-                        />
-                    ) }
-                    <ToggleControl
-                        label={ __( 'Move Behind Header', 'pdm-blocks' ) }
-                        checked={ moveBehindHeader }
-                        onChange={ ( value ) => setAttributes( { moveBehindHeader: value } ) }
-                        help={ __( 'Position this section behind the site header with negative margin.', 'pdm-blocks' ) }
-                    />
-                    
-                    {moveBehindHeader && (
+                <ToolsPanel
+                    className="pdm-section-tools-panel"
+                    label={ __( 'Additional Settings', 'pdm-blocks' ) }
+                    resetAll={ () => setAttributes( { useMinHeight: false, minHeight: 50, moveBehindHeader: false, responsiveIgnoreHeader: true, responsiveBreakpoint: 0, backgroundAspectRatio: '16/9', contentOrder: 'below' } ) }
+                >
+                    <ToolsPanelItem
+                        hasValue={ () => useMinHeight !== false }
+                        label={ __( 'Minimum Height', 'pdm-blocks' ) }
+                        onDeselect={ () => setAttributes( { useMinHeight: false, minHeight: 50 } ) }
+                        isShownByDefault={ false }
+                    >
                         <ToggleControl
-                            label={ __( 'Ignore Header in Responsive Mode', 'pdm-blocks' ) }
-                            checked={ responsiveIgnoreHeader }
-                            onChange={ ( value ) => setAttributes( { responsiveIgnoreHeader: value } ) }
-                            help={ __( 'Don\'t move section behind header when in responsive block mode.', 'pdm-blocks' ) }
+                            label={ __( 'Use Minimum Height', 'pdm-blocks' ) }
+                            checked={ useMinHeight }
+                            onChange={ ( value ) => setAttributes( { useMinHeight: value } ) }
                         />
-                    )}
-                </PanelBody>
-                
-                <PanelBody title={__('Responsive Settings', 'pdm-blocks')} initialOpen={false}>
-                    <ToggleControl
-                        label={__('Enable Responsive Breakpoint', 'pdm-blocks')}
-                        checked={responsiveBreakpoint > 0}
-                        onChange={(enabled) => setAttributes({ responsiveBreakpoint: enabled ? 1024 : 0 })}
-                        help={__('Enable responsive behavior at a specific screen width', 'pdm-blocks')}
-                    />
-                    
-                    {responsiveBreakpoint > 0 && (
-                        <>
-                            <NumberControl
-                                label={__('Breakpoint (px)', 'pdm-blocks')}
-                                value={responsiveBreakpoint}
-                                onChange={(value) => setAttributes({ responsiveBreakpoint: parseInt(value) || 0 })}
-                                min={320}
-                                max={2560}
-                                step={1}
-                                help={__('Screen width below which background displays as block', 'pdm-blocks')}
+                        { useMinHeight && (
+                            <RangeControl
+                                label={ __( 'Minimum Height (vh)', 'pdm-blocks' ) }
+                                value={ minHeight }
+                                onChange={ ( value ) => setAttributes( { minHeight: value } ) }
+                                min={ 10 }
+                                max={ 100 }
+                                step={ 5 }
                             />
-                            
-                            <SelectControl
-                                label={__('Background Aspect Ratio', 'pdm-blocks')}
-                                value={backgroundAspectRatio}
-                                options={[
-                                    { label: __('16:9 (Widescreen)', 'pdm-blocks'), value: '16/9' },
-                                    { label: __('4:3 (Traditional)', 'pdm-blocks'), value: '4/3' },
-                                    { label: __('1:1 (Square)', 'pdm-blocks'), value: '1/1' },
-                                    { label: __('3:2 (Photo)', 'pdm-blocks'), value: '3/2' },
-                                    { label: __('21:9 (Ultra Wide)', 'pdm-blocks'), value: '21/9' },
-                                ]}
-                                onChange={(value) => setAttributes({ backgroundAspectRatio: value })}
-                                help={__('Aspect ratio for background when displayed as block', 'pdm-blocks')}
+                        ) }
+                    </ToolsPanelItem>
+                    <ToolsPanelItem
+                        hasValue={ () => moveBehindHeader !== false }
+                        label={ __( 'Move Behind Header', 'pdm-blocks' ) }
+                        onDeselect={ () => setAttributes( { moveBehindHeader: false, responsiveIgnoreHeader: true } ) }
+                        isShownByDefault={ false }
+                    >
+                        <ToggleControl
+                            label={ __( 'Move Behind Header', 'pdm-blocks' ) }
+                            checked={ moveBehindHeader }
+                            onChange={ ( value ) => setAttributes( { moveBehindHeader: value } ) }
+                        />
+                        { moveBehindHeader && (
+                            <ToggleControl
+                                label={ __( 'Ignore Header in Responsive Mode', 'pdm-blocks' ) }
+                                checked={ responsiveIgnoreHeader }
+                                onChange={ ( value ) => setAttributes( { responsiveIgnoreHeader: value } ) }
                             />
-                            
-                            <SelectControl
-                                label={__('Content Order', 'pdm-blocks')}
-                                value={contentOrder}
-                                options={[
-                                    { label: __('Content Below Background', 'pdm-blocks'), value: 'below' },
-                                    { label: __('Content Above Background', 'pdm-blocks'), value: 'above' },
-                                ]}
-                                onChange={(value) => setAttributes({ contentOrder: value })}
-                                help={__('Whether content appears above or below background in responsive mode', 'pdm-blocks')}
-                            />
-                        </>
-                    )}
-                </PanelBody>
+                        ) }
+                    </ToolsPanelItem>
+                    <ToolsPanelItem
+                        hasValue={ () => responsiveBreakpoint > 0 }
+                        label={ __( 'Responsive Breakpoint', 'pdm-blocks' ) }
+                        onDeselect={ () => setAttributes( { responsiveBreakpoint: 0, backgroundAspectRatio: '16/9', contentOrder: 'below' } ) }
+                        isShownByDefault={ false }
+                    >
+                        <ToggleControl
+                            label={ __( 'Enable Responsive Breakpoint', 'pdm-blocks' ) }
+                            checked={ responsiveBreakpoint > 0 }
+                            onChange={ ( enabled ) => setAttributes( { responsiveBreakpoint: enabled ? 1024 : 0 } ) }
+                        />
+                        { responsiveBreakpoint > 0 && (
+                            <>
+                                <NumberControl
+                                    label={ __( 'Breakpoint (px)', 'pdm-blocks' ) }
+                                    value={ responsiveBreakpoint }
+                                    onChange={ ( value ) => setAttributes( { responsiveBreakpoint: parseInt( value ) || 0 } ) }
+                                    min={ 320 }
+                                    max={ 2560 }
+                                    step={ 1 }
+                                />
+                                <SelectControl
+                                    label={ __( 'Background Aspect Ratio', 'pdm-blocks' ) }
+                                    value={ backgroundAspectRatio }
+                                    options={ [
+                                        { label: __( '16:9 (Widescreen)', 'pdm-blocks' ), value: '16/9' },
+                                        { label: __( '4:3 (Traditional)', 'pdm-blocks' ), value: '4/3' },
+                                        { label: __( '1:1 (Square)', 'pdm-blocks' ), value: '1/1' },
+                                        { label: __( '3:2 (Photo)', 'pdm-blocks' ), value: '3/2' },
+                                        { label: __( '21:9 (Ultra Wide)', 'pdm-blocks' ), value: '21/9' },
+                                    ] }
+                                    onChange={ ( value ) => setAttributes( { backgroundAspectRatio: value } ) }
+                                />
+                                <SelectControl
+                                    label={ __( 'Content Order', 'pdm-blocks' ) }
+                                    value={ contentOrder }
+                                    options={ [
+                                        { label: __( 'Content Below Background', 'pdm-blocks' ), value: 'below' },
+                                        { label: __( 'Content Above Background', 'pdm-blocks' ), value: 'above' },
+                                    ] }
+                                    onChange={ ( value ) => setAttributes( { contentOrder: value } ) }
+                                />
+                            </>
+                        ) }
+                    </ToolsPanelItem>
+                </ToolsPanel>
             </InspectorControls>
             
             <div className={`section-flex-container ${contentOrder === 'above' ? 'content-first' : 'content-last'}`}>

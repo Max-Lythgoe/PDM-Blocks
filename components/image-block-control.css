@@ -83,6 +83,13 @@
 }
 
 
+/* ── Flyout content padding ─────────────────────────────────── */
+
+.pdm-media-flyout-content {
+    padding: 12px;
+    width: 280px;
+}
+
 @container(max-width: 200px) {
     .components-form-file-upload,
     .components-placeholder__label {
@@ -111,4 +118,25 @@
         flex-direction: column;
         justify-content: space-between;
     }
+}
+
+/* ── Media control trigger button ────────────────────────────── */
+
+.block-library-utils__media-control .components-button.is-next-40px-default-size {
+    box-shadow: inset 0 0 0 1px #ccc;
+    color: #1e1e1e;
+    height: 40px;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0 8px;
+    margin-bottom: 8px;
+}
+
+.block-library-utils__media-control__inspector-image-indicator {
+    width: 28px;
+    height: 28px;
+    border-radius: 2px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
 }

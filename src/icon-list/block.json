@@ -33,12 +33,7 @@
 	"style": "file:./style-index.css",
 	"attributes": {
 		"style": {
-			"type": "object",
-			"default": {
-				"spacing": {
-					"blockGap": "20px"
-				}
-			}
+			"type": "object"
 		},
 		"selectedIcon": {
 			"type": "string",

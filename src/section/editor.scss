@@ -12,3 +12,11 @@
 	position: relative;
 	z-index: 1;
 }
+
+// Space out controls inside each Additional Settings item
+.pdm-section-tools-panel .components-tools-panel-item {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+

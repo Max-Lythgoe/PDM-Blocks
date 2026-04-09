@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls, BlockVerticalAlignmentToolbar, BlockControls, __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordpress/block-editor';
 import ImageBlockControl from '../../components/ImageBlockControl';
 import { PanelBody, ToggleControl, SelectControl, TextControl, RangeControl, TextareaControl, __experimentalUnitControl as UnitControl, __experimentalToggleGroupControl as ToggleGroupControl,
-  __experimentalToggleGroupControlOption as ToggleGroupControlOption, Icon } from '@wordpress/components';
+  __experimentalToggleGroupControlOption as ToggleGroupControlOption, Icon, __experimentalToolsPanel as ToolsPanel, __experimentalToolsPanelItem as ToolsPanelItem } from '@wordpress/components';
 import { aspectRatio as aspectRatioIcon, image as imageIcon } from '@wordpress/icons';
 
 /**
@@ -163,6 +163,7 @@ export default function Edit({ attributes, setAttributes }) {
 								</div>
 							}
 							value={ imageAspectRatio }
+							__next40pxDefaultSize
 							options={ [
 								{ label: 'Auto', value: 'auto' },
 								{ label: '16:9', value: '16/9' },
@@ -173,23 +174,6 @@ export default function Edit({ attributes, setAttributes }) {
 								{ label: '21:9', value: '21/9' }
 							] }
 							onChange={ ( value ) => setAttributes( { imageAspectRatio: value } ) }
-						/>
-						{verticalAlignment !== 'stretch' && (
-							<RangeControl
-								label={ __( 'Image Max Height (px)', 'media-and-content' ) }
-								value={ imageMaxHeight }
-								onChange={ ( value ) => setAttributes( { imageMaxHeight: value } ) }
-								min={ 200 }
-								max={ 1200 }
-								step={ 50 }
-								help={ __( 'Note: When stretch alignment is enabled, max height is set to 100%', 'media-and-content' ) }
-							/>
-						)}
-						<ToggleControl
-							label={ __( 'Enable Lightbox', 'media-and-content' ) }
-							checked={ enableLightbox }
-							onChange={ ( value ) => setAttributes( { enableLightbox: value } ) }
-							help={ __( 'Open image in fullscreen lightbox when clicked', 'media-and-content' ) }
 						/>
 					</>
 				)}
@@ -302,33 +286,90 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					</>
 				)}
-				<ToggleControl
+			</PanelBody>
+			<ToolsPanel
+				label={ __( 'Additional Settings', 'media-and-content' ) }
+				resetAll={ () => setAttributes( { imageMaxHeight: 500, enableLightbox: false, mediaStack: 'column', gap: '40px', mediaBorderRadius: { topLeft: '0px', topRight: '0px', bottomLeft: '0px', bottomRight: '0px' } } ) }
+			>
+				{ mediaType === 'image' && verticalAlignment !== 'stretch' && (
+					<ToolsPanelItem
+						hasValue={ () => imageMaxHeight !== 500 }
+						label={ __( 'Image Max Height', 'media-and-content' ) }
+						onDeselect={ () => setAttributes( { imageMaxHeight: 500 } ) }
+						isShownByDefault={ false }
+					>
+						<RangeControl
+							label={ __( 'Image Max Height (px)', 'media-and-content' ) }
+							value={ imageMaxHeight }
+							onChange={ ( value ) => setAttributes( { imageMaxHeight: value } ) }
+							min={ 200 }
+							max={ 1200 }
+							step={ 50 }
+						/>
+					</ToolsPanelItem>
+				) }
+				{ mediaType === 'image' && (
+					<ToolsPanelItem
+						hasValue={ () => enableLightbox !== false }
+						label={ __( 'Enable Lightbox', 'media-and-content' ) }
+						onDeselect={ () => setAttributes( { enableLightbox: false } ) }
+						isShownByDefault={ false }
+					>
+						<ToggleControl
+							label={ __( 'Enable Lightbox', 'media-and-content' ) }
+							checked={ enableLightbox }
+							onChange={ ( value ) => setAttributes( { enableLightbox: value } ) }
+						/>
+					</ToolsPanelItem>
+				) }
+				<ToolsPanelItem
+					hasValue={ () => mediaStack !== 'column' }
 					label={ __( 'Stack Media on Bottom', 'media-and-content' ) }
-					checked={ mediaStack === 'column-reverse' }
-					onChange={ ( value ) => setAttributes( { mediaStack: value ? 'column-reverse' : 'column' } ) }
-				/>
-				<UnitControl
+					onDeselect={ () => setAttributes( { mediaStack: 'column' } ) }
+					isShownByDefault={ false }
+				>
+					<ToggleControl
+						label={ __( 'Stack Media on Bottom', 'media-and-content' ) }
+						checked={ mediaStack === 'column-reverse' }
+						onChange={ ( value ) => setAttributes( { mediaStack: value ? 'column-reverse' : 'column' } ) }
+					/>
+				</ToolsPanelItem>
+				<ToolsPanelItem
+					hasValue={ () => gap !== '40px' }
 					label={ __( 'Gap', 'media-and-content' ) }
-					__next40pxDefaultSize
-					value={ gap }
-					onChange={ ( value ) => setAttributes( { gap: value } ) }
-					size="__unstable-large"
-					units={ [
-						{ value: 'px', label: 'px' },
-						{ value: 'em', label: 'em' },
-						{ value: 'rem', label: 'rem' },
-						{ value: '%', label: '%' }
-					] }
-				/>
-			</PanelBody>
-			
-			<PanelBody title={__('Border Radius', 'media-and-content')} initialOpen={false}>
-				<BorderRadiusControl
-					label={__('Media Border Radius', 'media-and-content')}
-					values={mediaBorderRadius}
-					onChange={(value) => setAttributes({ mediaBorderRadius: value })}
-				/>
-			</PanelBody>
+					onDeselect={ () => setAttributes( { gap: '40px' } ) }
+					isShownByDefault={ false }
+				>
+					<UnitControl
+						label={ __( 'Gap', 'media-and-content' ) }
+						__next40pxDefaultSize
+						value={ gap }
+						onChange={ ( value ) => setAttributes( { gap: value } ) }
+						size="__unstable-large"
+						units={ [
+							{ value: 'px', label: 'px' },
+							{ value: 'em', label: 'em' },
+							{ value: 'rem', label: 'rem' },
+							{ value: '%', label: '%' }
+						] }
+					/>
+				</ToolsPanelItem>
+				<ToolsPanelItem
+					hasValue={ () => {
+						const r = mediaBorderRadius;
+						return r && ( r.topLeft !== '0px' || r.topRight !== '0px' || r.bottomLeft !== '0px' || r.bottomRight !== '0px' );
+					} }
+					label={ __( 'Media Border Radius', 'media-and-content' ) }
+					onDeselect={ () => setAttributes( { mediaBorderRadius: { topLeft: '0px', topRight: '0px', bottomLeft: '0px', bottomRight: '0px' } } ) }
+					isShownByDefault={ false }
+				>
+					<BorderRadiusControl
+						label={ __( 'Media Border Radius', 'media-and-content' ) }
+						values={ mediaBorderRadius }
+						onChange={ ( value ) => setAttributes( { mediaBorderRadius: value } ) }
+					/>
+				</ToolsPanelItem>
+			</ToolsPanel>
 		</InspectorControls>
 		<BlockControls>
                 <BlockVerticalAlignmentToolbar
