@@ -133,19 +133,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         onChange={(value) => setAttributes({ cornerRadius: value })}
                     />
                 </PanelBody>
-
-                <PanelBody title={__('Icon Settings', 'pdm-blocks')} initialOpen={false}>
-                    <ToggleControl
-                        label="Icon on Right"
-                        checked={iconPosition === 'right'}
-                        onChange={(val) => setAttributes({ iconPosition: val ? 'right' : 'left' })}
-                    />
-                    <DualIconEdit 
-                        attributes={attributes}
-                        setAttributes={setAttributes}
-                    />
-                </PanelBody>
             </InspectorControls>
+
+            <DualIconEdit
+                attributes={attributes}
+                setAttributes={setAttributes}
+				defaultIconSize="25px"
+            />
                 
             <InspectorControls group="color">
                 <ColorGradientSettingsDropdown

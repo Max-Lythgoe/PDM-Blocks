@@ -92,8 +92,8 @@
       "default": "right"
     },
     "iconSize": {
-      "type": "number",
-      "default": 25
+      "type": "string",
+      "default": "25px"
     },
     "columns": {
       "type": "number",

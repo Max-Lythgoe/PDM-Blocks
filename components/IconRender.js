@@ -12,7 +12,10 @@ import { ICON_LIBRARY, getDefaultIcon } from './icon-library';
 export default function IconRender({ attributes = {}, defaultIcon = 'check', className = '' }) {
 	const { selectedIcon, customIconUrl, customIconSvg, iconSize, iconColor, useCustomColor } = attributes;
 
-	const size = iconSize || 30;
+	// Support both legacy number (e.g. 30) and new string with unit (e.g. '30px')
+	const sizeValue = iconSize
+		? (typeof iconSize === 'number' ? `${iconSize}px` : iconSize)
+		: '30px';
 	// When useCustomColor is true, apply the selected color to override SVG colors
 	// When false (default), preserve original SVG colors by not applying any color
 	const color = useCustomColor ? (iconColor || 'currentColor') : undefined;
@@ -29,8 +32,8 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 					className={`custom-svg-inline ${useCustomColor ? 'use-custom-color' : ''}`}
 					dangerouslySetInnerHTML={{ __html: customIconSvg }}
 					style={{ 
-						width: `${size}px`,
-						height: `${size}px`,
+					width: sizeValue,
+					height: sizeValue,
 						display: 'inline-flex',
 						alignItems: 'center',
 						justifyContent: 'center'
@@ -44,8 +47,8 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 					src={customIconUrl} 
 					alt="" 
 					style={{ 
-						width: `${size}px`, 
-						height: `${size}px`, 
+						width: sizeValue, 
+						height: sizeValue, 
 						objectFit: 'contain' 
 					}} 
 				/>
@@ -57,8 +60,8 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 	}
 
 	const iconStyle = {
-		width: `${size}px`,
-		height: `${size}px`,
+		width: sizeValue,
+		height: sizeValue,
 		display: 'inline-flex',
 		alignItems: 'center',
 		justifyContent: 'center'

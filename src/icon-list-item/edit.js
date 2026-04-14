@@ -61,7 +61,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const blockProps = useBlockProps({
 		className: 'pdm-icon-list-item',
 		style: {
-			'--icon-size': `${attributes.iconSize || 30}px`,
+			'--icon-size': attributes.iconSize || '30px',
 			'--icon-color': attributes.iconColor || 'currentColor'
 		}
 	});

@@ -90,7 +90,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
     return (
         <details { ...useBlockProps({
             style: {
-                '--pdm-icon-size': `${attributes.iconSize || 25}px`,
+                '--pdm-icon-size': attributes.iconSize || '25px',
                 '--pdm-icon-color': attributes.iconColor || 'currentColor'
             }
         }) } name="pdm-accordion">

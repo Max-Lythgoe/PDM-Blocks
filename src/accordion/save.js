@@ -28,7 +28,7 @@ export default function save( { attributes } ) {
     return (
         <details { ...useBlockProps.save({
             style: {
-                '--pdm-icon-size': `${attributes.iconSize || 25}px`,
+                '--pdm-icon-size': attributes.iconSize || '25px',
                 '--pdm-icon-color': attributes.iconColor || 'currentColor'
             }
         }) } name="pdm-accordion">

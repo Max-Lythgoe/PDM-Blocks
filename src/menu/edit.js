@@ -256,15 +256,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 				</PanelBody>
 
-		<PanelBody title={__('Mobile Menu Icons', 'pdm-blocks')} initialOpen={false}>
-			<DualIconEdit
-				attributes={attributes}
-				setAttributes={setAttributes}
-				openLabel="Open Menu Icon"
-				closeLabel="Close Menu Icon"
-			/>
-		</PanelBody>
-
 		<PanelBody title={__('Menu Item Images', 'pdm-blocks')} initialOpen={false}>
 				<RangeControl
 						label={__('Menu Item Image Max Width (px)', 'pdm-blocks')}
@@ -285,6 +276,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		</PanelBody>
 
 	</InspectorControls>
+
+		<DualIconEdit
+			attributes={attributes}
+			setAttributes={setAttributes}
+			openLabel={__('Open Menu Icon', 'pdm-blocks')}
+			closeLabel={__('Close Menu Icon', 'pdm-blocks')}
+			defaultIconSize="45px"
+			hideByDefault={true}
+			openDefault="bars"
+			closeDefault="xmark"
+		/>
 
 	<InspectorControls group="color">
 		<ColorGradientSettingsDropdown
@@ -323,7 +325,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			<style dangerouslySetInnerHTML={{ __html: `
 				@media (max-width: ${mobileBreakpoint}px) {
 					.pdm-menu-mobile {
-					--iconSize: ${attributes.iconSize || 25}px;
+					--iconSize: ${attributes.iconSize || '45px'};
 				    }
 					[data-block="${clientId}"] .pdm-menu-desktop { display: none !important; }
 					[data-block="${clientId}"] .pdm-menu-mobile { display: flex !important; }

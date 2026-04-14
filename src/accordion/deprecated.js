@@ -44,6 +44,12 @@ const v1 = {
 			</details>
 		);
 	},
+	migrate( { iconSize, ...attrs } ) {
+		return {
+			...attrs,
+			iconSize: iconSize ? `${ iconSize }px` : '25px',
+		};
+	},
 };
 
 export default [ v1 ];

@@ -20,7 +20,7 @@ export default function save({ attributes }) {
 	const blockProps = useBlockProps.save({
 		className: 'pdm-icon-list-item',
 		style: {
-			'--icon-size': `${attributes.iconSize || 30}px`,
+			'--icon-size': attributes.iconSize || '30px',
 			'--icon-color': attributes.iconColor || 'currentColor'
 		}
 	});

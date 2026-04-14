@@ -13,8 +13,8 @@ export const iconAttributes = {
 		type: "string"
 	},
 	iconSize: {
-		type: "number",
-		default: 30
+		type: "string",
+		default: "30px"
 	},
 	iconColor: {
 		type: "string",
@@ -45,8 +45,8 @@ export const dualIconAttributes = {
 		type: "string"
 	},
 	iconSize: {
-		type: "number",
-		default: 25
+		type: "string",
+		default: "25px"
 	},
 	iconColor: {
 		type: "string",

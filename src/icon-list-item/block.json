@@ -35,7 +35,7 @@
 			"type": "string"
 		},
 		"iconSize": {
-			"type": "number"
+			"type": "string"
 		},
 		"iconColor": {
 			"type": "string"

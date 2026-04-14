@@ -1,5 +1,5 @@
 import { InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
-import { PanelBody, __experimentalUnitControl as UnitControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, __experimentalUnitControl as UnitControl, ToggleControl, __experimentalToolsPanel as ToolsPanel, __experimentalToolsPanelItem as ToolsPanelItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { IconSelector } from './IconSelector';
 
@@ -39,19 +39,10 @@ export default function IconEdit({ attributes, setAttributes, label = "Icon Sett
 				/>
 				
 				<UnitControl
+					__next40pxDefaultSize
 					label={__('Icon Size', 'pdm-blocks')}
 					value={iconSize}
-					onChange={(value) => setAttributes({ iconSize: parseInt(value) || 24 })}
-					min={1}
-					max={600}
-					units={[{ value: 'px', label: 'px' }]}
-				/>
-
-				<ToggleControl
-					label={__('Use Custom Color', 'pdm-blocks')}
-					checked={useCustomColor}
-					onChange={(value) => setAttributes({ useCustomColor: value })}
-					help={__('Override original SVG colors with selected icon color', 'pdm-blocks')}
+					onChange={(value) => setAttributes({ iconSize: value })}
 				/>
 
 				<PanelColorSettings
@@ -63,7 +54,14 @@ export default function IconEdit({ attributes, setAttributes, label = "Icon Sett
 							label: __('Icon Color', 'pdm-blocks'),
 						},
 					]}
-				/>
+				>
+					<ToggleControl
+						label={__('Use Custom Color', 'pdm-blocks')}
+						checked={useCustomColor}
+						onChange={(value) => setAttributes({ useCustomColor: value })}
+						help={__('Override original SVG colors with selected icon color', 'pdm-blocks')}
+					/>
+				</PanelColorSettings>
 			</PanelBody>
 		</InspectorControls>
 	);
@@ -72,30 +70,71 @@ export default function IconEdit({ attributes, setAttributes, label = "Icon Sett
 /**
  * Component for dual icon editing (open/close states)
  * Use for accordions or toggle-style blocks
+ * 
+ * @param {Object} props
+ * @param {Object} props.attributes - Block attributes
+ * @param {Function} props.setAttributes - Function to update attributes
+ * @param {string} [props.openLabel] - Label for the closed-state (open trigger) icon item
+ * @param {string} [props.closeLabel] - Label for the opened-state (close trigger) icon item
+ * @param {string} [props.defaultIconSize] - Default icon size string (e.g. '25px')
  */
-export function DualIconEdit({ attributes, setAttributes }) {
-	const { iconOpen, customIconUrlOpen, iconClose, customIconUrlClose, iconSize, iconColor, useCustomColor } = attributes;
+export function DualIconEdit({ attributes, setAttributes, openLabel, closeLabel, defaultIconSize = '25px', hideByDefault = false, openDefault = 'plus', closeDefault = 'minus' }) {
+	const { iconOpen, customIconUrlOpen, iconClose, customIconUrlClose, iconSize, iconColor, useCustomColor, iconPosition } = attributes;
+	const hasIconPosition = iconPosition !== undefined;
+	const shownByDefault = !hideByDefault;
 
 	return (
-		<>
-			<InspectorControls>
-				<PanelBody title={__('Icon Settings', 'pdm-blocks')} initialOpen={false}>
+		<InspectorControls>
+			<ToolsPanel
+				label={__('Icon Settings', 'pdm-blocks')}
+				resetAll={() => setAttributes({
+					iconSize: defaultIconSize,
+					iconColor: 'currentColor',
+					useCustomColor: false,
+					iconOpen: 'plus',
+					customIconUrlOpen: null,
+					customIconSvgOpen: null,
+					iconClose: 'minus',
+					customIconUrlClose: null,
+					customIconSvgClose: null,
+					...(hasIconPosition && { iconPosition: 'right' }),
+				})}
+			>
+				<ToolsPanelItem
+					hasValue={() => iconSize !== defaultIconSize}
+					label={__('Icon Size', 'pdm-blocks')}
+					onDeselect={() => setAttributes({ iconSize: defaultIconSize })}
+					isShownByDefault={shownByDefault}
+				>
 					<UnitControl
+						__next40pxDefaultSize
 						label={__('Icon Size', 'pdm-blocks')}
 						value={iconSize}
-						onChange={(value) => setAttributes({ iconSize: parseInt(value) || 25 })}
-						min={12}
-						max={64}
-						units={[{ value: 'px', label: 'px' }]}
+						onChange={(value) => setAttributes({ iconSize: value })}
 					/>
+				</ToolsPanelItem>
 
-					<ToggleControl
-						label={__('Use Custom Color', 'pdm-blocks')}
-						checked={useCustomColor}
-						onChange={(value) => setAttributes({ useCustomColor: value })}
-						help={__('Override original SVG colors with selected icon color', 'pdm-blocks')}
-					/>
+				{hasIconPosition && (
+					<ToolsPanelItem
+						hasValue={() => iconPosition !== 'right'}
+						label={__('Icon Position', 'pdm-blocks')}
+						onDeselect={() => setAttributes({ iconPosition: 'right' })}
+						isShownByDefault={false}
+					>
+						<ToggleControl
+							label={__('Icon on Right', 'pdm-blocks')}
+							checked={iconPosition === 'right'}
+							onChange={(val) => setAttributes({ iconPosition: val ? 'right' : 'left' })}
+						/>
+					</ToolsPanelItem>
+				)}
 
+				<ToolsPanelItem
+					hasValue={() => !!useCustomColor || iconColor !== 'currentColor'}
+					label={__('Icon Color', 'pdm-blocks')}
+					onDeselect={() => setAttributes({ useCustomColor: false, iconColor: 'currentColor' })}
+					isShownByDefault={false}
+				>
 					<PanelColorSettings
 						title={__('Icon Color', 'pdm-blocks')}
 						colorSettings={[
@@ -105,43 +144,62 @@ export function DualIconEdit({ attributes, setAttributes }) {
 								label: __('Icon Color', 'pdm-blocks'),
 							},
 						]}
-					/>
-				</PanelBody>
+					>
+						<ToggleControl
+							label={__('Use Custom Color', 'pdm-blocks')}
+							checked={useCustomColor}
+							onChange={(value) => setAttributes({ useCustomColor: value })}
+							help={__('Override original SVG colors with selected icon color', 'pdm-blocks')}
+						/>
+					</PanelColorSettings>
+				</ToolsPanelItem>
 
-				<PanelBody title={__('Closed Icon', 'pdm-blocks')} initialOpen={false}>
+				<ToolsPanelItem
+					hasValue={() => !!customIconUrlOpen || (iconOpen && iconOpen !== openDefault)}
+					label={openLabel || __('Closed State Icon', 'pdm-blocks')}
+					onDeselect={() => setAttributes({ iconOpen: 'plus', customIconUrlOpen: null, customIconSvgOpen: null })}
+					isShownByDefault={false}
+				>
+					<p style={{ margin: '0 0 8px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit' }}>{openLabel || __('Closed State Icon', 'pdm-blocks')}</p>
 					<IconSelector
 						selectedIcon={iconOpen}
 						customIconUrl={customIconUrlOpen}
-						onIconSelect={(icon) => setAttributes({ 
+						onIconSelect={(icon) => setAttributes({
 							iconOpen: icon,
 							customIconUrlOpen: null,
 							customIconSvgOpen: null
 						})}
-						onCustomIconSelect={(url, svgContent) => setAttributes({ 
+						onCustomIconSelect={(url, svgContent) => setAttributes({
 							customIconUrlOpen: url,
 							customIconSvgOpen: svgContent || null,
 							iconOpen: null
 						})}
 					/>
-				</PanelBody>
+				</ToolsPanelItem>
 
-				<PanelBody title={__('Opened Icon', 'pdm-blocks')} initialOpen={false}>
+				<ToolsPanelItem
+					hasValue={() => !!customIconUrlClose || (iconClose && iconClose !== closeDefault)}
+					label={closeLabel || __('Opened State Icon', 'pdm-blocks')}
+					onDeselect={() => setAttributes({ iconClose: 'minus', customIconUrlClose: null, customIconSvgClose: null })}
+					isShownByDefault={false}
+				>
+					<p style={{ margin: '0 0 8px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit' }}>{closeLabel || __('Opened State Icon', 'pdm-blocks')}</p>
 					<IconSelector
 						selectedIcon={iconClose}
 						customIconUrl={customIconUrlClose}
-						onIconSelect={(icon) => setAttributes({ 
+						onIconSelect={(icon) => setAttributes({
 							iconClose: icon,
 							customIconUrlClose: null,
 							customIconSvgClose: null
 						})}
-						onCustomIconSelect={(url, svgContent) => setAttributes({ 
+						onCustomIconSelect={(url, svgContent) => setAttributes({
 							customIconUrlClose: url,
 							customIconSvgClose: svgContent || null,
 							iconClose: null
 						})}
 					/>
-				</PanelBody>
-			</InspectorControls>
-		</>
+				</ToolsPanelItem>
+			</ToolsPanel>
+		</InspectorControls>
 	);
 }

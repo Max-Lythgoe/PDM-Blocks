@@ -28,7 +28,9 @@ $icon_open = isset($attributes['iconOpen']) ? $attributes['iconOpen'] : 'bars';
 $custom_icon_open = isset($attributes['customIconUrlOpen']) ? $attributes['customIconUrlOpen'] : '';
 $icon_close = isset($attributes['iconClose']) ? $attributes['iconClose'] : 'xmark';
 $custom_icon_close = isset($attributes['customIconUrlClose']) ? $attributes['customIconUrlClose'] : '';
-$icon_size = isset($attributes['iconSize']) ? $attributes['iconSize'] : 25;
+$icon_size_raw = isset($attributes['iconSize']) ? $attributes['iconSize'] : '45px';
+// Support both legacy number (e.g. 45) and new string with unit (e.g. '45px')
+$icon_size = is_numeric($icon_size_raw) ? $icon_size_raw . 'px' : $icon_size_raw;
 $icon_color = isset($attributes['iconColor']) ? $attributes['iconColor'] : 'currentColor';
 $use_custom_color = isset($attributes['useCustomColor']) ? $attributes['useCustomColor'] : false;
 $menu_item_image_max_width = isset($attributes['menuItemImageMaxWidth']) ? intval($attributes['menuItemImageMaxWidth']) : 100;
@@ -269,9 +271,9 @@ if ($mobile_image_first) {
 
 			<label for="<?php echo esc_attr($menu_toggle_id); ?>" id="open-menu-toggle-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-label="open menu button">
 				<?php if ($custom_icon_open): ?>
-					<img src="<?php echo esc_url($custom_icon_open); ?>" alt="Open menu" style="width: <?php echo esc_attr($icon_size); ?>px; height: <?php echo esc_attr($icon_size); ?>px; color: <?php echo esc_attr($icon_color); ?>;" />
+					<img src="<?php echo esc_url($custom_icon_open); ?>" alt="Open menu" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
 				<?php else: ?>
-					<span style="width: <?php echo esc_attr($icon_size); ?>px; height: <?php echo esc_attr($icon_size); ?>px; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
+					<span style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
 						<?php echo pdm_get_icon_svg($icon_open); ?>
 					</span>
 				<?php endif; ?> </label>
@@ -283,9 +285,9 @@ if ($mobile_image_first) {
 
 				<label for="<?php echo esc_attr($menu_toggle_id); ?>" id="close-menu-toggle-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-label="close menu button">
 					<?php if ($custom_icon_close): ?>
-						<img src="<?php echo esc_url($custom_icon_close); ?>" alt="Close menu" style="width: <?php echo esc_attr($icon_size); ?>px; height: <?php echo esc_attr($icon_size); ?>px; color: <?php echo esc_attr($icon_color); ?>;" />
+						<img src="<?php echo esc_url($custom_icon_close); ?>" alt="Close menu" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
 					<?php else: ?>
-						<span style="width: <?php echo esc_attr($icon_size); ?>px; height: <?php echo esc_attr($icon_size); ?>px; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
+						<span style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
 							<?php echo pdm_get_icon_svg($icon_close); ?>
 						</span>
 					<?php endif; ?> </label>
