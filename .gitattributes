@@ -1,0 +1,10 @@
+# .gitattributes
+.distignore         export-ignore
+.editorconfig       export-ignore
+.gitignore          export-ignore
+.git                export-ignore
+node_modules/       export-ignore
+src/                export-ignore
+scripts/            export-ignore
+package.json        export-ignore
+package-lock.json   export-ignore

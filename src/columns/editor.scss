@@ -4,11 +4,6 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- .wp-block-pdm-columns::after {
-	border-radius: 4px!important;
-	outline-offset: 4px!important;
-}
-
 .wp-block-pdm-columns>.block-editor-inner-blocks>.block-editor-block-list__layout {
     display: flex;
     gap: var(--desktop-gap);

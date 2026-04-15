@@ -56,7 +56,7 @@ export default function Edit({ attributes, setAttributes }) {
                 <ToolsPanel
                     className="pdm-section-tools-panel"
                     label={ __( 'Additional Settings', 'pdm-blocks' ) }
-                    resetAll={ () => setAttributes( { useMinHeight: false, minHeight: 50, moveBehindHeader: false, responsiveIgnoreHeader: true, responsiveBreakpoint: 0, backgroundAspectRatio: '16/9', contentOrder: 'below' } ) }
+                    resetAll={ () => setAttributes( { useMinHeight: false, minHeight: 50, moveBehindHeader: false, responsiveIgnoreHeader: true, responsiveBreakpoint: 0, backgroundAspectRatio: '16/9', contentOrder: 'below', htmlElement: 'section' } ) }
                 >
                     <ToolsPanelItem
                         hasValue={ () => useMinHeight !== false }
@@ -113,6 +113,7 @@ export default function Edit({ attributes, setAttributes }) {
                         { responsiveBreakpoint > 0 && (
                             <>
                                 <NumberControl
+                                    __next40pxDefaultSize
                                     label={ __( 'Breakpoint (px)', 'pdm-blocks' ) }
                                     value={ responsiveBreakpoint }
                                     onChange={ ( value ) => setAttributes( { responsiveBreakpoint: parseInt( value ) || 0 } ) }
@@ -121,6 +122,7 @@ export default function Edit({ attributes, setAttributes }) {
                                     step={ 1 }
                                 />
                                 <SelectControl
+                                    __next40pxDefaultSize
                                     label={ __( 'Background Aspect Ratio', 'pdm-blocks' ) }
                                     value={ backgroundAspectRatio }
                                     options={ [
@@ -133,6 +135,7 @@ export default function Edit({ attributes, setAttributes }) {
                                     onChange={ ( value ) => setAttributes( { backgroundAspectRatio: value } ) }
                                 />
                                 <SelectControl
+                                    __next40pxDefaultSize 
                                     label={ __( 'Content Order', 'pdm-blocks' ) }
                                     value={ contentOrder }
                                     options={ [
@@ -143,6 +146,26 @@ export default function Edit({ attributes, setAttributes }) {
                                 />
                             </>
                         ) }
+                    </ToolsPanelItem>
+                    <ToolsPanelItem
+                        hasValue={ () => !! attributes.htmlElement && attributes.htmlElement !== 'div' }
+                        label={ __( 'HTML Element', 'pdm-blocks' ) }
+                        onDeselect={ () => setAttributes( { htmlElement: 'div' } ) }
+                        isShownByDefault={ false }
+                    >
+                        <SelectControl
+                            __next40pxDefaultSize
+                            label={ __( 'HTML Element', 'pdm-blocks' ) }
+                            value={ attributes.htmlElement || 'div' }
+                            options={ [
+                                { label: __( 'Section', 'pdm-blocks' ), value: 'section' },
+                                { label: __( 'Div', 'pdm-blocks' ), value: 'div' },
+                                { label: __( 'Main', 'pdm-blocks' ), value: 'main' },
+                                { label: __( 'Article', 'pdm-blocks' ), value: 'article' },
+                                { label: __( 'Aside', 'pdm-blocks' ), value: 'aside' },
+                            ] }
+                            onChange={ ( value ) => setAttributes( { htmlElement: value } ) }
+                        />
                     </ToolsPanelItem>
                 </ToolsPanel>
             </InspectorControls>

@@ -42,8 +42,8 @@
 			"type": "string"
 		},
 		"iconSize": {
-			"type": "number",
-			"default": 75
+			"type": "string",
+			"default": "75px"
 		},
 		"iconColor": {
 			"type": "string",

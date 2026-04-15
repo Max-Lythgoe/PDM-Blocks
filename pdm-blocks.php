@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.3.4
+ * Version:           1.3.5
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -265,76 +265,6 @@ function pdm_blocks_classic_menu_support()
     add_theme_support('menus');
 }
 
-
-/**
- * Register default block styles for the plugin.
- * This injects defaults into the Global Styles system.
- */
-function pdm_register_block_defaults($theme_json)
-{
-    $plugin_data = [
-        'version' => 2,
-        'styles'  => [
-            'blocks' => [
-                // PDM CARD
-                'pdm/card' => [
-                    'border' => [
-                        'radius' => '25px'
-                    ],
-                    'color' => [
-                        'background' => 'var(--wp--preset--color--base, #ffffff)',
-                        'text'       => 'var(--wp--preset--color--contrast, #000000)',
-                    ],
-                    'shadow' => 'var(--wp--preset--shadow--natural, 0px 4px 10px 0px rgba(0,0,0,0.2))',
-                    'spacing' => [
-                        'padding' => [
-                            'top'    => '20px',
-                            'bottom' => '20px',
-                            'left'   => '20px',
-                            'right'  => '20px'
-                        ],
-                    ],
-                ],
-
-                // PDM POPUP
-                'pdm/popup' => [
-                    'border' => [
-                        'radius' => '25px'
-                    ],
-                    'color' => [
-                        'background' => 'var(--wp--preset--color--base, #ffffff)',
-                        'text'       => 'var(--wp--preset--color--contrast, #000000)',
-                    ],
-                    'shadow' => 'var(--wp--preset--shadow--natural, 0px 4px 10px 0px rgba(0,0,0,0.2))',
-                    'spacing' => [
-                        'padding' => [
-                            'top'    => 'var(--wp--preset--spacing--medium, 40px)',
-                            'bottom' => 'var(--wp--preset--spacing--medium, 40px)',
-                            'left'   => '20px',
-                            'right'  => '20px'
-                        ],
-                    ],
-                ],
-
-                // PDM SECTION
-                'pdm/section' => [
-                    'spacing' => [
-                        'padding' => [
-                            'top'    => 'var(--wp--preset--spacing--medium, 40px)',
-                            'bottom' => 'var(--wp--preset--spacing--medium, 40px)',
-                            'left'   => 'var(--wp--preset--spacing--x-small, 10px)',
-                            'right'  => 'var(--wp--preset--spacing--x-small, 10px)'
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ];
-
-    return $theme_json->update_with($plugin_data);
-}
-add_filter('wp_theme_json_data_default', 'pdm_register_block_defaults');
-
 /**
  * Replace featured image placeholders in rendered block content
  */
@@ -412,3 +342,14 @@ function pdm_blocks_render_featured_image($block_content, $block)
     return $block_content;
 }
 add_filter('render_block', 'pdm_blocks_render_featured_image', 10, 2);
+
+// Remove core block patterns
+add_action('init', function () {
+    remove_theme_support('core-block-patterns');
+}, 9);
+
+// Strip global styles
+add_filter('wp_enqueue_scripts', function () {
+    // This removes the "classic" theme styles WP adds for backwards compatibility
+    wp_dequeue_style('classic-theme-styles');
+}, 20);

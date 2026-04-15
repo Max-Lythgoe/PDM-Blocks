@@ -107,24 +107,12 @@
 		.bbb-tab-icon svg {
 			color: var(--bbb-tab-icon-default-color);
 			height: 100%;
+			width: 100%;
 		}
 
 		&:not(.is-bbb-active-tab) {
 			.bbb-tab-icon svg {
 				color: var(--bbb-tab-icon-default-color);
-			}
-		}
-
-		&.is-bbb-active-tab {
-			background-color: var(--bbb-tab-background-active-color);
-			color: var(--bbb-tab-text-active-color);
-
-			.tab-button-text {
-				color: inherit;
-			}
-
-			.bbb-tab-icon svg {
-				color: var(--bbb-tab-icon-active-color);
 			}
 		}
 
@@ -146,6 +134,19 @@
 
 			&:after {
 				border-top-color: var(--bbb-tab-background-hover-color) !important;
+			}
+		}
+
+		&.is-bbb-active-tab {
+			background-color: var(--bbb-tab-background-active-color);
+			color: var(--bbb-tab-text-active-color);
+
+			.tab-button-text {
+				color: inherit;
+			}
+
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-active-color);
 			}
 		}
 	}
@@ -201,8 +202,6 @@
 		flex-wrap: nowrap !important;
 		overflow-x: auto;
 		overflow-y: hidden;
-		// scrollbar-width: none;
-		// -ms-overflow-style: none;
 	}
 
 	// .pdm-tab-container.pdm-tabs__horizontal .pdm-tabs-buttons {

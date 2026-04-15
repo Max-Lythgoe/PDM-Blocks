@@ -40,6 +40,7 @@ export default function save({ attributes }) {
         style: useMinHeight ? { minHeight: `${minHeight}vh` } : {},
     });
 
+	const Tag = attributes.htmlElement || 'div';
 	return (
 		<>
 			{responsiveBreakpoint > 0 && (
@@ -82,14 +83,14 @@ export default function save({ attributes }) {
 					`
 				}} />
 			)}
-			<div { ...blockProps }>
+			<Tag { ...blockProps }>
 				<div className={`section-flex-container ${contentOrder === 'above' ? 'content-first' : 'content-last'}`}>
 					<BackgroundMediaRender attributes={attributes} />
 					<div className="content-wrapper"> 
 						<InnerBlocks.Content />
 					</div>
 				</div>
-			</div>
+			</Tag>
 		</>
 	);
 }

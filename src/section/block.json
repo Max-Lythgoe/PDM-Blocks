@@ -49,6 +49,11 @@
 		"responsiveIgnoreHeader": {
 			"type": "boolean",
 			"default": true
+		},
+		"htmlElement": {
+			"type": "string",
+			"default": "div",
+			"enum": ["section", "div", "main", "article"]
 		}
 	},
 	"supports": {
