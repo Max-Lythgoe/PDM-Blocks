@@ -1,58 +1,51 @@
 <?php
 
-/**
- * Register a custom 'Company Info' settings page and all its fields for PDM Blocks.
- *
- * This file is included in the pdm-blocks plugin.
- */
-
-// 1. Add the custom settings menu item as a top-level menu
+// COMPANY INFO SETTINGS PAGE
 function pdm_blocks_add_company_info_menu_page()
 {
     $icon_svg = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="white" d="M192 64C156.7 64 128 92.7 128 128L128 512C128 547.3 156.7 576 192 576L448 576C483.3 576 512 547.3 512 512L512 128C512 92.7 483.3 64 448 64L192 64zM304 416L336 416C353.7 416 368 430.3 368 448L368 528L272 528L272 448C272 430.3 286.3 416 304 416zM224 176C224 167.2 231.2 160 240 160L272 160C280.8 160 288 167.2 288 176L288 208C288 216.8 280.8 224 272 224L240 224C231.2 224 224 216.8 224 208L224 176zM368 160L400 160C408.8 160 416 167.2 416 176L416 208C416 216.8 408.8 224 400 224L368 224C359.2 224 352 216.8 352 208L352 176C352 167.2 359.2 160 368 160zM224 304C224 295.2 231.2 288 240 288L272 288C280.8 288 288 295.2 288 304L288 336C288 344.8 280.8 352 272 352L240 352C231.2 352 224 344.8 224 336L224 304zM368 288L400 288C408.8 288 416 295.2 416 304L416 336C416 344.8 408.8 352 400 352L368 352C359.2 352 352 344.8 352 336L352 304C352 295.2 359.2 288 368 288z"/></svg>');
 
     add_menu_page(
-        'Company Info',                    // Page title
-        'Company Info',                    // Menu title
-        'manage_options',                  // Capability required to see the page
-        'pdm-blocks-company-info',         // Menu slug (unique ID)
-        'pdm_blocks_company_info_page_content', // Callback function to display the page content
-        $icon_svg,                         // Icon (SVG as data URI)
-        3                                  // Position (3 = right after Dashboard)
+        'Company Info',
+        'Company Info',
+        'manage_options',
+        'pdm-blocks-company-info',
+        'pdm_blocks_company_info_page_content',
+        $icon_svg,
+        3
     );
 }
 add_action('admin_menu', 'pdm_blocks_add_company_info_menu_page');
 
 
-// 2. Register all settings, sections, and fields
+// settings / fields
 function pdm_blocks_company_info_settings_init()
 {
-    // Register the setting group (which saves all options as a single array)
     register_setting(
-        'pdm_blocks_company_info_group', // Option group (matches settings_fields() in the form)
-        'pdm_blocks_company_info',       // Option name (the key in wp_options)
-        'pdm_blocks_company_info_sanitize' // Sanitize callback function
+        'pdm_blocks_company_info_group',
+        'pdm_blocks_company_info',
+        'pdm_blocks_company_info_sanitize'
     );
 
-    // --- SECTION 1: General Info ---
+    // general info 
     add_settings_section(
-        'pdm_blocks_general_info_section', // Section ID
-        'General Contact Information',    // Section Title
-        'pdm_blocks_general_info_section_callback', // Callback to display section intro text
-        'pdm-blocks-company-info'         // Page slug (unique ID)
+        'pdm_blocks_general_info_section',
+        'General Contact Information',
+        'pdm_blocks_general_info_section_callback',
+        'pdm-blocks-company-info'
     );
 
-    // Single field for repeatable locations (address, phone, email, map)
+    // repeater locations 
     add_settings_field(
-        'company_locations',                          // Field ID
-        'Company Locations',                          // Field Title
-        'pdm_blocks_locations_input_callback',        // Callback renders repeatable inputs
-        'pdm-blocks-company-info',                    // Page slug
-        'pdm_blocks_general_info_section',            // Section ID
+        'company_locations',
+        'Company Locations',
+        'pdm_blocks_locations_input_callback',
+        'pdm-blocks-company-info',
+        'pdm_blocks_general_info_section',
         array('id' => 'company_locations', 'label' => 'Add one or more company locations (address, phone, email, map embed).')
     );
 
-    // --- SECTION 2: Service Areas ---
+    // service areas toggle 
     add_settings_section(
         'pdm_blocks_service_areas_section',
         'Service Areas',
@@ -72,10 +65,9 @@ function pdm_blocks_company_info_settings_init()
 add_action('admin_init', 'pdm_blocks_company_info_settings_init');
 
 
-// 3. Render the settings page content (The Form)
+// settings page content
 function pdm_blocks_company_info_page_content()
 {
-    // Check user capabilities
     if (! current_user_can('manage_options')) {
         return;
     }
@@ -84,13 +76,10 @@ function pdm_blocks_company_info_page_content()
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
         <form method="post" action="options.php">
             <?php
-            // Output security fields and the options group reference.
             settings_fields('pdm_blocks_company_info_group');
 
-            // Output settings sections and fields.
             do_settings_sections('pdm-blocks-company-info');
 
-            // Output the save button.
             submit_button('Save Company Info');
             ?>
         </form>
@@ -99,9 +88,6 @@ function pdm_blocks_company_info_page_content()
 }
 
 
-// 4. Callback functions for Sections and Fields
-
-// Section callback functions (optional intro text for the section)
 function pdm_blocks_general_info_section_callback()
 {
     echo '<p>Enter your primary contact information and location details.</p>';
@@ -109,12 +95,10 @@ function pdm_blocks_general_info_section_callback()
 
 function pdm_blocks_service_areas_section_callback()
 {
-    echo '<p>Configure Service Areas to showcase the cities and regions you serve.</p>';
+    echo '<p>Toggle on/off Service Areas post type.</p>';
 }
 
-/**
- * Renders a generic text input field.
- */
+// default field
 function pdm_blocks_text_input_callback($args)
 {
     $options = get_option('pdm_blocks_company_info');
@@ -128,9 +112,7 @@ function pdm_blocks_text_input_callback($args)
     }
 }
 
-/**
- * Renders a generic textarea input field (used for address and map code).
- */
+// default textarea for map 
 function pdm_blocks_textarea_input_callback($args)
 {
     $options = get_option('pdm_blocks_company_info');
@@ -146,9 +128,7 @@ function pdm_blocks_textarea_input_callback($args)
     }
 }
 
-/**
- * Renders a checkbox input field.
- */
+// default checkbox
 function pdm_blocks_checkbox_input_callback($args)
 {
     $options = get_option('pdm_blocks_company_info');
@@ -163,15 +143,11 @@ function pdm_blocks_checkbox_input_callback($args)
 }
 
 
-// 5. Sanitize Callback
-/**
- * Sanitize all option fields before saving to the database.
- */
+// sanitize options on save
 function pdm_blocks_company_info_sanitize($input)
 {
     $sanitized_input = array();
 
-    // Sanitize repeatable company locations
     if (isset($input['company_locations']) && is_array($input['company_locations'])) {
         $sanitized_input['company_locations'] = array();
         foreach ($input['company_locations'] as $loc) {
@@ -184,7 +160,6 @@ function pdm_blocks_company_info_sanitize($input)
             $san['phone']   = isset($loc['phone']) ? sanitize_text_field($loc['phone']) : '';
             $san['email']   = isset($loc['email']) ? sanitize_email($loc['email']) : '';
 
-            // Sanitize hours - flexible repeater rows
             if (isset($loc['hours']) && is_array($loc['hours'])) {
                 $san['hours'] = array();
                 foreach ($loc['hours'] as $hour_row) {
@@ -199,7 +174,7 @@ function pdm_blocks_company_info_sanitize($input)
                 $san['hours'] = array();
             }
 
-            // Map iframe: allow limited iframe attributes
+            // allow iframe stuff
             if (isset($loc['map'])) {
                 $allowed_html = array(
                     'iframe' => array(
@@ -213,7 +188,6 @@ function pdm_blocks_company_info_sanitize($input)
                     ),
                 );
                 $san['map'] = wp_kses($loc['map'], $allowed_html);
-                // Sanitize enable_service_areas checkbox
                 $sanitized_input['enable_service_areas'] = isset($input['enable_service_areas']) ? 1 : 0;
             } else {
                 $san['map'] = '';
@@ -222,7 +196,7 @@ function pdm_blocks_company_info_sanitize($input)
         }
     }
 
-    // Ensure at least one empty location exists so UI always has one row
+    // require one row
     if (! isset($sanitized_input['company_locations']) || ! is_array($sanitized_input['company_locations']) || empty($sanitized_input['company_locations'])) {
         $sanitized_input['company_locations'] = array(
             array(
@@ -240,39 +214,29 @@ function pdm_blocks_company_info_sanitize($input)
 }
 
 
-// 6. Helper Function for Front-End Use (Crucial!)
-/**
- * Retrieve a specific company info option.
- */
+// get options 
 function pdm_blocks_get_company_info($key, $default = '')
 {
     $options = get_option('pdm_blocks_company_info', array());
 
-    // Check for the specific key and if value is not empty
     if (isset($options[$key]) && ! empty($options[$key])) {
         $value = $options[$key];
 
-        // Escaping based on the key type
         if (strpos($key, '_link') !== false) {
-            return esc_url($value); // Escape for URL output
+            return esc_url($value);
         } elseif ($key === 'company_email') {
-            return sanitize_email($value); // Clean email output
+            return sanitize_email($value);
         } elseif ($key === 'company_map_iframe') {
-            // Map code is already safe (kses'd) on save, just echo
             return $value;
         }
 
-        // Default text/address output (already sanitized as text/textarea on save)
         return esc_html($value);
     }
 
     return $default;
 }
 
-/**
- * Retrieve all company locations as an array.
- * Each location includes: address, phone, email, map
- */
+// get locations 
 function pdm_blocks_get_company_locations()
 {
     $options = get_option('pdm_blocks_company_info', array());
@@ -282,9 +246,6 @@ function pdm_blocks_get_company_locations()
     return array();
 }
 
-/**
- * Backwards compatibility - allow themes to still use old function names
- */
 if (!function_exists('accelerate_get_company_locations')) {
     function accelerate_get_company_locations()
     {
@@ -299,21 +260,16 @@ if (!function_exists('accelerate_get_company_info')) {
     }
 }
 
-/**
- * Render repeatable locations input
- * Outputs multiple location blocks with add/remove buttons (simple JS clone)
- */
+// repeater input 
 function pdm_blocks_locations_input_callback($args)
 {
     $options = get_option('pdm_blocks_company_info');
     $locations = isset($options['company_locations']) && is_array($options['company_locations']) ? $options['company_locations'] : array();
 
-    // Template index placeholder
     $index = 0;
 
     echo '<div id="pdm-blocks-locations-wrap">';
     if (empty($locations)) {
-        // show one empty row by default
         $locations[] = array('address' => '', 'phone' => '', 'email' => '', 'map' => '', 'hours' => array());
     }
 
@@ -341,7 +297,6 @@ function pdm_blocks_locations_input_callback($args)
         echo '<p class="description">Add custom hour rows (e.g., "M-F", "Sat-Sun", or specific days). Enter hours in any format you like.</p>';
         echo '<div class="pdm-hours-repeater" data-location-index="' . esc_attr($i) . '" style="margin-bottom: 15px;">';
 
-        // Show existing hours or one empty row
         if (empty($hours)) {
             $hours = array(array('label' => '', 'hours' => ''));
         }
@@ -363,8 +318,6 @@ function pdm_blocks_locations_input_callback($args)
         echo '<p><button type="button" class="button pdm-blocks-remove-location">Remove Location</button></p>';
         echo '</div>';
     }
-
-    // Add Location button and a small inline script to clone rows
 ?>
     </div>
     <p><button type="button" class="button" id="pdm-blocks-add-location">Add Location</button></p>
@@ -374,16 +327,15 @@ function pdm_blocks_locations_input_callback($args)
             var addBtn = $('#pdm-blocks-add-location');
             if (!wrap.length || !addBtn.length) return;
 
-            // Function to renumber all locations
+            // number locations
             function renumberLocations() {
                 wrap.find('.pdm-blocks-location-row').each(function(index) {
                     var row = $(this);
                     var oldIndex = row.data('index');
 
-                    // Update data-index
                     row.attr('data-index', index);
 
-                    // Update heading
+                    // update name
                     var nameInput = row.find('input[name*="[name]"]').first();
                     var customName = nameInput.val();
                     var heading = row.find('h3').first();
@@ -393,7 +345,6 @@ function pdm_blocks_locations_input_callback($args)
                         heading.text('Location ' + (index + 1));
                     }
 
-                    // Update all name attributes in this location
                     row.find('textarea, input').each(function() {
                         var el = $(this);
                         var name = el.attr('name');
@@ -402,13 +353,11 @@ function pdm_blocks_locations_input_callback($args)
                         }
                     });
 
-                    // Update hours repeater data attribute
                     var hoursRepeater = row.find('.pdm-hours-repeater');
                     if (hoursRepeater.length) {
                         hoursRepeater.attr('data-location-index', index);
                     }
 
-                    // Update add hour button data attribute
                     var addHourBtn = row.find('.pdm-add-hour-row');
                     if (addHourBtn.length) {
                         addHourBtn.attr('data-location-index', index);
@@ -416,8 +365,6 @@ function pdm_blocks_locations_input_callback($args)
                 });
             }
 
-            // Use event delegation for all dynamic buttons
-            // Remove location button
             wrap.on('click', '.pdm-blocks-remove-location', function(e) {
                 e.preventDefault();
                 var rows = wrap.find('.pdm-blocks-location-row');
@@ -469,10 +416,8 @@ function pdm_blocks_locations_input_callback($args)
                 var rows = wrap.find('.pdm-blocks-location-row');
                 var index = rows.length;
 
-                // clone the first row as template
                 var template = rows.first().clone();
 
-                // clear values and update name attributes
                 template.find('textarea, input').each(function() {
                     var el = $(this);
                     var name = el.attr('name');
@@ -486,7 +431,6 @@ function pdm_blocks_locations_input_callback($args)
                     }
                 });
 
-                // Reset hours to one empty row
                 var hoursRepeater = template.find('.pdm-hours-repeater');
                 if (hoursRepeater.length) {
                     hoursRepeater.attr('data-location-index', index);
@@ -505,7 +449,7 @@ function pdm_blocks_locations_input_callback($args)
                     addHourBtn.attr('data-location-index', index);
                 }
 
-                // Update the location heading
+                // Update the location name heading
                 var heading = template.find('h3');
                 if (heading.length) {
                     heading.text('Location ' + (index + 1));
@@ -519,10 +463,7 @@ function pdm_blocks_locations_input_callback($args)
 <?php
 }
 
-/**
- * Example: Render all company locations
- * Use this in your theme templates to output each location's address, phone and map.
- */
+// render locations reference
 function pdm_blocks_display_company_locations()
 {
     $locations = pdm_blocks_get_company_locations();
@@ -545,26 +486,22 @@ function pdm_blocks_display_company_locations()
         if ($phone_raw && $phone_digits) {
             echo '<div class="pdm-blocks-location-phone"><a href="tel:' . esc_attr($phone_digits) . '">' . $phone_raw . '</a></div>';
         } elseif ($phone_raw) {
-            // If digits couldn't be parsed, still output raw text
             echo '<div class="pdm-blocks-location-phone">' . $phone_raw . '</div>';
         }
         if ($email) {
             echo '<div class="pdm-blocks-location-email"><a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a></div>';
         }
         if ($map) {
-            // Map iframe was sanitized on save via wp_kses
             echo '<div class="pdm-blocks-location-map">' . $map . '</div>';
         }
-        echo '</div>'; // .pdm-blocks-location
+        echo '</div>';
     }
-    echo '</div>'; // .pdm-blocks-company-locations
+    echo '</div>';
 }
 
-// ===== SERVICE AREAS POST TYPE AND TAXONOMIES =====
+// service areas post type / taxonomies
 
-/**
- * Register Service Areas custom post type if enabled
- */
+// register post type 
 function pdm_blocks_register_service_areas_post_type()
 {
     $options = get_option('pdm_blocks_company_info');
@@ -597,18 +534,12 @@ function pdm_blocks_register_service_areas_post_type()
         'has_archive' => true,
         'menu_icon' => $icon_svg,
         'menu_position' => 20,
-        'template' => [
-            ['core/pattern', ['slug' => 'pdm-accelerate/citypage']]
-        ],
         'template_lock' => false,
     ]);
 }
 add_action('init', 'pdm_blocks_register_service_areas_post_type');
 
-/**
- * Register Cities taxonomy for Service Areas
- * This matches the taxonomy from pdm-recent-projects plugin
- */
+// register cities 
 function pdm_blocks_register_cities_taxonomy()
 {
     $options = get_option('pdm_blocks_company_info');
@@ -618,14 +549,11 @@ function pdm_blocks_register_cities_taxonomy()
         return;
     }
 
-    // Check if taxonomy is already registered (by pdm-recent-projects or another plugin)
     if (taxonomy_exists('city')) {
-        // If it exists, just associate it with our service-areas post type
         register_taxonomy_for_object_type('city', 'service-areas');
         return;
     }
 
-    // Register the taxonomy if it doesn't exist
     $labels = [
         'name' => 'Cities',
         'singular_name' => 'City',
@@ -653,9 +581,7 @@ function pdm_blocks_register_cities_taxonomy()
 }
 add_action('init', 'pdm_blocks_register_cities_taxonomy');
 
-/**
- * Register Counties taxonomy for Service Areas
- */
+// register counties 
 function pdm_blocks_register_counties_taxonomy()
 {
     $options = get_option('pdm_blocks_company_info');
@@ -694,9 +620,7 @@ function pdm_blocks_register_counties_taxonomy()
 }
 add_action('init', 'pdm_blocks_register_counties_taxonomy');
 
-/**
- * Custom meta box for County selection (radio buttons instead of checkboxes)
- */
+// metabox 
 function pdm_blocks_county_radio_meta_box($post, $box)
 {
     $taxonomy = $box['args']['taxonomy'];
@@ -724,16 +648,13 @@ function pdm_blocks_county_radio_meta_box($post, $box)
     echo '</div>';
 }
 
-/**
- * Flush rewrite rules when Service Areas is enabled/disabled
- */
+// flush rewrite rules for links 
 function pdm_blocks_flush_rewrite_on_save($old_value, $new_value)
 {
     $old_enabled = isset($old_value['enable_service_areas']) && $old_value['enable_service_areas'];
     $new_enabled = isset($new_value['enable_service_areas']) && $new_value['enable_service_areas'];
 
     if ($old_enabled !== $new_enabled) {
-        // Re-register taxonomies and post type to ensure proper setup
         if ($new_enabled) {
             pdm_blocks_register_service_areas_post_type();
             pdm_blocks_register_cities_taxonomy();

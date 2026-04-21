@@ -1,12 +1,5 @@
 <?php
-
-/**
- * PHP Icon Library
- * Maps to components/icon-library.js for consistent icon rendering
- * 
- * AUTO-GENERATED - DO NOT EDIT MANUALLY
- * Run: node scripts/convert-icons.js to regenerate
- */
+// icon library for dynamic blocks
 
 function pdm_get_icon_svg($icon_name = 'check')
 {

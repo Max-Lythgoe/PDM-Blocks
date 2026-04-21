@@ -29,19 +29,19 @@ $pdm_blocks_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buil
     'pdm-blocks'
 );
 
-// Include company info settings
+// company info settings
 require_once plugin_dir_path(__FILE__) . 'includes/company-info-settings.php';
 
-// Register WordPress Abilities API integration for company info
+// WordPress Abilities API integration for company info
 require_once plugin_dir_path(__FILE__) . 'includes/company-info-abilities.php';
 
-// Include paragraph company info extension (shortcodes and editor extensions)
+// paragraph company info extension
 require_once plugin_dir_path(__FILE__) . 'includes/paragraph-company-info-extension.php';
 
-// Include menu item image field (adds image upload to Appearance > Menus)
+// menu item image field
 require_once plugin_dir_path(__FILE__) . 'includes/menu-item-image.php';
 
-// Include tabs block helpers
+// tabs block helpers
 require_once plugin_dir_path(__FILE__) . 'helpers.php';
 
 add_action('init', 'pdm_blocks_register_blocks');
@@ -59,15 +59,13 @@ function pdm_blocks_register_blocks()
     }
 }
 
-// Localize company data for blocks
+// comapny data for blocks and shortcodes
 add_action('enqueue_block_editor_assets', 'pdm_blocks_localize_company_data');
 function pdm_blocks_localize_company_data()
 {
-    // Check if the helper function exists
     if (function_exists('pdm_blocks_get_company_locations')) {
         $locations = pdm_blocks_get_company_locations();
 
-        // Use a more reliable method to inject the data
         wp_add_inline_script(
             'wp-block-editor',
             'window.pdmCompanyData = {
@@ -85,7 +83,6 @@ function pdm_blocks_localize_company_data()
     }
 }
 
-
 // remove default blocks we're replacing
 function pdm_disallowed_block_types($allowed_blocks, $editor_context)
 {
@@ -95,7 +92,7 @@ function pdm_disallowed_block_types($allowed_blocks, $editor_context)
 }
 add_filter('allowed_block_types_all', 'pdm_disallowed_block_types', 10, 2);
 
-// remove only youtube embed variation to encourage custom YouTube Video block usage
+// remove only youtube embed variation
 add_action('enqueue_block_editor_assets', 'pdm_blocks_unregister_embed_variations');
 function pdm_blocks_unregister_embed_variations()
 {
@@ -114,7 +111,7 @@ function pdm_blocks_unregister_embed_variations()
 
 
 
-// Add custom block category to top of inserter
+// add pdm blocks category to top
 function custom_block_category($categories, $post)
 {
     return array_merge(
@@ -182,7 +179,7 @@ function accelerate_block_styles()
 
 add_action('init', 'accelerate_block_styles');
 
-// Localize assets URL for pdm/tabs editor script
+// tabs editor assets
 add_action('enqueue_block_editor_assets', 'pdm_tabs_enqueue_editor_assets');
 function pdm_tabs_enqueue_editor_assets()
 {
@@ -348,8 +345,7 @@ add_action('init', function () {
     remove_theme_support('core-block-patterns');
 }, 9);
 
-// Strip global styles
+// remove classic styles
 add_filter('wp_enqueue_scripts', function () {
-    // This removes the "classic" theme styles WP adds for backwards compatibility
     wp_dequeue_style('classic-theme-styles');
 }, 20);

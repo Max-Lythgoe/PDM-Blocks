@@ -72,7 +72,6 @@
     }
 }
 
-/* Global CSS to force SVG fills to use currentColor for icon color control - only when custom color is enabled */
 .pdm-icon-display.use-custom-color svg,
 .accordion-icon.use-custom-color svg,
 .icon-list-icon.use-custom-color svg,

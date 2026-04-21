@@ -1,7 +1,4 @@
-/**
- * Reusable component for rendering background images/videos on the frontend
- * Use this in your save.js functions to avoid repeating code
- */
+// background image render component
 
 export default function BackgroundMediaRender({ attributes }) {
 	const {
@@ -30,7 +27,6 @@ export default function BackgroundMediaRender({ attributes }) {
 		return null;
 	}
 
-	// If using featured image, add a data attribute for PHP to replace
 	if (useFeaturedImage) {
 		return (
 			<div 

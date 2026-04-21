@@ -1,32 +1,20 @@
 import { ICON_LIBRARY, getDefaultIcon } from './icon-library';
 
-/**
- * Reusable component for rendering icons on the frontend
- * Use this in your save.js functions to avoid repeating code
- * 
- * @param {Object} props
- * @param {Object} props.attributes - Block attributes
- * @param {string} props.defaultIcon - Default icon name if none selected (e.g., 'check', 'plus')
- * @param {string} props.className - Optional CSS class for wrapper
- */
+// icon rendering
 export default function IconRender({ attributes = {}, defaultIcon = 'check', className = '' }) {
 	const { selectedIcon, customIconUrl, customIconSvg, iconSize, iconColor, useCustomColor } = attributes;
 
-	// Support both legacy number (e.g. 30) and new string with unit (e.g. '30px')
 	const sizeValue = iconSize
 		? (typeof iconSize === 'number' ? `${iconSize}px` : iconSize)
 		: '30px';
-	// When useCustomColor is true, apply the selected color to override SVG colors
-	// When false (default), preserve original SVG colors by not applying any color
+	// custom colorr
 	const color = useCustomColor ? (iconColor || 'currentColor') : undefined;
 
-	// Get the icon element
 	let iconElement;
 	if (customIconUrl) {
 		const isSvg = customIconUrl.toLowerCase().endsWith('.svg');
 		
 		if (isSvg && customIconSvg) {
-			// Render SVG inline so color can be controlled
 			iconElement = (
 				<span 
 					className={`custom-svg-inline ${useCustomColor ? 'use-custom-color' : ''}`}
@@ -41,7 +29,7 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 				/>
 			);
 		} else {
-			// For regular images or SVGs without content, use img tag
+			// iamges w/o svg
 			iconElement = (
 				<img 
 					src={customIconUrl} 
@@ -67,12 +55,10 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 		justifyContent: 'center'
 	};
 
-	// Only apply color when using custom color override
 	if (useCustomColor && color) {
 		iconStyle.color = color;
 	}
 
-	// Add specific class when custom color should be applied
 	const containerClassName = useCustomColor ? `${className} use-custom-color` : className;
 
 	return (
@@ -85,20 +71,15 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 	);
 }
 
-/**
- * Component for rendering dual icons (open/close states)
- * Returns both open and close icon elements for accordion-style blocks
- */
+// dual icons 
 export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDefault = 'minus' }) {
 	const { iconOpen, customIconUrlOpen, customIconSvgOpen, iconClose, customIconUrlClose, customIconSvgClose, iconSize, iconColor, useCustomColor } = attributes;
 
 	const color = useCustomColor ? (iconColor || 'currentColor') : undefined;
 	
-	// Create icon style with conditional color application
 	const createIconStyle = () => {
 		const baseStyle = {};
 		
-		// Only apply color when using custom color override
 		if (useCustomColor && color) {
 			baseStyle.color = color;
 		}
@@ -108,7 +89,6 @@ export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDef
 	
 	const iconStyle = createIconStyle();
 
-	// Helper function to render icon with inline SVG support
 	const renderIcon = (customUrl, customSvg, iconName, defaultIcon) => {
 		if (customUrl) {
 			const isSvg = customUrl.toLowerCase().endsWith('.svg');

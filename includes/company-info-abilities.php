@@ -1,18 +1,8 @@
 <?php
-
-/**
- * PDM Company Info — WordPress Abilities API integration.
- *
- * Registers two abilities so AI assistants (e.g. PDM Supercharge chatbot) can
- * read and update company info directly without requiring the user to navigate
- * to the Company Info admin page.
- *
- * @package PDM_Blocks
- */
-
+// abilities api stuff
 defined('ABSPATH') || exit;
 
-add_action('init', 'pdm_blocks_register_company_info_abilities');
+add_action('wp_abilities_api_init', 'pdm_blocks_register_company_info_abilities');
 
 function pdm_blocks_register_company_info_abilities(): void
 {
@@ -22,9 +12,7 @@ function pdm_blocks_register_company_info_abilities(): void
 
     $edit_url = admin_url('admin.php?page=pdm-blocks-company-info');
 
-    // ------------------------------------------------------------------
-    // Ability 1: Get Company Info
-    // ------------------------------------------------------------------
+    // get company info
     wp_register_ability(
         'pdm/get-company-info',
         [
@@ -100,9 +88,7 @@ function pdm_blocks_register_company_info_abilities(): void
         ]
     );
 
-    // ------------------------------------------------------------------
-    // Ability 2: Update Company Info
-    // ------------------------------------------------------------------
+    // update company info 
     wp_register_ability(
         'pdm/update-company-info',
         [
@@ -173,9 +159,6 @@ function pdm_blocks_register_company_info_abilities(): void
                 $existing['company_locations'] = $locs;
                 $saved = update_option('pdm_blocks_company_info', $existing);
 
-                // update_option returns false both on DB error and when the
-                // serialised value hasn't changed (e.g. identical to current).
-                // Re-read and compare to distinguish the two cases.
                 if (! $saved) {
                     wp_cache_delete('pdm_blocks_company_info', 'options');
                     $verify  = get_option('pdm_blocks_company_info', []);

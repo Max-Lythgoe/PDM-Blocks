@@ -6,9 +6,9 @@ import './icon-selector.css';
 
 export function IconSelector({ selectedIcon, customIconUrl, onIconSelect, onCustomIconSelect }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState('library'); // 'library' or 'custom'
+    const [activeTab, setActiveTab] = useState('library');
 
-    // Filter icons based on search term
+    // search icons
     const filteredIcons = Object.entries(ICON_LIBRARY).filter(([name]) =>
         name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -59,7 +59,6 @@ export function IconSelector({ selectedIcon, customIconUrl, onIconSelect, onCust
                     <MediaUploadCheck>
                         <MediaUpload
                             onSelect={async (media) => {
-                                // If it's an SVG, fetch and store the content
                                 if (media.url.toLowerCase().endsWith('.svg')) {
                                     try {
                                         const response = await fetch(media.url);

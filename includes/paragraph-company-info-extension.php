@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Block Extension for Company Info and Dynamic Content
- * 
- * Extends paragraph, heading, and list item blocks to add a toolbar control for inserting
- * company information and dynamic content (year, site name, site URL) inline.
- */
+// extend paragraphs to support company info 
 
-// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -16,39 +10,32 @@ class PDM_Blocks_Paragraph_Company_Info_Extension
 {
     public function __construct()
     {
-        // Register the shortcode for dynamic company info
+        // register shortcode for dynamic company info
         add_shortcode('company_info', array($this, 'render_company_info_shortcode'));
 
-        // Register the shortcode for dynamic content (year, sitename, siteurl)
+        // register shortcode for dynamic content (year, sitename, siteurl)
         add_shortcode('dynamic_content', array($this, 'render_dynamic_content_shortcode'));
 
-        // Ensure shortcodes are processed in block content
+        // ensure shortcodes work in blocks
         add_filter('the_content', 'do_shortcode', 11);
     }
 
-    /**
-     * Render company info shortcode
-     * Usage: [company_info type="address" location="1"]
-     */
+    // comapny info shortcode registration 
     public function render_company_info_shortcode($atts)
     {
-        // Parse shortcode attributes
         $attributes = shortcode_atts(array(
             'type' => 'address',
-            'location' => '1'  // Default to 1 (first location)
+            'location' => '1'
         ), $atts);
 
-        // Check if the helper function exists
         if (!function_exists('pdm_blocks_get_company_locations')) {
             return '';
         }
 
         $locations = pdm_blocks_get_company_locations();
 
-        // Convert 1-based location number to 0-based array index
         $location_index = intval($attributes['location']) - 1;
 
-        // Check if the location exists (ensure location is 1 or higher, and array index exists)
         if (intval($attributes['location']) < 1 || !isset($locations[$location_index])) {
             return '';
         }
@@ -59,7 +46,6 @@ class PDM_Blocks_Paragraph_Company_Info_Extension
         switch ($attributes['type']) {
             case 'address':
                 if (!empty($location['address'])) {
-                    // Clean up address formatting - replace multiple line breaks with commas
                     $address = trim($location['address']);
                     $address = preg_replace('/\s*[\r\n]+\s*/', ', ', $address);
                     $output = wp_kses_post($address);
@@ -89,13 +75,9 @@ class PDM_Blocks_Paragraph_Company_Info_Extension
         return $output;
     }
 
-    /**
-     * Render dynamic content shortcode
-     * Usage: [dynamic_content type="year"], [dynamic_content type="sitename"], [dynamic_content type="siteurl"]
-     */
+    // dynamic shortcodes (year, sitename, siteurl)
     public function render_dynamic_content_shortcode($atts)
     {
-        // Parse shortcode attributes
         $attributes = shortcode_atts(array(
             'type' => 'year'
         ), $atts);
@@ -121,5 +103,4 @@ class PDM_Blocks_Paragraph_Company_Info_Extension
     }
 }
 
-// Initialize the extension
 new PDM_Blocks_Paragraph_Company_Info_Extension();

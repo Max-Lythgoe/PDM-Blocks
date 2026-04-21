@@ -1,20 +1,11 @@
 <?php
 
-/**
- * Menu Item Image Field
- *
- * Adds a custom image upload field to WordPress nav menu items in
- * Appearance > Menus. The image URL is stored as _menu_item_image
- * post meta and rendered by the PDM Menu block's walker.
- */
+// menu item image 
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Register post meta for nav_menu_item so the block editor REST API includes it.
- */
 add_action('init', 'pdm_register_menu_item_image_meta');
 function pdm_register_menu_item_image_meta()
 {
@@ -29,9 +20,7 @@ function pdm_register_menu_item_image_meta()
     ]);
 }
 
-/**
- * Render the image field inside each menu item row.
- */
+// render inside menu item 
 add_action('wp_nav_menu_item_custom_fields', 'pdm_menu_item_image_field', 10, 4);
 function pdm_menu_item_image_field($item_id, $item, $depth, $args)
 {
@@ -57,12 +46,7 @@ function pdm_menu_item_image_field($item_id, $item, $depth, $args)
 <?php
 }
 
-/**
- * Save the image URL when a menu item is saved.
- *
- * WordPress core already verifies the nonce for the menu save action
- * before wp_update_nav_menu_item fires, so a capability check is sufficient.
- */
+// save imag eurl 
 add_action('wp_update_nav_menu_item', 'pdm_save_menu_item_image', 10, 3);
 function pdm_save_menu_item_image($menu_id, $menu_item_db_id, $args)
 {
@@ -83,9 +67,7 @@ function pdm_save_menu_item_image($menu_id, $menu_item_db_id, $args)
     }
 }
 
-/**
- * Enqueue the WP media uploader and inline JS on the nav-menus admin page.
- */
+// enqueue media uploader and JS on nav-menus admin page
 add_action('admin_enqueue_scripts', 'pdm_menu_item_image_admin_scripts');
 function pdm_menu_item_image_admin_scripts($hook)
 {

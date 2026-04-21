@@ -31,11 +31,6 @@ import icon from './icon';
 registerBlockType( metadata.name, {
 	icon: icon.svg,
 	edit: Edit,
-
-	/**
-	 * @see ./save.js
-	 */
 	save,
-	save,
-deprecated,
+	deprecated,
 } );

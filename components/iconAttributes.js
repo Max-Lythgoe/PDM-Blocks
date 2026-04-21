@@ -1,6 +1,4 @@
-// Shared attributes for icon functionality
-// Import and spread these in your block.json attributes
-
+// icon attributes
 export const iconAttributes = {
 	selectedIcon: {
 		type: "string",
@@ -22,7 +20,7 @@ export const iconAttributes = {
 	}
 };
 
-// For blocks that need multiple icons (like accordions with open/close)
+// dual icons
 export const dualIconAttributes = {
 	iconOpen: {
 		type: "string",

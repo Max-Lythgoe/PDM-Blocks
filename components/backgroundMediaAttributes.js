@@ -1,6 +1,4 @@
-// Shared attributes for background image/video functionality
-// Import and spread these in your block.json attributes
-
+// attributes for background image/video
 export const backgroundMediaAttributes = {
 	opacity: {
 		type: "number",

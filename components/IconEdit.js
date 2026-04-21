@@ -3,16 +3,7 @@ import { PanelBody, __experimentalUnitControl as UnitControl, ToggleControl, __e
 import { __ } from '@wordpress/i18n';
 import { IconSelector } from './IconSelector';
 
-/**
- * Reusable component for icon editing controls
- * Use this in your edit.js to add icon selection UI
- * 
- * @param {Object} props
- * @param {Object} props.attributes - Block attributes
- * @param {Function} props.setAttributes - Function to update attributes
- * @param {string} props.label - Label for the panel (default: "Icon Settings")
- * @param {boolean} props.initialOpen - Whether panel is initially open (default: false)
- */
+// icon editing
 export default function IconEdit({ attributes, setAttributes, label = "Icon Settings", initialOpen = false }) {
 	const { selectedIcon, customIconUrl, iconSize, iconColor, useCustomColor } = attributes;
 
@@ -67,17 +58,7 @@ export default function IconEdit({ attributes, setAttributes, label = "Icon Sett
 	);
 }
 
-/**
- * Component for dual icon editing (open/close states)
- * Use for accordions or toggle-style blocks
- * 
- * @param {Object} props
- * @param {Object} props.attributes - Block attributes
- * @param {Function} props.setAttributes - Function to update attributes
- * @param {string} [props.openLabel] - Label for the closed-state (open trigger) icon item
- * @param {string} [props.closeLabel] - Label for the opened-state (close trigger) icon item
- * @param {string} [props.defaultIconSize] - Default icon size string (e.g. '25px')
- */
+// dual icon editing 
 export function DualIconEdit({ attributes, setAttributes, openLabel, closeLabel, defaultIconSize = '25px', hideByDefault = false, openDefault = 'plus', closeDefault = 'minus' }) {
 	const { iconOpen, customIconUrlOpen, iconClose, customIconUrlClose, iconSize, iconColor, useCustomColor, iconPosition } = attributes;
 	const hasIconPosition = iconPosition !== undefined;

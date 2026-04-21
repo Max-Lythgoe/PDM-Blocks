@@ -6,7 +6,7 @@ import { video as videoIcon, image, trash, postFeaturedImage } from '@wordpress/
 
 import "./image-block-control.css";
 
-// Module-level: only one flyout open at a time across all instances
+// flyout close
 let pdmCloseFlyout = null;
 
 function getFilename( url ) {
@@ -22,7 +22,7 @@ export default function BackgroundMediaEdit({ attributes, setAttributes }) {
     const videoButtonRef = useRef();
     const imgLabel = getFilename(imageURL);
 
-    // Retrieve the featured image URL and ID
+    // featured image id
     const featuredImage = useSelect((select) => {
         const postId = select('core/editor')?.getCurrentPostId();
         const postType = select('core/editor')?.getCurrentPostType();
@@ -34,7 +34,7 @@ export default function BackgroundMediaEdit({ attributes, setAttributes }) {
         return media ? { url: media.source_url, id: media.id } : null;
     }, []);
 
-    // When useFeaturedImage is true and featuredImage exists, update imageURL
+    // featured iamge udpate url
     if (useFeaturedImage && featuredImage && imageURL !== featuredImage.url) {
         setAttributes({
             imageURL: featuredImage.url,

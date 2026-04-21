@@ -5,7 +5,7 @@ import { trash, upload, image, starFilled } from '@wordpress/icons';
 
 import "./image-block-control.css";
 
-// Module-level: only one flyout open at a time across all instances
+// flyout 
 let pdmCloseFlyout = null;
 
 function getFilename( url ) {
