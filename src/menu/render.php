@@ -120,6 +120,12 @@ if (!class_exists('Desktop_Menu_Walker')) {
 
 			// Menu link
 			$link_attr = !empty($item->url) ? ' href="' . esc_url($item->url) . '"' : '';
+			if (!empty($item->target)) {
+				$link_attr .= ' target="' . esc_attr($item->target) . '"';
+				if ($item->target === '_blank') {
+					$link_attr .= ' rel="noopener noreferrer"';
+				}
+			}
 			$title = apply_filters('the_title', $item->title, $item->ID);
 
 			if (!empty($image_url)) {
@@ -172,6 +178,12 @@ if (!class_exists('Mobile_Menu_Walker')) {
 
 			// Menu link
 			$link_attr = !empty($item->url) ? ' href="' . esc_url($item->url) . '"' : '';
+			if (!empty($item->target)) {
+				$link_attr .= ' target="' . esc_attr($item->target) . '"';
+				if ($item->target === '_blank') {
+					$link_attr .= ' rel="noopener noreferrer"';
+				}
+			}
 			$title = apply_filters('the_title', $item->title, $item->ID);
 
 			if (!empty($image_url)) {
