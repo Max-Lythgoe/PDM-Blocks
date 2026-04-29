@@ -260,21 +260,6 @@
     }
 }
 
-// Mobile: Hide desktop menu, show mobile toggle
-@media (max-width: 1024px) {
-    .pdm-menu-desktop {
-        display: none !important;
-    }
-
-    .pdm-menu-mobile {
-        display: block;
-    }
-
-    .block-menu-toggle {
-        display: flex !important;
-    }
-}
-
 // Custom breakpoint overrides are output as scoped inline styles in render.php.
 
 .menu-slideout .block-menu-toggle {
