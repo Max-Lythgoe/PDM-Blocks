@@ -217,43 +217,23 @@ if (!class_exists('Mobile_Menu_Walker')) {
 // Generate unique menu toggle ID for this block instance
 $menu_toggle_id = 'menu-toggle-' . $block->parsed_block['blockName'] . '-' . wp_unique_id();
 $block_instance_id = 'pdm-menu-block-' . wp_unique_id();
-?>
+$id = esc_attr($block_instance_id);
+$bp_min = intval($desktop_breakpoint);
+$bp_max = intval($mobile_breakpoint);
 
-<style>
-	@media (min-width: <?php echo intval($desktop_breakpoint); ?>px) {
-		#<?php echo esc_attr($block_instance_id); ?>.pdm-menu-desktop {
-			display: block;
-		}
-
-		#<?php echo esc_attr($block_instance_id); ?>.pdm-menu-mobile {
-			display: none;
-		}
-
-		#<?php echo esc_attr($block_instance_id); ?>.block-menu-toggle {
-			display: none !important;
-		}
+echo "<style>
+	@media (min-width: {$bp_min}px) {
+		#{$id} .pdm-menu-desktop { display: block; }
+		#{$id} .pdm-menu-mobile { display: none; }
+		#{$id} .block-menu-toggle { display: none !important; }
 	}
-
-	@media (max-width: <?php echo intval($mobile_breakpoint); ?>px) {
-		#<?php echo esc_attr($block_instance_id); ?>.pdm-menu-desktop {
-			display: none !important;
-		}
-
-		#<?php echo esc_attr($block_instance_id); ?>.pdm-menu-mobile {
-			display: block;
-		}
-
-		#<?php echo esc_attr($block_instance_id); ?>.block-menu-toggle {
-			display: flex !important;
-			margin-inline: auto;
-		}
-
-		#<?php echo esc_attr($block_instance_id); ?> {
-			width: 100%;
-		}
+	@media (max-width: {$bp_max}px) {
+		#{$id} .pdm-menu-desktop { display: none !important; }
+		#{$id} .pdm-menu-mobile { display: block; }
+		#{$id} .block-menu-toggle { display: flex !important; margin-inline: auto; }
+		#{$id} { width: 100%; }
 	}
-</style>
-<?php
+</style>";
 $wrapper_classes = 'menu-block pdm-block';
 if ($mobile_image_first) {
 	$wrapper_classes .= ' pdm-menu-image-mobile-first';

@@ -245,21 +245,6 @@
     z-index: 1000001;
 }
 
-// Desktop: Show desktop menu, hide mobile toggle
-@media (min-width: 1025px) {
-    .pdm-menu-desktop {
-        display: block;
-    }
-
-    .pdm-menu-mobile {
-        display: none;
-    }
-
-    .block-menu-toggle {
-        display: none !important;
-    }
-}
-
 // Custom breakpoint overrides are output as scoped inline styles in render.php.
 
 .menu-slideout .block-menu-toggle {
