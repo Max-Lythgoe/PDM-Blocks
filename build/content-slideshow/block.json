@@ -16,7 +16,8 @@
     "align": [
       "wide",
       "full"
-    ]
+    ],
+    "listView": true
   },
   "attributes": {
     "align": {

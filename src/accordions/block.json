@@ -22,7 +22,8 @@
 				"background": false,
 				"text": false
 			}
-		}
+		},
+		"listView": true
 	},
 	"textdomain": "accordions",
 	"editorScript": "file:./index.js",

@@ -18,7 +18,8 @@
         "top",
         "bottom"
       ]
-    }
+    },
+    "listView": true
   },
   "textdomain": "cards",
   "editorScript": "file:./index.js",

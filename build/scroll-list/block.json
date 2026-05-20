@@ -9,7 +9,8 @@
   "example": {},
   "supports": {
     "html": false,
-    "align": false
+    "align": false,
+    "listView": true
   },
   "attributes": {
     "switchSides": {

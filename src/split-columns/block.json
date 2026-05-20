@@ -13,7 +13,8 @@
 		"spacing": {
 			"margin": true,
 			"padding": true
-		}
+		},
+		"listView": true
 	},
 	"keywords": ["columns", "split", "two columns"],
 	"textdomain": "split-columns",

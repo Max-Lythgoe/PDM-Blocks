@@ -20,7 +20,8 @@
         }
     },
     "supports": {
-        "html": false
+        "html": false,
+        "listView": true
     },
     "textdomain": "pdm-blocks",
     "editorScript": "file:./index.js",

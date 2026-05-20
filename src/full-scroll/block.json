@@ -15,7 +15,8 @@
 			"text": true,
 			"gradients": true,
 			"link": true
-		}
+		},
+		"listView": true
 	},
 	"attributes": {
 		"align": {

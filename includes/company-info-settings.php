@@ -78,7 +78,31 @@ function pdm_blocks_company_info_page_content()
             <?php
             settings_fields('pdm_blocks_company_info_group');
 
-            do_settings_sections('pdm-blocks-company-info');
+            echo '<div class="pdm-blocks-settings-section">';
+            echo '<h2>General Contact Information</h2>';
+            pdm_blocks_general_info_section_callback();
+            echo '<div class="pdm-blocks-settings-field">';
+            echo '<label for="pdm-blocks-locations-wrap"><strong>Company Locations</strong></label>';
+            pdm_blocks_locations_input_callback(array(
+                'id' => 'company_locations',
+                'label' => 'Add one or more company locations (address, phone, email, map embed).',
+            ));
+            echo '</div>';
+            echo '</div>';
+
+            echo '<div class="pdm-blocks-settings-section" style="margin-top: 32px;">';
+            echo '<h2>Service Areas</h2>';
+            echo '<div class="pdm-blocks-settings-field" style="display: flex; align-items: flex-start; gap: 10px;">';
+            pdm_blocks_checkbox_input_callback(array(
+                'id' => 'enable_service_areas',
+                'label' => '',
+            ));
+            echo '<div>';
+            echo '<label for="enable_service_areas"><strong>Enable Service Areas</strong></label>';
+            echo '<p class="description">Enable a custom post type for Service Areas with Cities and Counties taxonomies.</p>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
 
             submit_button('Save Company Info');
             ?>
@@ -93,9 +117,55 @@ function pdm_blocks_general_info_section_callback()
     echo '<p>Enter your primary contact information and location details.</p>';
 }
 
-function pdm_blocks_service_areas_section_callback()
+function pdm_blocks_service_areas_section_callback() {}
+
+function pdm_blocks_get_allowed_map_iframe_html()
 {
-    echo '<p>Toggle on/off Service Areas post type.</p>';
+    return array(
+        'iframe' => array(
+            'src'             => true,
+            'width'           => true,
+            'height'          => true,
+            'frameborder'     => true,
+            'style'           => true,
+            'allowfullscreen' => true,
+            'loading'         => true,
+        ),
+    );
+}
+
+function pdm_blocks_normalize_phone_number($phone)
+{
+    $phone = sanitize_text_field($phone);
+    $digits = preg_replace('/\D+/', '', $phone);
+
+    if (strlen($digits) === 11 && strpos($digits, '1') === 0) {
+        $digits = substr($digits, 1);
+    }
+
+    if (strlen($digits) === 10) {
+        return substr($digits, 0, 3) . '-' . substr($digits, 3, 3) . '-' . substr($digits, 6, 4);
+    }
+
+    return $phone;
+}
+
+function pdm_blocks_get_admin_field_icon($icon)
+{
+    $icons = array(
+        'location_name' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M541.9 139.5C546.4 127.7 543.6 114.3 534.7 105.4C525.8 96.5 512.4 93.6 500.6 98.2L84.6 258.2C71.9 263 63.7 275.2 64 288.7C64.3 302.2 73.1 314.1 85.9 318.3L262.7 377.2L321.6 554C325.9 566.8 337.7 575.6 351.2 575.9C364.7 576.2 376.9 568 381.8 555.4L541.8 139.4z"/></svg>',
+        'address' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M128 252.6C128 148.4 214 64 320 64C426 64 512 148.4 512 252.6C512 371.9 391.8 514.9 341.6 569.4C329.8 582.2 310.1 582.2 298.3 569.4C248.1 514.9 127.9 371.9 127.9 252.6zM320 320C355.3 320 384 291.3 384 256C384 220.7 355.3 192 320 192C284.7 192 256 220.7 256 256C256 291.3 284.7 320 320 320z"/></svg>',
+        'phone' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M224.2 89C216.3 70.1 195.7 60.1 176.1 65.4L170.6 66.9C106 84.5 50.8 147.1 66.9 223.3C104 398.3 241.7 536 416.7 573.1C493 589.3 555.5 534 573.1 469.4L574.6 463.9C580 444.2 569.9 423.6 551.1 415.8L453.8 375.3C437.3 368.4 418.2 373.2 406.8 387.1L368.2 434.3C297.9 399.4 241.3 341 208.8 269.3L253 233.3C266.9 222 271.6 202.9 264.8 186.3L224.2 89z"/></svg>',
+        'email' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"/></svg>',
+        'map' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M576 112C576 100.9 570.3 90.6 560.8 84.8C551.3 79 539.6 78.4 529.7 83.4L413.5 141.5L234.1 81.6C226 78.9 217.3 79.5 209.7 83.3L81.7 147.3C70.8 152.8 64 163.9 64 176L64 528C64 539.1 69.7 549.4 79.2 555.2C88.7 561 100.4 561.6 110.3 556.6L226.4 498.5L405.8 558.3C413.9 561 422.6 560.4 430.2 556.6L558.2 492.6C569 487.2 575.9 476.1 575.9 464L575.9 112zM256 440.9L256 156.4L384 199.1L384 483.6L256 440.9z"/></svg>',
+        'hours' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1.5em; height: 1.5em; display: block;"><path fill="currentColor" d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z"/></svg>',
+    );
+
+    if (! isset($icons[$icon])) {
+        return '';
+    }
+
+    return '<span aria-hidden="true" style="display: inline-flex; width: 1.5em; height: 1.5em; align-items: center; justify-content: center; flex-shrink: 0;">' . $icons[$icon] . '</span>';
 }
 
 // default field
@@ -157,7 +227,7 @@ function pdm_blocks_company_info_sanitize($input)
             $san = array();
             $san['name']    = isset($loc['name']) ? sanitize_text_field($loc['name']) : '';
             $san['address'] = isset($loc['address']) ? sanitize_textarea_field($loc['address']) : '';
-            $san['phone']   = isset($loc['phone']) ? sanitize_text_field($loc['phone']) : '';
+            $san['phone']   = isset($loc['phone']) ? pdm_blocks_normalize_phone_number($loc['phone']) : '';
             $san['email']   = isset($loc['email']) ? sanitize_email($loc['email']) : '';
 
             if (isset($loc['hours']) && is_array($loc['hours'])) {
@@ -176,18 +246,7 @@ function pdm_blocks_company_info_sanitize($input)
 
             // allow iframe stuff
             if (isset($loc['map'])) {
-                $allowed_html = array(
-                    'iframe' => array(
-                        'src'             => true,
-                        'width'           => true,
-                        'height'          => true,
-                        'frameborder'     => true,
-                        'style'           => true,
-                        'allowfullscreen' => true,
-                        'loading'         => true,
-                    ),
-                );
-                $san['map'] = wp_kses($loc['map'], $allowed_html);
+                $san['map'] = wp_kses($loc['map'], pdm_blocks_get_allowed_map_iframe_html());
                 $sanitized_input['enable_service_areas'] = isset($input['enable_service_areas']) ? 1 : 0;
             } else {
                 $san['map'] = '';
@@ -268,7 +327,7 @@ function pdm_blocks_locations_input_callback($args)
 
     $index = 0;
 
-    echo '<div id="pdm-blocks-locations-wrap">';
+    echo '<div id="pdm-blocks-locations-wrap" style="max-width: 800px;">';
     if (empty($locations)) {
         $locations[] = array('address' => '', 'phone' => '', 'email' => '', 'map' => '', 'hours' => array());
     }
@@ -278,6 +337,7 @@ function pdm_blocks_locations_input_callback($args)
         $phone = isset($loc['phone']) ? esc_attr($loc['phone']) : '';
         $email = isset($loc['email']) ? esc_attr($loc['email']) : '';
         $map = isset($loc['map']) ? $loc['map'] : '';
+        $map_preview = $map ? wp_kses($map, pdm_blocks_get_allowed_map_iframe_html()) : '';
 
         $hours = isset($loc['hours']) && is_array($loc['hours']) ? $loc['hours'] : array();
         $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
@@ -286,15 +346,33 @@ function pdm_blocks_locations_input_callback($args)
         $location_display = $name ? $name : 'Location ' . ($i + 1);
 
         echo '<div class="pdm-blocks-location-row" data-index="' . esc_attr($i) . '" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; background: #f9f9f9;">';
-        echo '<h3>' . esc_html($location_display) . '</h3>';
-        echo '<p><label>Location Name (optional):<br><input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][name]" value="' . $name . '" class="regular-text" placeholder="Location ' . ($i + 1) . '" /></label></p>';
-        echo '<p><label>Address:<br><textarea name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][address]" rows="3" cols="50">' . $addr . '</textarea></label></p>';
-        echo '<p><label>Phone:<br><input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][phone]" value="' . $phone . '" class="regular-text" /></label></p>';
-        echo '<p><label>Email:<br><input type="email" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][email]" value="' . $email . '" class="regular-text" /></label></p>';
-        echo '<p><label>Map Embed (iframe):<br><textarea name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][map]" rows="3" cols="50">' . esc_textarea($map) . '</textarea></label></p>';
+        echo '<h3 style="position: sticky; top: 32px; z-index: 5; margin: -15px -15px 16px; padding: 12px 15px; background: var(--wp-admin-theme-color, #2271b1); color: #fff; border-bottom: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);">' . esc_html($location_display) . '</h3>';
+        echo '<div class="pdm-blocks-location-core-fields" style="display: grid; gap: 12px; margin-bottom: 20px;">';
+        echo '<div><label><span style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">' . pdm_blocks_get_admin_field_icon('location_name') . '<span>Location Name (optional):</span></span><br><input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][name]" value="' . $name . '" class="regular-text" placeholder="Location ' . ($i + 1) . '" style="width: 100%; max-width: none;" /></label></div>';
+        echo '<div><label><span style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">' . pdm_blocks_get_admin_field_icon('address') . '<span>Address:</span></span><br><textarea name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][address]" rows="3" cols="50" style="width: 100%; max-width: none;">' . $addr . '</textarea></label></div>';
+        echo '<div><label><span style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">' . pdm_blocks_get_admin_field_icon('phone') . '<span>Phone:</span></span><br><input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][phone]" value="' . $phone . '" class="regular-text" style="width: 100%; max-width: none;" /></label></div>';
+        echo '<div><label><span style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">' . pdm_blocks_get_admin_field_icon('email') . '<span>Email:</span></span><br><input type="email" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][email]" value="' . $email . '" class="regular-text" style="width: 100%; max-width: none;" /></label></div>';
+        echo '<div>';
+        echo '<label><span style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">' . pdm_blocks_get_admin_field_icon('map') . '<span>Map Embed (iframe):</span></span></label>';
+        echo '<div class="pdm-blocks-map-row" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">';
+        echo '<div style="flex: 1 1 320px; min-width: 280px;">';
+        echo '<textarea class="pdm-blocks-map-input" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][map]" rows="6" cols="50" style="width: 100%; max-width: none;">' . esc_textarea($map) . '</textarea>';
+        echo '</div>';
+        echo '<div style="flex: 1 1 320px; min-width: 280px; display: flex;">';
+        echo '<div class="pdm-blocks-map-preview" style="border: 1px solid #ccd0d4; background: #fff; min-height: 180px; padding: 8px; box-sizing: border-box; width: 100%; display: flex;">';
+        if ($map_preview) {
+            echo $map_preview;
+        } else {
+            echo '<p class="description" style="margin: 0; align-self: center;">Paste an iframe to preview the map here.</p>';
+        }
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
 
-        echo '<h4 style="margin-top: 20px;">Business Hours</h4>';
-        echo '<p class="description">Add custom hour rows (e.g., "M-F", "Sat-Sun", or specific days). Enter hours in any format you like.</p>';
+        echo '<h4 style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px;">' . pdm_blocks_get_admin_field_icon('hours') . '<span>Business Hours</span></h4>';
+        echo '<p class="description">Add custom hour rows (e.g., "M-F", "Sat-Sun", or specific days). Enter hours in any format you like. <button type="button" class="button-link pdm-autopopulate-hours" data-location-index="' . esc_attr($i) . '">Autopopulate</button></p>';
         echo '<div class="pdm-hours-repeater" data-location-index="' . esc_attr($i) . '" style="margin-bottom: 15px;">';
 
         if (empty($hours)) {
@@ -308,14 +386,14 @@ function pdm_blocks_locations_input_callback($args)
             echo '<div class="pdm-hour-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">';
             echo '<input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][hours][' . esc_attr($h_index) . '][label]" value="' . $hour_label . '" class="regular-text" placeholder="M-F" style="flex: 0 0 150px;" />';
             echo '<input type="text" name="pdm_blocks_company_info[company_locations][' . esc_attr($i) . '][hours][' . esc_attr($h_index) . '][hours]" value="' . $hour_hours . '" class="regular-text" placeholder="9:00 AM - 5:00 PM" style="flex: 1;" />';
-            echo '<button type="button" class="button pdm-remove-hour-row">Remove</button>';
+            echo '<button type="button" class="button pdm-remove-hour-row" style="color: #b32d2e; border-color: #d63638;">Remove</button>';
             echo '</div>';
         }
 
         echo '</div>';
         echo '<p><button type="button" class="button pdm-add-hour-row" data-location-index="' . esc_attr($i) . '">Add Hours Row</button></p>';
 
-        echo '<p><button type="button" class="button pdm-blocks-remove-location">Remove Location</button></p>';
+        echo '<p><button type="button" class="button pdm-blocks-remove-location" style="color: #b32d2e; border-color: #d63638;">Remove Location</button></p>';
         echo '</div>';
     }
 ?>
@@ -326,6 +404,75 @@ function pdm_blocks_locations_input_callback($args)
             var wrap = $('#pdm-blocks-locations-wrap');
             var addBtn = $('#pdm-blocks-add-location');
             if (!wrap.length || !addBtn.length) return;
+
+            function getMapPreviewPlaceholder() {
+                return '<p class="description" style="margin: 0;">Paste an iframe to preview the map here.</p>';
+            }
+
+            function updateMapPreview(row) {
+                var mapInput = row.find('.pdm-blocks-map-input').first();
+                var mapPreview = row.find('.pdm-blocks-map-preview').first();
+
+                if (!mapInput.length || !mapPreview.length) {
+                    return;
+                }
+
+                var mapValue = $.trim(mapInput.val());
+                mapPreview.html(mapValue ? mapValue : getMapPreviewPlaceholder());
+
+                var iframe = mapPreview.find('iframe').first();
+                if (iframe.length) {
+                    iframe.attr('width', '100%');
+                    iframe.attr('height', '100%');
+                    iframe.css({
+                        width: '100%',
+                        height: '100%',
+                        minHeight: '180px',
+                        display: 'block',
+                        border: '0'
+                    });
+                }
+            }
+
+            function getDefaultHoursRowsHtml(locationIndex) {
+                var defaultHours = [{
+                        label: 'Monday',
+                        hours: '9:00 AM - 5:00 PM'
+                    },
+                    {
+                        label: 'Tuesday',
+                        hours: '9:00 AM - 5:00 PM'
+                    },
+                    {
+                        label: 'Wednesday',
+                        hours: '9:00 AM - 5:00 PM'
+                    },
+                    {
+                        label: 'Thursday',
+                        hours: '9:00 AM - 5:00 PM'
+                    },
+                    {
+                        label: 'Friday',
+                        hours: '9:00 AM - 5:00 PM'
+                    },
+                    {
+                        label: 'Saturday',
+                        hours: 'Closed'
+                    },
+                    {
+                        label: 'Sunday',
+                        hours: 'Closed'
+                    }
+                ];
+
+                return $.map(defaultHours, function(hourRow, rowIndex) {
+                    return '<div class="pdm-hour-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
+                        '<input type="text" name="pdm_blocks_company_info[company_locations][' + locationIndex + '][hours][' + rowIndex + '][label]" value="' + hourRow.label + '" class="regular-text" placeholder="M-F" style="flex: 0 0 150px;" />' +
+                        '<input type="text" name="pdm_blocks_company_info[company_locations][' + locationIndex + '][hours][' + rowIndex + '][hours]" value="' + hourRow.hours + '" class="regular-text" placeholder="9:00 AM - 5:00 PM" style="flex: 1;" />' +
+                        '<button type="button" class="button pdm-remove-hour-row" style="color: #b32d2e; border-color: #d63638;">Remove</button>' +
+                        '</div>';
+                }).join('');
+            }
 
             // number locations
             function renumberLocations() {
@@ -362,8 +509,19 @@ function pdm_blocks_locations_input_callback($args)
                     if (addHourBtn.length) {
                         addHourBtn.attr('data-location-index', index);
                     }
+
+                    var autopopulateBtn = row.find('.pdm-autopopulate-hours');
+                    if (autopopulateBtn.length) {
+                        autopopulateBtn.attr('data-location-index', index);
+                    }
+
+                    updateMapPreview(row);
                 });
             }
+
+            wrap.on('input change', '.pdm-blocks-map-input', function() {
+                updateMapPreview($(this).closest('.pdm-blocks-location-row'));
+            });
 
             wrap.on('click', '.pdm-blocks-remove-location', function(e) {
                 e.preventDefault();
@@ -389,10 +547,24 @@ function pdm_blocks_locations_input_callback($args)
                 newRow.html(
                     '<input type="text" name="pdm_blocks_company_info[company_locations][' + locationIndex + '][hours][' + newIndex + '][label]" value="" class="regular-text" placeholder="M-F" style="flex: 0 0 150px;" />' +
                     '<input type="text" name="pdm_blocks_company_info[company_locations][' + locationIndex + '][hours][' + newIndex + '][hours]" value="" class="regular-text" placeholder="9:00 AM - 5:00 PM" style="flex: 1;" />' +
-                    '<button type="button" class="button pdm-remove-hour-row">Remove</button>'
+                    '<button type="button" class="button pdm-remove-hour-row" style="color: #b32d2e; border-color: #d63638;">Remove</button>'
                 );
 
                 repeater.append(newRow);
+            });
+
+            wrap.on('click', '.pdm-autopopulate-hours', function(e) {
+                e.preventDefault();
+                var btn = $(this);
+                var locationIndex = btn.data('location-index');
+                var row = btn.closest('.pdm-blocks-location-row');
+                var repeater = row.find('.pdm-hours-repeater').first();
+
+                if (!repeater.length) {
+                    return;
+                }
+
+                repeater.html(getDefaultHoursRowsHtml(locationIndex));
             });
 
             // Remove hour row button
@@ -438,7 +610,7 @@ function pdm_blocks_locations_input_callback($args)
                         '<div class="pdm-hour-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
                         '<input type="text" name="pdm_blocks_company_info[company_locations][' + index + '][hours][0][label]" value="" class="regular-text" placeholder="M-F" style="flex: 0 0 150px;" />' +
                         '<input type="text" name="pdm_blocks_company_info[company_locations][' + index + '][hours][0][hours]" value="" class="regular-text" placeholder="9:00 AM - 5:00 PM" style="flex: 1;" />' +
-                        '<button type="button" class="button pdm-remove-hour-row">Remove</button>' +
+                        '<button type="button" class="button pdm-remove-hour-row" style="color: #b32d2e; border-color: #d63638;">Remove</button>' +
                         '</div>'
                     );
                 }
@@ -449,14 +621,25 @@ function pdm_blocks_locations_input_callback($args)
                     addHourBtn.attr('data-location-index', index);
                 }
 
+                var autopopulateBtn = template.find('.pdm-autopopulate-hours');
+                if (autopopulateBtn.length) {
+                    autopopulateBtn.attr('data-location-index', index);
+                }
+
                 // Update the location name heading
                 var heading = template.find('h3');
                 if (heading.length) {
                     heading.text('Location ' + (index + 1));
                 }
 
+                template.find('.pdm-blocks-map-preview').html(getMapPreviewPlaceholder());
+
                 wrap.append(template);
                 renumberLocations();
+            });
+
+            wrap.find('.pdm-blocks-location-row').each(function() {
+                updateMapPreview($(this));
             });
         });
     </script>

@@ -16,7 +16,8 @@
     "spacing": {
       "margin": true,
       "padding": true
-    }
+    },
+    "listView": true
   },
   "keywords": [
     "columns",

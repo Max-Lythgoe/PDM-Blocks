@@ -25,7 +25,8 @@
 				"type": "flex",
 				"orientation": "vertical"
 			}
-		}
+		},
+		"listView": true
 	},
 	"textdomain": "icon-list",
 	"editorScript": "file:./index.js",

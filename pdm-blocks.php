@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.3.8
+ * Version:           1.4.0
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +28,15 @@ $pdm_blocks_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buil
     __FILE__,
     'pdm-blocks'
 );
+
+add_filter('puc_request_info_result-pdm-blocks', function ($info) {
+    if (is_object($info)) {
+        $info->icons = [
+            '2x' => plugin_dir_url(__FILE__) . 'assets/img/icon.png',
+        ];
+    }
+    return $info;
+});
 
 // company info settings
 require_once plugin_dir_path(__FILE__) . 'includes/company-info-settings.php';

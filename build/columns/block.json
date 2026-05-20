@@ -18,7 +18,8 @@
         "top",
         "bottom"
       ]
-    }
+    },
+    "listView": true
   },
   "textdomain": "columns",
   "editorScript": "file:./index.js",

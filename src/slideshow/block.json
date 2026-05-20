@@ -13,7 +13,8 @@
 			"margin": true
 		},
 		"customClassName": true,
-		"align": ["wide", "full"]
+		"align": ["wide", "full"],
+		"listView": true
 	},
 	"attributes": {
 		"align": {
