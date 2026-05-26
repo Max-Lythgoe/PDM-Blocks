@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/templates/dynamic-legal-page-templates.php';
+
 // COMPANY INFO SETTINGS PAGE
 function pdm_blocks_add_company_info_menu_page()
 {
@@ -71,6 +73,16 @@ function pdm_blocks_company_info_page_content()
     if (! current_user_can('manage_options')) {
         return;
     }
+
+    $options = get_option('pdm_blocks_company_info', array());
+    $legal_page_definitions = pdm_blocks_get_dynamic_legal_page_definitions();
+    $enable_privacy_policy_page = ! empty($options['enable_privacy_policy_page']);
+    $enable_terms_page = ! empty($options['enable_terms_page']);
+    $company_state = isset($options['company_state']) ? sanitize_text_field($options['company_state']) : '';
+    $privacy_policy_page = pdm_blocks_find_dynamic_legal_page($legal_page_definitions['privacy_policy']['slug']);
+    $terms_page = pdm_blocks_find_dynamic_legal_page($legal_page_definitions['terms_page']['slug']);
+    $privacy_policy_url = $privacy_policy_page instanceof WP_Post ? get_permalink($privacy_policy_page) : '';
+    $terms_page_url = $terms_page instanceof WP_Post ? get_permalink($terms_page) : '';
 ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -104,10 +116,54 @@ function pdm_blocks_company_info_page_content()
             echo '</div>';
             echo '</div>';
 
+            echo '<div class="pdm-blocks-settings-section" style="margin-top: 32px; max-width: 800px;">';
+            echo '<h2>Dynamic Privacy Policy / Terms Pages</h2>';
+
+            echo '<div class="pdm-blocks-settings-field" style="margin-top: 16px;">';
+            echo '<label style="display: flex; align-items: flex-start; gap: 10px;">';
+            echo '<input type="checkbox" id="enable_privacy_policy_page" name="pdm_blocks_company_info[enable_privacy_policy_page]" value="1" ' . checked($enable_privacy_policy_page, true, false) . '>';
+            echo '<span><strong>Enable Privacy Policy Page</strong></span>';
+            echo '</label>';
+            if ($enable_privacy_policy_page && ! empty($privacy_policy_url)) {
+                echo '<p style="margin: 8px 0 0 28px;"><a href="' . esc_url($privacy_policy_url) . '" target="_blank" rel="noopener noreferrer">View Privacy Policy Page</a></p>';
+            }
+            echo '</div>';
+
+            echo '<div class="pdm-blocks-settings-field" style="margin-top: 12px;">';
+            echo '<label style="display: flex; align-items: flex-start; gap: 10px;">';
+            echo '<input type="checkbox" id="enable_terms_page" name="pdm_blocks_company_info[enable_terms_page]" value="1" ' . checked($enable_terms_page, true, false) . '>';
+            echo '<span><strong>Enable Terms Page</strong></span>';
+            echo '</label>';
+            if ($enable_terms_page && ! empty($terms_page_url)) {
+                echo '<p style="margin: 8px 0 0 28px;"><a href="' . esc_url($terms_page_url) . '" target="_blank" rel="noopener noreferrer">View Terms Page</a></p>';
+            }
+            echo '</div>';
+
+            echo '<div id="pdm-blocks-company-state-wrap" class="pdm-blocks-settings-field" style="margin-top: 16px;">';
+            echo '<label for="company_state"><strong>Company State</strong></label><br>';
+            echo '<input type="text" id="company_state" name="pdm_blocks_company_info[company_state]" value="' . esc_attr($company_state) . '" class="regular-text" placeholder="UT" style="max-width: 240px;">';
+            echo '</div>';
+
+            echo '</div>';
+
             submit_button('Save Company Info');
             ?>
         </form>
     </div>
+    <script>
+        jQuery(function($) {
+            var legalPageToggles = $('#enable_privacy_policy_page, #enable_terms_page');
+            var stateWrap = $('#pdm-blocks-company-state-wrap');
+
+            function toggleCompanyStateField() {
+                var shouldShow = legalPageToggles.is(':checked');
+                stateWrap.toggle(shouldShow);
+            }
+
+            legalPageToggles.on('change', toggleCompanyStateField);
+            toggleCompanyStateField();
+        });
+    </script>
 <?php
 }
 
@@ -167,6 +223,88 @@ function pdm_blocks_get_admin_field_icon($icon)
 
     return '<span aria-hidden="true" style="display: inline-flex; width: 1.5em; height: 1.5em; align-items: center; justify-content: center; flex-shrink: 0;">' . $icons[$icon] . '</span>';
 }
+function pdm_blocks_find_dynamic_legal_page($slug)
+{
+    $page = get_page_by_path($slug, OBJECT, 'page');
+
+    if ($page instanceof WP_Post) {
+        return $page;
+    }
+
+    return null;
+}
+
+function pdm_blocks_upsert_dynamic_legal_page($page_type, $definition)
+{
+    $existing_page = pdm_blocks_find_dynamic_legal_page($definition['slug']);
+
+    $post_data = array(
+        'post_type' => 'page',
+        'post_title' => $definition['title'],
+        'post_name' => $definition['slug'],
+        'post_content' => $definition['content'],
+        'post_status' => 'publish',
+    );
+
+    if ($existing_page instanceof WP_Post) {
+        $post_data['ID'] = $existing_page->ID;
+        $page_id = wp_update_post($post_data, true);
+    } else {
+        $page_id = wp_insert_post($post_data, true);
+    }
+
+    if (is_wp_error($page_id) || ! $page_id) {
+        return 0;
+    }
+
+    update_post_meta($page_id, '_pdm_blocks_dynamic_legal_page', $page_type);
+
+    return (int) $page_id;
+}
+
+function pdm_blocks_disable_dynamic_legal_page($page_type, $slug)
+{
+    $page = pdm_blocks_find_dynamic_legal_page($slug);
+
+    if (! ($page instanceof WP_Post)) {
+        return;
+    }
+
+    if (get_post_meta($page->ID, '_pdm_blocks_dynamic_legal_page', true) !== $page_type) {
+        return;
+    }
+
+    wp_update_post(array(
+        'ID' => $page->ID,
+        'post_status' => 'draft',
+    ));
+}
+
+function pdm_blocks_sync_dynamic_legal_pages($old_value, $new_value)
+{
+    $definitions = pdm_blocks_get_dynamic_legal_page_definitions();
+    $privacy_enabled = ! empty($new_value['enable_privacy_policy_page']);
+    $terms_enabled = ! empty($new_value['enable_terms_page']);
+
+    if ($privacy_enabled) {
+        $privacy_page_id = pdm_blocks_upsert_dynamic_legal_page('privacy_policy', $definitions['privacy_policy']);
+        if ($privacy_page_id) {
+            update_option('wp_page_for_privacy_policy', $privacy_page_id);
+        }
+    } else {
+        $privacy_page = pdm_blocks_find_dynamic_legal_page($definitions['privacy_policy']['slug']);
+        if ($privacy_page instanceof WP_Post && (int) get_option('wp_page_for_privacy_policy') === (int) $privacy_page->ID) {
+            update_option('wp_page_for_privacy_policy', 0);
+        }
+        pdm_blocks_disable_dynamic_legal_page('privacy_policy', $definitions['privacy_policy']['slug']);
+    }
+
+    if ($terms_enabled) {
+        pdm_blocks_upsert_dynamic_legal_page('terms_page', $definitions['terms_page']);
+    } else {
+        pdm_blocks_disable_dynamic_legal_page('terms_page', $definitions['terms_page']['slug']);
+    }
+}
 
 // default field
 function pdm_blocks_text_input_callback($args)
@@ -218,6 +356,11 @@ function pdm_blocks_company_info_sanitize($input)
 {
     $sanitized_input = array();
 
+    $sanitized_input['enable_service_areas'] = ! empty($input['enable_service_areas']) ? 1 : 0;
+    $sanitized_input['enable_privacy_policy_page'] = ! empty($input['enable_privacy_policy_page']) ? 1 : 0;
+    $sanitized_input['enable_terms_page'] = ! empty($input['enable_terms_page']) ? 1 : 0;
+    $sanitized_input['company_state'] = isset($input['company_state']) ? sanitize_text_field($input['company_state']) : '';
+
     if (isset($input['company_locations']) && is_array($input['company_locations'])) {
         $sanitized_input['company_locations'] = array();
         foreach ($input['company_locations'] as $loc) {
@@ -247,7 +390,6 @@ function pdm_blocks_company_info_sanitize($input)
             // allow iframe stuff
             if (isset($loc['map'])) {
                 $san['map'] = wp_kses($loc['map'], pdm_blocks_get_allowed_map_iframe_html());
-                $sanitized_input['enable_service_areas'] = isset($input['enable_service_areas']) ? 1 : 0;
             } else {
                 $san['map'] = '';
             }
@@ -847,3 +989,4 @@ function pdm_blocks_flush_rewrite_on_save($old_value, $new_value)
     }
 }
 add_action('update_option_pdm_blocks_company_info', 'pdm_blocks_flush_rewrite_on_save', 10, 2);
+add_action('update_option_pdm_blocks_company_info', 'pdm_blocks_sync_dynamic_legal_pages', 20, 2);

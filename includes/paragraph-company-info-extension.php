@@ -97,6 +97,12 @@ class PDM_Blocks_Paragraph_Company_Info_Extension
                 $site_url = home_url('/');
                 $output = '<a href="' . esc_url($site_url) . '">' . esc_html($site_url) . '</a>';
                 break;
+
+            case 'state':
+                if (function_exists('pdm_blocks_get_company_info')) {
+                    $output = pdm_blocks_get_company_info('company_state');
+                }
+                break;
         }
 
         return $output;
