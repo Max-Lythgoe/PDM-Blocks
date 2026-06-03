@@ -1,0 +1,52 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "pdm/toggled-popup",
+	"version": "0.1.0",
+	"title": "Toggled Popup",
+	"category": "pdm-blocks",
+	"description": "A popup triggered by links or buttons using the native Popover API. Assign an ID, then link to it with href=\"#your-id\".",
+	"example": {},
+	"supports": {
+		"html": false,
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"shadow": true,
+		"spacing": {
+			"padding": true
+		},
+		"color": {
+			"background": true,
+			"text": true,
+			"link": true,
+			"gradients": true
+		}
+	},
+	"attributes": {
+		"popupId": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayBackgroundColor": {
+			"type": "string",
+			"default": "rgba(0, 0, 0, 0.5)"
+		},
+		"popupWidth": {
+			"type": "string",
+			"default": "400px"
+		},
+		"contentPosition": {
+			"type": "string",
+			"default": "center center"
+		}
+	},
+	"textdomain": "toggled-popup",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

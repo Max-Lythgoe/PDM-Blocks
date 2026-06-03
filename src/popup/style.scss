@@ -9,7 +9,7 @@
 	width: var(--popup-width, 400px);
 	height: auto;
 	max-height: 80vh;
-	max-width: 90vw;
+	max-width: 90vw!important;
 	position: relative;
 	overflow-y: auto;
 	pointer-events: all;

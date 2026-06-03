@@ -47,8 +47,8 @@
       "default": "rgba(0, 0, 0, 0.5)"
     },
     "popupWidth": {
-      "type": "number",
-      "default": 400
+      "type": "string",
+      "default": "400px"
     },
     "contentPosition": {
       "type": "string",

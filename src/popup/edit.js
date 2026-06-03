@@ -8,7 +8,7 @@ import { useState } from '@wordpress/element';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InnerBlocks, InspectorControls, BlockControls } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, SelectControl, AlignmentMatrixControl, ToolbarDropdownMenu } from '@wordpress/components';
+import { PanelBody, __experimentalUnitControl as UnitControl, SelectControl, AlignmentMatrixControl, ToolbarDropdownMenu } from '@wordpress/components';
 import { __experimentalColorGradientControl as ColorGradientControl } from '@wordpress/block-editor';
 
 /**
@@ -29,7 +29,7 @@ import './editor.scss';
  */
 export default function Edit({ attributes, setAttributes }) {
 	const style = {
-		'--popup-width': attributes.popupWidth + 'px'
+		'--popup-width': attributes.popupWidth
 	}
 
 	const blockProps = useBlockProps({
@@ -69,12 +69,18 @@ export default function Edit({ attributes, setAttributes }) {
 					colorValue={ attributes.overlayBackgroundColor }
 					onColorChange={ ( value ) => setAttributes( { overlayBackgroundColor: value } ) }
 				/>
-				<RangeControl
-					label={ __( 'Popup Width (px)', 'pdm-blocks' ) }
+				<UnitControl
+				    __next40pxDefaultSize
+					label={ __( 'Popup Width', 'pdm-blocks' ) }
 					value={ attributes.popupWidth }
 					onChange={ ( value ) => setAttributes( { popupWidth: value } ) }
-					min={ 200 }
-					max={ 1200 }
+					units={ [
+						{ value: 'px', label: 'px', default: 400 },
+						{ value: '%', label: '%', default: 50 },
+						{ value: 'vw', label: 'vw', default: 50 },
+						{ value: 'em', label: 'em', default: 25 },
+						{ value: 'rem', label: 'rem', default: 25 },
+					] }
 				/>
 			</PanelBody>
 			<PanelBody title={ __( 'Trigger Settings', 'pdm-blocks' ) }>

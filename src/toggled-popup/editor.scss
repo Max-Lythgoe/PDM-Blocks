@@ -1,0 +1,36 @@
+/**
+ * editor only - ensure the popover is always visible (no [popover] attribute)
+ */
+
+.wp-block-pdm-toggled-popup {
+	position: relative;
+	display: block;
+	margin-inline: auto;
+	width: var( --popup-width, 400px );
+	max-width: 100%;
+
+	// visible in editor
+	opacity: 1 !important;
+	transform: none !important;
+
+	.pdm-toggled-popup-close {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 10;
+		pointer-events: none;
+	}
+
+	// ID badge
+	.pdm-toggled-popup-id-badge {
+		display: inline-block;
+		font-size: 11px;
+		font-family: monospace;
+		background: #1d2327;
+		color: #f0f0f1;
+		padding: 2px 8px;
+		border-radius: 3px;
+		margin-bottom: 8px;
+		user-select: all;
+	}
+}

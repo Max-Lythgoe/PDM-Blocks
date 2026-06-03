@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.5.1
+ * Version:           1.6.0
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -67,6 +67,22 @@ function pdm_blocks_register_blocks()
         }
     }
 }
+
+// register block patterns
+function pdm_blocks_register_patterns()
+{
+    register_block_pattern(
+        'pdm-blocks/pinned-cta-buttons',
+        array(
+            'title'       => __('Pinned CTA Buttons', 'pdm-blocks'),
+            'description' => __('A full-width pinned bottom container handling stacked layout with zero-width space correction.', 'pdm-blocks'),
+            'categories'  => array('buttons', 'call-to-action'),
+            'content'    => file_get_contents(plugin_dir_path(__FILE__) . 'patterns/pinned-cta-buttons.html'),
+        )
+    );
+}
+add_action('init', 'pdm_blocks_register_patterns');
+
 
 // comapny data for blocks and shortcodes
 add_action('enqueue_block_editor_assets', 'pdm_blocks_localize_company_data');
@@ -187,6 +203,61 @@ function accelerate_block_styles()
 }
 
 add_action('init', 'accelerate_block_styles');
+
+
+// pinned buttons
+function pdm_blocks_register_bottom_buttons_style()
+{
+
+    $custom_css = "
+        :not(.editor-styles-wrapper) > .wp-block-buttons.is-style-vertical-icon-layout {
+            position: fixed;
+            z-index: 999;
+            bottom: 0px;       
+            width: 100%;
+            container-type: inline-size;
+        }
+
+        .editor-styles-wrapper .wp-block-buttons.is-style-vertical-icon-layout {
+            position: relative;
+            bottom: initial;
+        }
+
+        @container(max-width: 768px) {
+
+            .wp-block-buttons.is-style-vertical-icon-layout .wp-block-button {
+                display: contents; 
+            }
+
+            .wp-block-buttons.is-style-vertical-icon-layout a.wp-block-button__link {
+                display: flex;
+                flex-direction: column;
+                gap: 5px; 
+                position: relative; 
+            }
+            
+            .wp-block-buttons.is-style-vertical-icon-layout a.wp-block-button__link .wp-rich-text-accelerate-icon {
+                font-size: 1.25em;
+                margin-top: -1em; 
+                line-height: 0; 
+            }
+
+            .wp-block-buttons.is-style-vertical-icon-layout a.wp-block-button__link * {
+                font-size: initial;
+            }
+        }
+    ";
+
+    register_block_style(
+        'core/buttons',
+        array(
+            'name'         => 'vertical-icon-layout',
+            'label'        => __('Pinned CTA Layout', 'pdm-blocks'),
+            'inline_style' => $custom_css,
+        )
+    );
+}
+add_action('init', 'pdm_blocks_register_bottom_buttons_style');
 
 // tabs editor assets
 add_action('enqueue_block_editor_assets', 'pdm_tabs_enqueue_editor_assets');
@@ -358,3 +429,9 @@ add_action('init', function () {
 add_filter('wp_enqueue_scripts', function () {
     wp_dequeue_style('classic-theme-styles');
 }, 20);
+
+// remove style shuffle
+add_filter('block_editor_settings_all', function ($settings) {
+    $settings['disableContentOnlyForUnsyncedPatterns'] = true;
+    return $settings;
+});

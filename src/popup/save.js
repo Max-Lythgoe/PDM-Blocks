@@ -17,7 +17,7 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
  */
 export default function save({ attributes }) {
 	const style = {
-		'--popup-width': attributes.popupWidth + 'px',
+		'--popup-width': attributes.popupWidth,
 		'--overlay-bg': attributes.overlayBackgroundColor,
 	};
 

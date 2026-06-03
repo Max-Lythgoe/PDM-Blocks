@@ -1,1 +1,1 @@
-"use strict";(globalThis.webpackChunkpdm_blocks=globalThis.webpackChunkpdm_blocks||[]).push([[2992],{611(){}}]);
+"use strict";(globalThis.webpackChunkpdm_blocks=globalThis.webpackChunkpdm_blocks||[]).push([[2992],{2992(){}}]);
