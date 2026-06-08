@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.0
+ * Version:           1.6.1
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,9 @@ require_once plugin_dir_path(__FILE__) . 'includes/paragraph-company-info-extens
 
 // menu item image field
 require_once plugin_dir_path(__FILE__) . 'includes/menu-item-image.php';
+
+// Schema engine + PDM Settings page (loads only when PDM Accelerate theme is NOT active)
+require_once plugin_dir_path(__FILE__) . 'includes/schema-engine/schema-engine-loader.php';
 
 // tabs block helpers
 require_once plugin_dir_path(__FILE__) . 'helpers.php';
