@@ -13,7 +13,7 @@ if (! $post || empty($post->post_content)) {
 }
 
 // Parse headings directly from raw block content — avoids recursive rendering
-preg_match_all('/<h([2-5])[^>]*(?:id="([^"]*)")?[^>]*>(.*?)<\/h\1>/is', $post->post_content, $matches, PREG_SET_ORDER);
+preg_match_all('/<h([1-5])[^>]*(?:id="([^"]*)")?[^>]*>(.*?)<\/h\1>/is', $post->post_content, $matches, PREG_SET_ORDER);
 
 if (empty($matches)) {
     if ($is_editor) {
