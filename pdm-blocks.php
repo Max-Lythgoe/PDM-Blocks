@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.3
+ * Version:           1.6.4
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -60,7 +60,7 @@ require_once plugin_dir_path(__FILE__) . 'helpers.php';
 add_filter('the_content', function ($content) {
     if (empty($content)) return $content;
 
-    return preg_replace_callback('/<h([2-5])([^>]*)>(.*?)<\/h\1>/is', function ($m) {
+    return preg_replace_callback('/<h([1-5])([^>]*)>(.*?)<\/h\1>/is', function ($m) {
         // Already has an id — leave it alone
         if (preg_match('/\bid=["\']/', $m[2])) return $m[0];
 
