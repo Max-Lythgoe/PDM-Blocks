@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.1
+ * Version:           1.6.2
  * Author:            Performance Driven Marketing
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,19 @@ require_once plugin_dir_path(__FILE__) . 'includes/schema-engine/schema-engine-l
 
 // tabs block helpers
 require_once plugin_dir_path(__FILE__) . 'helpers.php';
+
+// Add IDs to headings for TOC anchor links
+add_filter('the_content', function ($content) {
+    if (empty($content)) return $content;
+
+    return preg_replace_callback('/<h([2-5])([^>]*)>(.*?)<\/h\1>/is', function ($m) {
+        // Already has an id — leave it alone
+        if (preg_match('/\bid=["\']/', $m[2])) return $m[0];
+
+        $id = sanitize_title(wp_strip_all_tags($m[3]));
+        return '<h' . $m[1] . $m[2] . ' id="' . esc_attr($id) . '">' . $m[3] . '</h' . $m[1] . '>';
+    }, $content);
+});
 
 add_action('init', 'pdm_blocks_register_blocks');
 function pdm_blocks_register_blocks()
