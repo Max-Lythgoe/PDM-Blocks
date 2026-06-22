@@ -340,7 +340,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						</div>
 					</nav>
 					<nav className="pdm-menu pdm-menu-mobile">
-						<div className="block-menu-toggle" style={{ display: 'flex' }}>
+						<div className="block-menu-toggle">
 							{ DualIconRender({ attributes, openDefault: 'bars', closeDefault: 'xmark' }).openIcon }
 						</div>
 					</nav>

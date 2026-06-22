@@ -103,7 +103,7 @@
       "gradients": true,
       "__experimentalDefaultControls": {
         "background": false,
-        "text": false
+        "text": true
       }
     },
     "typography": {

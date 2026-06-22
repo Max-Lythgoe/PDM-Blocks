@@ -5,6 +5,7 @@
  */
 
 .wp-block-pdm-menu {
+
 	// Disable pointer events for menu items in editor to prevent navigation
 	.menu-desktop a,
 	.menu-mobile a {
@@ -26,4 +27,8 @@
 			margin: 0;
 		}
 	}
+}
+
+.block-menu-toggle {
+	display: none;
 }

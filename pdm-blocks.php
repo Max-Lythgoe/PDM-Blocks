@@ -5,8 +5,9 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.5
- * Author:            Performance Driven Marketing
+ * Version:           1.6.6
+ * Author: Performance Driven Marketing
+ * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       pdm-blocks
@@ -55,6 +56,22 @@ require_once plugin_dir_path(__FILE__) . 'includes/schema-engine/schema-engine-l
 
 // tabs block helpers
 require_once plugin_dir_path(__FILE__) . 'helpers.php';
+
+
+// settings link(s) 
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
+    $additional_links = [
+        __('Company Info', 'pdm-blocks') => admin_url('admin.php?page=pdm-blocks-company-info')
+    ];
+
+    foreach (array_reverse($additional_links) as $text => $url) {
+        $link_html = sprintf('<a href="%s">%s</a>', esc_url($url), esc_html($text));
+        array_unshift($links, $link_html);
+    }
+
+    return $links;
+});
+
 
 // Add IDs to headings for TOC anchor links
 add_filter('the_content', function ($content) {

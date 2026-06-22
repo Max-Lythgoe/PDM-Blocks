@@ -52,12 +52,12 @@
 
 // none: no bullets or numbers
 .toc-list-style-none ul {
-	list-style: none;
+	list-style: none !important;
 }
 
 // bullets: standard disc
 .toc-list-style-bullets ul {
-	list-style: disc;
+	list-style: disc !important;
 }
 
 // numbers: browser-native ol numbering
@@ -65,7 +65,7 @@
 .toc-list-style-numbers {
 
 	li {
-		list-style-type: none;
+		list-style-type: none !important;
 	}
 
 	li.toc-level-2 {
