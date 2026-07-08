@@ -42,20 +42,22 @@ registerBlockType( metadata.name, {
 			className: `is-vertically-aligned-${verticalAlignment || 'top'}`
 		});
 
-		return (
-			<div { ...blockProps }>
-				{url && (
-					<a
-						className="pdm-card-link"
-						href={url}
-						{...(linkTarget && { target: linkTarget })}
-						{...(rel && { rel: rel })}
-						aria-hidden="true"
-						tabIndex="-1"
-					/>
-				)}
-				<InnerBlocks.Content />
-			</div>
-		);
+		const content = <InnerBlocks.Content />;
+
+		if (url) {
+			return (
+				<a
+					{ ...blockProps }
+					href={url}
+					className={ `${ blockProps.className } pdm-card-link` }
+					{ ...( linkTarget && { target: linkTarget } ) }
+					{ ...( rel && { rel: rel } ) }
+				>
+					{ content }
+				</a>
+			);
+		}
+
+		return <div { ...blockProps }>{ content }</div>;
 	}
 } );

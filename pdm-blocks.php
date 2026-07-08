@@ -5,22 +5,37 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.6
+ * Version:           1.6.7
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       pdm-blocks
+ * Requires Plugins:  pdm-plugins-manager
  *
  */
 
-/**
- * Registers the block using the metadata loaded from the `block.json` file.
- * Behind the scenes, it registers also all assets so they can be enqueued
- * through the block editor in the corresponding context.
- *
- * @see https://developer.wordpress.org/reference/functions/register_block_type/
- */
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+// -----------------------------------------------------------------------
+// Dependency: requires PDM Plugins Manager
+// -----------------------------------------------------------------------
+add_action('admin_init', function () {
+    if (! function_exists('is_plugin_active')) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    if (! is_plugin_active('pdm-plugins-manager/pdm-plugins-manager.php')) {
+        deactivate_plugins(plugin_basename(__FILE__), true);
+        add_action('admin_notices', function () {
+            echo '<div class="notice notice-error"><p>This plugin requires <strong>PDM Plugins Manager</strong> to be installed and activated. It has been deactivated.</p></div>';
+        });
+        if (isset($_GET['activate'])) {
+            unset($_GET['activate']);
+        }
+    }
+}, 0);
 
 // Plugin Update Checker
 require_once plugin_dir_path(__FILE__) . 'plugin-update-checker-5.6/plugin-update-checker-5.6/load-v5p6.php';

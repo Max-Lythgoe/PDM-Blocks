@@ -38,6 +38,8 @@
 .table-of-contents-inner {
 	padding: 20px;
 	padding-top: 0;
+	max-height: 40vh;
+	overflow-y: auto;
 }
 
 .wp-block-pdm-table-of-contents ul,

@@ -5,36 +5,36 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- .wp-block-pdm-section {
+.wp-block-pdm-section {
 	display: flex;
 	flex-direction: column;
- }
+}
 
 // Flex container for responsive layout
 .section-flex-container {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	
+
 	&.content-first {
 		flex-direction: column;
-		
+
 		.content-wrapper {
 			order: 1;
 		}
-		
+
 		.section-background {
 			order: 2;
 		}
 	}
-	
+
 	&.content-last {
 		flex-direction: column;
-		
+
 		.section-background {
 			order: 1;
 		}
-		
+
 		.content-wrapper {
 			order: 2;
 		}

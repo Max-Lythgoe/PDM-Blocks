@@ -28,6 +28,11 @@ $list_tag   = $list_style === 'numbers' ? 'ol' : 'ul';
 $output        = '';
 $current_level = 0;
 
+// Collect heading data for both HTML output and JSON-LD schema
+$schema_items = [];
+$position     = 1;
+$page_url     = get_permalink($post_id);
+
 foreach ($matches as $match) {
     $heading_level = (int) $match[1];
     $heading_id    = ! empty($match[2]) ? $match[2] : sanitize_title(wp_strip_all_tags($match[3]));
@@ -43,11 +48,29 @@ foreach ($matches as $match) {
 
     $output       .= '<li class="toc-level-' . esc_attr($heading_level) . '"><a href="#' . esc_attr($heading_id) . '">' . esc_html($heading_text) . '</a>';
     $current_level = $heading_level;
+
+    // Collect for SiteNavigationElement JSON-LD schema
+    $schema_items[] = [
+        '@type' => 'SiteNavigationElement',
+        'name'  => $heading_text,
+        'url'   => $page_url . '#' . $heading_id,
+        'position' => $position++,
+    ];
 }
 
 if ($current_level > 0) $output .= str_repeat('</li></' . $list_tag . '>', $current_level);
 
-$toc_html  = '<details class="toc-accordion" open>';
+// SiteNavigationElement JSON-LD schema — helps search engines understand
+// the TOC as a structured navigation element, improving SEO rich results.
+$schema_json = wp_json_encode([
+    '@context' => 'https://schema.org',
+    '@type'    => 'SiteNavigationElement',
+    'name'     => 'Table of Contents',
+    'hasPart'  => $schema_items,
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+$toc_html  = '<script type="application/ld+json">' . $schema_json . '</script>';
+$toc_html .= '<details class="toc-accordion" open>';
 $toc_html .= '<summary>Table of Contents <span class="toc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="currentColor" d="M297.4 438.6C309.9 451.1 330.2 451.1 342.7 438.6L502.7 278.6C515.2 266.1 515.2 245.8 502.7 233.3C490.2 220.8 469.9 220.8 457.4 233.3L320 370.7L182.6 233.4C170.1 220.9 149.8 220.9 137.3 233.4C124.8 245.9 124.8 266.2 137.3 278.7L297.3 438.7z"/></svg></span></summary>';
 $toc_html .= '<div class="table-of-contents-inner">' . $output . '</div></details>';
 

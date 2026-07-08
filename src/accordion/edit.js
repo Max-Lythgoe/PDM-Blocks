@@ -97,6 +97,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
             <summary
                 className={`accord-title icon-position-${attributes.iconPosition || 'right'}`}
                 onKeyUp={handleSummaryKeyUp}
+                onClick={ ( e ) => {
+                    // Prevent toggle when clicking the RichText title so editing is smooth.
+                    // Clicks on icons or padding still toggle normally.
+                    if ( e.target.closest( '.accord-title-text' ) ) {
+                        e.preventDefault();
+                    }
+                } }
                 style={{
                     background: context['pdm/toggleGradient'] || context['pdm/toggleBg'] || '#000000',
                     color: context['pdm/toggleColor'] || '#ffffff',

@@ -23,7 +23,8 @@
 			"fontWeight": true,
 			"letterSpacing": true,
 			"textTransform": true,
-			"textDecoration": true
+			"textDecoration": true,
+			"textAlign": true
 		},
 		"color": {
 			"text": true,
