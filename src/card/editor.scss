@@ -14,17 +14,18 @@
 	width: 100%;
 }
 
-.wp-block-pdm-card .pdm-card-image .components-form-file-upload, .wp-block-pdm-card .pdm-card-image .block-editor-media-placeholder__url-input-container {
+.wp-block-pdm-card .pdm-card-image .components-form-file-upload,
+.wp-block-pdm-card .pdm-card-image .block-editor-media-placeholder__url-input-container {
 	display: none;
 }
 
 .wp-block-pdm-card .block-list-appender {
-	position: relative!important;
+	position: relative !important;
 	width: 100%;
 }
 
 /* Hide empty span elements created by Popover portals between cards */
-.wp-block-pdm-cards .block-editor-block-list__layout > span:empty {
+.wp-block-pdm-cards .block-editor-block-list__layout>span:empty {
 	display: none !important;
 	position: absolute !important;
 	width: 0 !important;

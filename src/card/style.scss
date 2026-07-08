@@ -11,18 +11,23 @@
 	display: flex;
 	flex-direction: column;
 
-	// When the block itself is a linked card (<a> wrapping all inner content),
-	// reset link styling so it inherits colors and renders as a block-level flex container.
-	&.pdm-card-link {
-		color: inherit;
-		text-decoration: none;
-		display: flex;
-		flex-direction: column;
+	// Full-size overlay link — sits behind content, makes entire card clickable
+	// without wrapping block-level children in <a> (invalid HTML)
+	.pdm-card-link {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		cursor: pointer;
+	}
 
-		// Prevent hover underline on child content
-		&:hover {
-			text-decoration: none;
-		}
+	// Interactive elements float above the overlay so they remain clickable
+	a:not(.pdm-card-link),
+	button,
+	[role="button"],
+	.wp-block-button,
+	.wp-block-buttons {
+		position: relative;
+		z-index: 1;
 	}
 
 	&.is-vertically-aligned-top {
