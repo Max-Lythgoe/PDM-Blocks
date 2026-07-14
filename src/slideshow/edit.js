@@ -1,5 +1,5 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useBlockProps, InnerBlocks, InspectorControls, BlockControls, MediaUpload } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks, InspectorControls, BlockControls, MediaUpload, __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordpress/block-editor';
 import { ToolbarButton, Button } from '@wordpress/components';
 import { seen } from '@wordpress/icons';
 import { PanelBody, RangeControl, ToggleControl } from '@wordpress/components';
@@ -112,7 +112,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         data-gap={attributes.gap}
                         data-loop={attributes.loop}
                         data-slider-height={attributes.sliderHeight}
-                        style={{ '--slider-height': attributes.sliderHeight ? `${attributes.sliderHeight}vh` : undefined }}
+                        data-slide-radius={typeof attributes.slideRadius === 'object' ? `${attributes.slideRadius.topLeft || '0px'} ${attributes.slideRadius.topRight || '0px'} ${attributes.slideRadius.bottomRight || '0px'} ${attributes.slideRadius.bottomLeft || '0px'}` : attributes.slideRadius}
+                        style={{ '--slider-height': attributes.sliderHeight ? `${attributes.sliderHeight}vh` : undefined, '--slide-radius': typeof attributes.slideRadius === 'object' ? `${attributes.slideRadius.topLeft || '0px'} ${attributes.slideRadius.topRight || '0px'} ${attributes.slideRadius.bottomRight || '0px'} ${attributes.slideRadius.bottomLeft || '0px'}` : (attributes.slideRadius || undefined) }}
                     >
                         <div className="splide__track">
                             <ul className="splide__list">
@@ -225,6 +226,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							value={parseInt(attributes.sliderHeight) || 50}
 							onChange={(val) => setAttributes({ sliderHeight: String(val) })}
 						/>
+                        <BorderRadiusControl
+                            label="Slide Border Radius"
+                            values={attributes.slideRadius}
+                            onChange={(val) => setAttributes({ slideRadius: val })}
+                            max={100}
+                        />
                 </PanelBody>
             </InspectorControls>
         </>

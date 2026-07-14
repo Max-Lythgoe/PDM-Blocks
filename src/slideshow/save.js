@@ -13,7 +13,8 @@ export default function save({ attributes }) {
                 data-slides-per-view={attributes.slidesPerView}
                 data-gap={attributes.gap}
                 data-loop={attributes.loop}
-                style={{ '--slider-height': attributes.sliderHeight ? `${attributes.sliderHeight}vh` : undefined }}
+                data-slide-radius={typeof attributes.slideRadius === 'object' ? `${attributes.slideRadius.topLeft || '0px'} ${attributes.slideRadius.topRight || '0px'} ${attributes.slideRadius.bottomRight || '0px'} ${attributes.slideRadius.bottomLeft || '0px'}` : attributes.slideRadius}
+                style={{ '--slider-height': attributes.sliderHeight ? `${attributes.sliderHeight}vh` : undefined, '--slide-radius': typeof attributes.slideRadius === 'object' ? `${attributes.slideRadius.topLeft || '0px'} ${attributes.slideRadius.topRight || '0px'} ${attributes.slideRadius.bottomRight || '0px'} ${attributes.slideRadius.bottomLeft || '0px'}` : (attributes.slideRadius || undefined) }}
             >
                 <div className="splide__track">
                     <ul className="splide__list">

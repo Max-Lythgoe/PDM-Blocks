@@ -12,6 +12,8 @@
 
 .wp-block-pdm-slide img {
     height: var(--slider-height, 50vh);
-	width: 100%;
-	object-fit: cover;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--slide-radius, 0px);
+    overflow: clip;
 }

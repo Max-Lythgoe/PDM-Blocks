@@ -1,1 +1,1 @@
-.wp-block-pdm-slide{position:relative}.wp-block-pdm-slide img{height:var(--slider-height,50vh);-o-object-fit:cover;object-fit:cover;width:100%}
+.wp-block-pdm-slide{position:relative}.wp-block-pdm-slide img{border-radius:var(--slide-radius,0);height:var(--slider-height,50vh);-o-object-fit:cover;object-fit:cover;overflow:clip;width:100%}

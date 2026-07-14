@@ -1,0 +1,27 @@
+/* Editor Styles for Custom Code Meta Box */
+/* Migrated from PDM Accelerate theme */
+
+.hfs-meta-box .hfs-script-name {
+	min-width: 400px;
+	margin-bottom: 7px;
+}
+
+.hfs-meta-box .hfs-script-code {
+	min-height: 120px;
+	font-family: Consolas, Monaco, monospace;
+	font-size: 13px;
+	width: 100%;
+}
+
+.hfs-meta-box .hfs-meta-script-row {
+	margin-bottom: 15px;
+}
+
+.hfs-remove-script,
+.hfs-remove-meta-script {
+	flex-shrink: 0;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+}

@@ -11,6 +11,7 @@ const v1 = {
 		gap: { type: 'string', default: '0px' },
 		loop: { type: 'boolean' },
 		sliderHeight: { type: 'number' },
+		slideRadius: { type: ['string', 'object'], default: '0px' },
 	},
 	save( { attributes } ) {
 		return (

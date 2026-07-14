@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.8
+ * Version:           1.6.9
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
@@ -71,6 +71,30 @@ require_once plugin_dir_path(__FILE__) . 'includes/schema-engine/schema-engine-l
 
 // tabs block helpers
 require_once plugin_dir_path(__FILE__) . 'helpers.php';
+
+// -----------------------------------------------------------------------
+// Extensions (migrated from PDM Accelerate theme)
+// These extend core WordPress blocks with additional functionality.
+// When the theme is also active, plugin versions take priority.
+// -----------------------------------------------------------------------
+
+// Company Info Paragraph Extension - Rich text toolbar for shortcodes
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/company-info-extension.php';
+
+// Button Phone Extender - Company phone link/text for core/button
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/button-extender.php';
+
+// Button Icon Extension - SVG icon insertion for buttons
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/button-icon-extension.php';
+
+// Heading Balance - Text-wrap:balance toggle for headings
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/heading-balance.php';
+
+// Query Loop Drafts - Show draft posts in query loops
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/query-loop-drafts.php';
+
+// Header & Footer Scripts - Custom code manager
+require_once plugin_dir_path(__FILE__) . 'includes/extensions/header-footer-scripts/header-footer-scripts.php';
 
 
 // settings link(s) 

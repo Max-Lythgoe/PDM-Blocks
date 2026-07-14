@@ -10,35 +10,35 @@
 		height: fit-content;
 	}
 
-	   .block-editor-block-list__layout {
-		   display: grid;
-		   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-		   gap: 12px;
-		   overflow-y: auto;
-		   background: #f0f0f0;
-		   border-radius: 5px;
-		   padding: 10px;
-		   height: 500px;
-		   resize: vertical;
-		   min-height: 160px;
-	   }
+	.block-editor-block-list__layout {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		gap: 12px;
+		overflow-y: auto;
+		background: #f0f0f0;
+		border-radius: 5px;
+		padding: 10px;
+		height: 500px;
+		resize: vertical;
+		min-height: 160px;
+	}
 
-	   .block-editor-block-list__layout>* {
-		   width: 100%;
-		   height: auto;
-		   aspect-ratio: 5 / 3;
-		   padding: 10px;
-	   }
+	.block-editor-block-list__layout>* {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 5 / 3;
+		padding: 10px;
+	}
 
 	.wp-block-pdm-slide .slide-image-container {
-		height: 100%!important;
-		width: 100%!important;
+		height: 100% !important;
+		width: 100% !important;
 	}
 
 	.wp-block-pdm-slide .seo-image-container img {
-		height: 100%!important;
-		width: 100%!important;
-		object-fit: cover!important;
+		height: 100% !important;
+		width: 100% !important;
+		object-fit: cover !important;
 	}
 
 	.wp-block-pdm-slide .slide-image-container .trash-icon {
@@ -51,14 +51,14 @@
 	}
 
 	.slide-image-container img {
-		height: 100%!important;
-		width: 100%!important;
-		object-fit: cover!important;
+		height: 100% !important;
+		width: 100% !important;
+		object-fit: cover !important;
 	}
 
 	.block-list-appender {
-		position: relative!important;
-		inset: auto!important;
+		position: relative !important;
+		inset: auto !important;
 	}
 
 	.block-list-appender button {
@@ -67,12 +67,15 @@
 }
 
 // in preview mode
-.splide__slide {
-    position: relative;
+.wp-block-pdm-slideshow .splide__slide {
+	position: relative;
+	background: none !important;
 }
 
-.splide__slide img {
+.wp-block-pdm-slideshow .splide__slide img {
 	width: 100%;
 	object-fit: cover;
 	height: var(--slider-height, 50vh);
+	border-radius: var(--slide-radius, 0px);
+	overflow: clip;
 }

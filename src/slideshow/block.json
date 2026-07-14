@@ -60,6 +60,10 @@
 		"sliderHeight": {
 			"type": "string",
 			"default": "50"
+		},
+		"slideRadius": {
+			"type": ["string", "object"],
+			"default": "0px"
 		}
 	},
 	"keywords": [
