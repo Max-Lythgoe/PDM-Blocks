@@ -26,7 +26,12 @@ add_action('init', function () {
             }
 
             register_post_meta($post_type, $meta_key, array(
-                'show_in_rest' => true,
+                'show_in_rest' => array(
+                    'schema' => array(
+                        'type'    => array('string', 'null'),
+                        'default' => '',
+                    ),
+                ),
                 'single'       => true,
                 'type'         => 'string',
                 'default'      => '',
