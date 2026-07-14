@@ -175,6 +175,14 @@ function pdm_hfs_restore_default_snippet($snippet_id)
     return false;
 }
 
+/**
+ * Flag used by the shutdown handler to determine whether a fatal error
+ * occurred during snippet eval (as opposed to an unrelated PHP error).
+ *
+ * @var bool
+ */
+$pdm_hfs_executing_snippets = false;
+
 function pdm_hfs_execute_active_snippets()
 {
     // If the theme already defines this function, its snippet executor is active too.
@@ -183,13 +191,107 @@ function pdm_hfs_execute_active_snippets()
         return;
     }
 
+    global $pdm_hfs_executing_snippets;
+
     $active_snippets = pdm_hfs_get_active_snippets();
     $all_snippets = pdm_hfs_get_all_snippets();
+    $errored_ids = array();
+
+    // Set flag so the shutdown handler only disables snippets if
+    // the fatal error originated from within this eval loop.
+    $pdm_hfs_executing_snippets = true;
 
     foreach ($all_snippets as $snippet) {
-        if (in_array($snippet['id'], $active_snippets) && !empty($snippet['code'])) {
-            // Execute the PHP code
+        if (!in_array($snippet['id'], $active_snippets) || empty($snippet['code'])) {
+            continue;
+        }
+
+        // Wrap eval in error suppression to catch runtime errors
+        try {
+            // phpcs:ignore Squiz.PHP.Eval.Discouraged
             eval($snippet['code']);
+        } catch (\Throwable $e) {
+            $errored_ids[] = $snippet['id'];
+            continue;
         }
     }
+
+    $pdm_hfs_executing_snippets = false;
+
+    // Auto-disable any snippets that threw errors
+    if (!empty($errored_ids)) {
+        pdm_hfs_disable_snippets($errored_ids);
+    }
 }
+
+/**
+ * Shutdown handler: if a fatal error occurred during snippet eval,
+ * auto-disable all active snippets so the site recovers on next request.
+ *
+ * Only acts when $pdm_hfs_executing_snippets is true — this prevents
+ * unrelated PHP errors (plugin conflicts, memory limits, etc.) from
+ * wiping all active snippets.
+ */
+register_shutdown_function(function () {
+    global $pdm_hfs_executing_snippets;
+
+    // Bail if we weren't executing snippets when the error happened
+    if (!$pdm_hfs_executing_snippets) {
+        return;
+    }
+
+    $last_error = error_get_last();
+    if ($last_error && in_array($last_error['type'], array(E_PARSE, E_COMPILE_ERROR, E_ERROR))) {
+        $active = pdm_hfs_get_active_snippets();
+        if (!empty($active)) {
+            pdm_hfs_disable_snippets($active);
+        }
+    }
+});
+
+/**
+ * Disable snippets and store error info for admin notice.
+ */
+function pdm_hfs_disable_snippets(array $ids)
+{
+    $active_snippets = pdm_hfs_get_active_snippets();
+    $updated = array_diff($active_snippets, $ids);
+    update_option('hfs_active_snippets', array_values($updated));
+
+    update_option('hfs_snippet_errors', array(
+        'ids'  => $ids,
+        'time' => time(),
+    ));
+}
+
+/**
+ * Show admin notice about auto-disabled snippets.
+ */
+add_action('admin_notices', function () {
+    $errors = get_option('hfs_snippet_errors', array());
+    if (empty($errors['ids']) || empty($errors['time'])) {
+        return;
+    }
+
+    // Only show for 5 minutes after the error occurred
+    if (time() - $errors['time'] > 300) {
+        delete_option('hfs_snippet_errors');
+        return;
+    }
+
+    $snippets = pdm_hfs_get_all_snippets();
+    $names = array();
+    foreach ($snippets as $s) {
+        if (in_array($s['id'], $errors['ids'])) {
+            $names[] = esc_html($s['name']);
+        }
+    }
+
+    if (!empty($names)) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>PDM Blocks:</strong> The following PHP snippet(s) caused an error and have been automatically disabled:</p>';
+        echo '<p>' . implode(', ', $names) . '</p>';
+        echo '<p>You can edit and re-enable them from <a href="' . admin_url('admin.php?page=custom-code&tab=php') . '">Custom Code → PHP Snippets</a>.</p>';
+        echo '</div>';
+    }
+});

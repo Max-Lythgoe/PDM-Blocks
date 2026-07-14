@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.9
+ * Version:           1.7.0
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
@@ -95,6 +95,16 @@ require_once plugin_dir_path(__FILE__) . 'includes/extensions/query-loop-drafts.
 
 // Header & Footer Scripts - Custom code manager
 require_once plugin_dir_path(__FILE__) . 'includes/extensions/header-footer-scripts/header-footer-scripts.php';
+
+// Responsive Controls - Breakpoint-based responsive block controls
+// Deferred to after_setup_theme so we can check if the theme (pdm-accelerate < 1.5.4)
+// already loaded its copy — WordPress loads plugins before themes, so a direct
+// class_exists() check at this point would always pass.
+add_action('after_setup_theme', function () {
+    if (!class_exists('PRC_Settings')) {
+        require_once plugin_dir_path(__FILE__) . 'includes/extensions/responsive-controls/responsive-controls.php';
+    }
+}, 0);
 
 
 // settings link(s) 
