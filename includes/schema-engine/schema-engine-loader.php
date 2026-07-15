@@ -4,10 +4,10 @@
  * Schema Engine Loader for PDM Blocks Plugin
  *
  * Loads the PDM Settings admin page and schema engine (FAQ, Article, Author E-E-A-T,
- * Service Area schemas) when the PDM Accelerate theme is NOT active.
+ * Service Area schemas).
  *
- * If the pdm-accelerate theme is active, it already provides this functionality and
- * this loader will do nothing to avoid duplication.
+ * Only skips if the PDM Accelerate theme (< 1.5.4) still has these built in.
+ * From 1.5.4 onward the theme delegates to this plugin.
  *
  * @package PDM_Blocks
  */
@@ -17,22 +17,19 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Maybe load the schema engine.
+ * Load the schema engine.
  *
- * Runs on `after_setup_theme` (priority 20) so the active theme's functions.php
- * has already been parsed. We bail out if the theme already registered the
- * PDM Settings page (function existence is the reliable signal).
+ * Runs on `after_setup_theme` (priority 20) so any theme-side hooks can be
+ * unregistered first if needed.
  */
 add_action('after_setup_theme', 'pdm_blocks_maybe_load_schema_engine', 20);
 
 function pdm_blocks_maybe_load_schema_engine()
 {
-    // If the PDM Accelerate theme is active it already provides all of this.
+    // If pdm-accelerate theme < 1.5.4 is active, it still has these built in.
     $theme = wp_get_theme();
-    if (
-        $theme->get_stylesheet() === 'pdm-accelerate' ||
-        $theme->get_template()   === 'pdm-accelerate'
-    ) {
+    $is_pdm_theme = $theme->get_stylesheet() === 'pdm-accelerate' || $theme->get_template() === 'pdm-accelerate';
+    if ($is_pdm_theme && version_compare($theme->get('Version'), '1.5.4', '<')) {
         return;
     }
 

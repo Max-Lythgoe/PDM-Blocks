@@ -7,7 +7,7 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "cross-env WP_EXPERIMENTAL_MODULES=true wp-scripts build --webpack-copy-php && wp-scripts build --config webpack.extension.config.js",
-		"plugin-zip": "wp-scripts plugin-zip",
+		"plugin-zip": "wp-scripts plugin-zip && move /y pdm-blocks.zip %USERPROFILE%\\Downloads\\pdm-blocks.zip",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
@@ -19,10 +19,16 @@
 		"convert-icons": "node scripts/convert-icons.js"
 	},
 	"files": [
+		"assets",
+		"block.json",
 		"build",
+		"components",
+		"helpers.php",
+		"includes",
+		"patterns",
 		"pdm-blocks.php",
-		"readme.txt",
-		"block.json"
+		"plugin-update-checker-5.6",
+		"README.md"
 	],
 	"devDependencies": {
 		"@wordpress/browserslist-config": "^6.32.0",

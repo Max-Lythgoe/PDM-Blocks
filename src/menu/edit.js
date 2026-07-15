@@ -11,6 +11,8 @@ import {
 	SelectControl,
 	RangeControl,
 	ToggleControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalNumberControl as NumberControl,
 	ToolbarGroup,
 	ToolbarButton
@@ -40,6 +42,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		mobileBreakpoint = 1024,
 		menuItemImageMaxWidth = 100,
 		mobileImageFirst = true,
+		mobileMenuPosition = 'center',
 		submenuBackgroundColor,
 		submenuBackgroundGradient,
 		submenuHoverBackgroundColor,
@@ -184,6 +187,22 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
+	// Determine mobile toggle margin-inline & justify from position
+	const getMobileToggleMargin = (position) => {
+		switch (position) {
+			case 'left': return '0 auto 0 0';
+			case 'right': return '0 0 0 auto';
+			default: return 'auto';
+		}
+	};
+	const getMobileToggleJustify = (position) => {
+		switch (position) {
+			case 'left': return 'flex-start';
+			case 'right': return 'flex-end';
+			default: return 'center';
+		}
+	};
+
 	// CSS variables for submenu colors
 	const submenuStyles = {
 		'--submenu-bg-color': submenuBackgroundGradient || submenuBackgroundColor,
@@ -193,7 +212,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		'--max-width': `${maxWidth}px`,
 		'--menu-alignment': menuJustify,
 		'--menu-radius': menuRadius || '0px',
-		'--menu-item-image-max-width': `${menuItemImageMaxWidth}px`
+		'--menu-item-image-max-width': `${menuItemImageMaxWidth}px`,
+		'--mobile-toggle-margin': getMobileToggleMargin(mobileMenuPosition),
+		'--mobile-toggle-justify': getMobileToggleJustify(mobileMenuPosition)
 	};
 
 		const blockProps = useBlockProps({ className: 'menu-block pdm-block', style: submenuStyles });
@@ -242,6 +263,19 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						max={1920}
 						help={__('Screen width at which the menu switches to mobile layout.', 'pdm-blocks')}
 					/>
+
+					<ToggleGroupControl
+						__next40pxDefaultSize
+						isBlock
+						label={__('Mobile Toggle Position', 'pdm-blocks')}
+						value={mobileMenuPosition}
+						onChange={(value) => setAttributes({ mobileMenuPosition: value })}
+						help={__('Alignment of the mobile menu toggle button.', 'pdm-blocks')}
+					>
+						<ToggleGroupControlOption value="left" label={__('Left', 'pdm-blocks')} />
+						<ToggleGroupControlOption value="center" label={__('Center', 'pdm-blocks')} />
+						<ToggleGroupControlOption value="right" label={__('Right', 'pdm-blocks')} />
+					</ToggleGroupControl>
 				</PanelBody>
 
 				<PanelBody title={__('Border Radius', 'pdm-blocks')} initialOpen={false}>
@@ -328,8 +362,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					--iconSize: ${attributes.iconSize || '45px'};
 				    }
 					[data-block="${clientId}"] .pdm-menu-desktop { display: none !important; }
-					[data-block="${clientId}"] .pdm-menu-mobile { display: flex !important; }
-					[data-block="${clientId}"] .block-menu-toggle { display: flex !important; margin-inline: auto; }
+					[data-block="${clientId}"] .pdm-menu-mobile { display: flex !important; justify-content: var(--mobile-toggle-justify, center); }
+					[data-block="${clientId}"] .block-menu-toggle { display: flex !important; margin-inline: var(--mobile-toggle-margin, auto); }
 				}
 			` }} />
 			{menuId && selectedMenuItems.length > 0 ? (

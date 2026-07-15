@@ -79,6 +79,10 @@
 		"mobileImageFirst": {
 			"type": "boolean",
 			"default": true
+		},
+		"mobileMenuPosition": {
+			"type": "string",
+			"default": "center"
 		}
 	},
 	"example": {

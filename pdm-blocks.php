@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.7.1
+ * Version:           1.7.2
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
@@ -96,16 +96,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/extensions/query-loop-drafts.
 // Header & Footer Scripts - Custom code manager
 require_once plugin_dir_path(__FILE__) . 'includes/extensions/header-footer-scripts/header-footer-scripts.php';
 
-// Responsive Controls - Breakpoint-based responsive block controls
-// Deferred to after_setup_theme so we can check if the theme (pdm-accelerate < 1.5.4)
-// already loaded its copy — WordPress loads plugins before themes, so a direct
-// class_exists() check at this point would always pass.
-add_action('after_setup_theme', function () {
-    if (!class_exists('PRC_Settings')) {
-        require_once plugin_dir_path(__FILE__) . 'includes/extensions/responsive-controls/responsive-controls.php';
-    }
-}, 0);
-
 
 // settings link(s) 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
@@ -194,7 +184,7 @@ function pdm_blocks_localize_company_data()
 function pdm_disallowed_block_types($allowed_blocks, $editor_context)
 {
     $blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
-    unset($blocks['core/columns'], $blocks['core/accordion'], $blocks['core/gallery'], $blocks['core/media-text'], $blocks['core/tabs']);
+    unset($blocks['core/columns'], $blocks['core/accordion'], $blocks['core/gallery'], $blocks['core/media-text'], $blocks['core/tabs'], $blocks['core/icon']);
     return array_keys($blocks);
 }
 add_filter('allowed_block_types_all', 'pdm_disallowed_block_types', 10, 2);

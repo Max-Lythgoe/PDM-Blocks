@@ -35,6 +35,7 @@ $icon_color = isset($attributes['iconColor']) ? $attributes['iconColor'] : 'curr
 $use_custom_color = isset($attributes['useCustomColor']) ? $attributes['useCustomColor'] : false;
 $menu_item_image_max_width = isset($attributes['menuItemImageMaxWidth']) ? intval($attributes['menuItemImageMaxWidth']) : 100;
 $mobile_image_first = isset($attributes['mobileImageFirst']) ? (bool) $attributes['mobileImageFirst'] : true;
+$mobile_menu_position = isset($attributes['mobileMenuPosition']) ? $attributes['mobileMenuPosition'] : 'center';
 
 // Build CSS variables array
 $css_vars = [
@@ -65,6 +66,20 @@ if (!empty($submenu_hover_text)) {
 if (!empty($menu_justify)) {
 	$css_vars['--menu-alignment'] = $menu_justify;
 }
+
+// Mobile toggle margin & justify based on position
+if ($mobile_menu_position === 'left') {
+	$mobile_toggle_margin = '0 auto 0 0';
+	$mobile_toggle_justify = 'flex-start';
+} elseif ($mobile_menu_position === 'right') {
+	$mobile_toggle_margin = '0 0 0 auto';
+	$mobile_toggle_justify = 'flex-end';
+} else {
+	$mobile_toggle_margin = 'auto';
+	$mobile_toggle_justify = 'center';
+}
+$css_vars['--mobile-toggle-margin'] = $mobile_toggle_margin;
+$css_vars['--mobile-toggle-justify'] = $mobile_toggle_justify;
 
 // Convert to style string
 $style_string = '';
@@ -230,8 +245,7 @@ echo "<style>
 	@media (max-width: {$bp_max}px) {
 		#{$id} .pdm-menu-desktop { display: none !important; }
 		#{$id} .pdm-menu-mobile { display: block; }
-		#{$id} .block-menu-toggle { display: flex !important; margin-inline: auto; }
-		#{$id} { width: 100%; }
+		#{$id} .pdm-menu-mobile .block-menu-toggle { display: flex !important; justify-content: var(--mobile-toggle-justify, center); margin-inline: var(--mobile-toggle-margin, auto); }
 	}
 </style>";
 $wrapper_classes = 'menu-block pdm-block';
