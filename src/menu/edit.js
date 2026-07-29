@@ -48,7 +48,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		submenuHoverBackgroundColor,
 		submenuHoverBackgroundGradient,
 		submenuTextColor,
-		submenuHoverTextColor
+		submenuHoverTextColor,
+		arrowStyle = 'chevron'
 	} = attributes;
 
 	// Get menu data
@@ -214,10 +215,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		'--menu-radius': menuRadius || '0px',
 		'--menu-item-image-max-width': `${menuItemImageMaxWidth}px`,
 		'--mobile-toggle-margin': getMobileToggleMargin(mobileMenuPosition),
-		'--mobile-toggle-justify': getMobileToggleJustify(mobileMenuPosition)
+		'--mobile-toggle-justify': getMobileToggleJustify(mobileMenuPosition),
+		'--pdm-arrow-icon': arrowStyle === 'none' ? 'none' : (
+			arrowStyle === 'caret'
+				? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath fill='currentColor' d='M300.3 440.8C312.9 451 331.4 450.3 343.1 438.6L471.1 310.6C480.3 301.4 483 287.7 478 275.7C473 263.7 461.4 256 448.5 256L192.5 256C179.6 256 167.9 263.8 162.9 275.8C157.9 287.8 160.7 301.5 169.9 310.6L297.9 438.6L300.3 440.8z'/%3E%3C/svg%3E")`
+				: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath d='M297.4 438.6C309.9 451.1 330.2 451.1 342.7 438.6L502.7 278.6C515.2 266.1 515.2 245.8 502.7 233.3C490.2 220.8 469.9 220.8 457.4 233.3L320 370.7L182.6 233.4C170.1 220.9 149.8 220.9 137.3 233.4C124.8 245.9 124.8 266.2 137.3 278.7L297.3 438.7z'/%3E%3C/svg%3E")`
+		)
 	};
 
-		const blockProps = useBlockProps({ className: 'menu-block pdm-block', style: submenuStyles });
+		const blockProps = useBlockProps({ className: 'menu-block pdm-block', style: submenuStyles, 'data-arrow-style': arrowStyle });
 
 		return (
 		<>
@@ -276,6 +282,18 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						<ToggleGroupControlOption value="center" label={__('Center', 'pdm-blocks')} />
 						<ToggleGroupControlOption value="right" label={__('Right', 'pdm-blocks')} />
 					</ToggleGroupControl>
+
+					<SelectControl
+						label={__('Arrow Style', 'pdm-blocks')}
+						value={arrowStyle}
+						options={[
+							{ label: __('Chevron', 'pdm-blocks'), value: 'chevron' },
+							{ label: __('Caret', 'pdm-blocks'), value: 'caret' },
+							{ label: __('No Icon', 'pdm-blocks'), value: 'none' },
+						]}
+						onChange={(value) => setAttributes({ arrowStyle: value })}
+						help={__('Choose the arrow icon style for submenu indicators.', 'pdm-blocks')}
+					/>
 				</PanelBody>
 
 				<PanelBody title={__('Border Radius', 'pdm-blocks')} initialOpen={false}>

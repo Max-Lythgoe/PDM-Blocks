@@ -60,9 +60,15 @@ function pdm_hfs_render_snippets_tab()
     $snippets = pdm_hfs_get_all_snippets();
     $active_snippets = pdm_hfs_get_active_snippets();
 
+    $export_nonce = wp_create_nonce('pdm_hfs_export_snippets');
     $import_nonce = wp_create_nonce('pdm_hfs_import_snippets');
 ?>
     <div class="hfs-snippets-header">
+        <div class="hfs-snippets-select-all">
+            <label class="hfs-checkbox-label">
+                <input type="checkbox" id="hfs-select-all" title="Select all snippets" />
+            </label>
+        </div>
         <div class="hfs-snippets-search">
             <input type="text" id="hfs-snippet-search" placeholder="Search snippets..." />
         </div>
@@ -79,16 +85,17 @@ function pdm_hfs_render_snippets_tab()
         </div>
         <div class="hfs-snippets-actions">
             <button type="button" class="button" id="hfs-export-snippets">
-                <span class="dashicons dashicons-download"></span> Export
+                <span class="dashicons dashicons-upload"></span> Export
             </button>
             <button type="button" class="button" id="hfs-import-snippets">
-                <span class="dashicons dashicons-upload"></span> Import
+                <span class="dashicons dashicons-download"></span> Import
             </button>
             <button type="button" class="button button-primary" id="hfs-add-snippet">
                 <span class="dashicons dashicons-plus-alt"></span> Add New Snippet
             </button>
         </div>
     </div>
+    <input type="file" id="hfs-import-file" accept=".json" style="display:none;" />
 
     <div class="hfs-snippets-list">
         <?php if (empty($snippets)) : ?>
@@ -100,8 +107,13 @@ function pdm_hfs_render_snippets_tab()
                 $is_default = $snippet['type'] === 'default';
                 $is_modified = isset($snippet['modified']) && $snippet['modified'];
                 ?>
-                <div class="hfs-snippet-item" data-snippet-id="<?php echo esc_attr($snippet['id']); ?>" data-snippet-name="<?php echo esc_attr(strtolower($snippet['name'])); ?>" data-snippet-category="<?php echo esc_attr(strtolower($snippet['category'])); ?>">
+                <div class="hfs-snippet-item" data-snippet-id="<?php echo esc_attr($snippet['id']); ?>" data-snippet-name="<?php echo esc_attr(strtolower($snippet['name'])); ?>" data-snippet-category="<?php echo esc_attr(strtolower($snippet['category'])); ?>" data-snippet-export="<?php echo esc_attr(json_encode(array('name' => $snippet['name'], 'description' => isset($snippet['description']) ? $snippet['description'] : '', 'category' => $snippet['category'], 'code' => $snippet['code']))); ?>">
                     <div class="hfs-snippet-header">
+                        <div class="hfs-snippet-checkbox">
+                            <label class="hfs-checkbox-label">
+                                <input type="checkbox" class="hfs-snippet-checkbox-input" data-snippet-id="<?php echo esc_attr($snippet['id']); ?>" />
+                            </label>
+                        </div>
                         <div class="hfs-snippet-info">
                             <h3><?php echo esc_html($snippet['name']); ?>
                                 <?php if ($is_default) : ?>
@@ -206,5 +218,36 @@ function pdm_hfs_render_snippets_tab()
             </form>
         </div>
     </div>
+
+    <!-- Import Preview Modal -->
+    <div id="pdm-hfs-import-modal" class="hfs-modal" style="display: none;">
+        <div class="hfs-modal-content">
+            <div class="hfs-modal-header">
+                <h2>Import Snippets</h2>
+                <button type="button" class="hfs-modal-close">&times;</button>
+            </div>
+            <div id="hfs-import-modal-body">
+                <p>Select the snippets you want to import:</p>
+                <div class="hfs-import-select-all" style="margin-bottom:12px;">
+                    <label>
+                        <input type="checkbox" id="hfs-import-select-all" checked /> Select / Deselect All
+                    </label>
+                </div>
+                <div id="hfs-import-snippets-list"></div>
+                <div style="margin-top:16px;">
+                    <button type="button" class="button button-primary" id="hfs-import-confirm">
+                        <span class="dashicons dashicons-download"></span> Import Selected
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var hfsSnippetsNonces = {
+            export: <?php echo json_encode($export_nonce); ?>,
+            import: <?php echo json_encode($import_nonce); ?>
+        };
+    </script>
 <?php
 }

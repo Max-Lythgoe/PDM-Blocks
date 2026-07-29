@@ -36,6 +36,7 @@ $use_custom_color = isset($attributes['useCustomColor']) ? $attributes['useCusto
 $menu_item_image_max_width = isset($attributes['menuItemImageMaxWidth']) ? intval($attributes['menuItemImageMaxWidth']) : 100;
 $mobile_image_first = isset($attributes['mobileImageFirst']) ? (bool) $attributes['mobileImageFirst'] : true;
 $mobile_menu_position = isset($attributes['mobileMenuPosition']) ? $attributes['mobileMenuPosition'] : 'center';
+$arrow_style = isset($attributes['arrowStyle']) ? $attributes['arrowStyle'] : 'chevron';
 
 // Build CSS variables array
 $css_vars = [
@@ -65,6 +66,11 @@ if (!empty($submenu_hover_text)) {
 }
 if (!empty($menu_justify)) {
 	$css_vars['--menu-alignment'] = $menu_justify;
+}
+
+// Arrow style
+if ($arrow_style === 'none') {
+	$css_vars['--pdm-arrow-icon'] = 'none';
 }
 
 // Mobile toggle margin & justify based on position
@@ -245,7 +251,7 @@ echo "<style>
 	@media (max-width: {$bp_max}px) {
 		#{$id} .pdm-menu-desktop { display: none !important; }
 		#{$id} .pdm-menu-mobile { display: block; }
-		#{$id} .pdm-menu-mobile .block-menu-toggle { display: flex !important; justify-content: var(--mobile-toggle-justify, center); margin-inline: var(--mobile-toggle-margin, auto); }
+		#{$id} .pdm-menu-mobile > .block-menu-toggle { display: flex !important; justify-content: var(--mobile-toggle-justify, center); margin-inline: var(--mobile-toggle-margin, auto); }
 	}
 </style>";
 $wrapper_classes = 'menu-block pdm-block';
@@ -253,7 +259,7 @@ if ($mobile_image_first) {
 	$wrapper_classes .= ' pdm-menu-image-mobile-first';
 }
 ?>
-<div <?php echo get_block_wrapper_attributes(['id' => $block_instance_id, 'class' => $wrapper_classes, 'style' => $style_string]); ?>>
+<div <?php echo get_block_wrapper_attributes(['id' => $block_instance_id, 'class' => $wrapper_classes, 'style' => $style_string, 'data-arrow-style' => esc_attr($arrow_style)]); ?>>
 	<?php if ($menu_exists): ?>
 		<!-- Desktop Menu -->
 		<nav class="pdm-menu pdm-menu-desktop" style=" max-width:<?php echo esc_attr($max_width); ?>px;margin-inline:auto;">

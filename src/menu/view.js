@@ -35,4 +35,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Close mobile menu when clicking anchor links (#section)
+    const slideoutMenus = document.querySelectorAll('.menu-slideout');
+    slideoutMenus.forEach(slideout => {
+        slideout.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+            // Find the associated menu toggle checkbox
+            const mobileNav = slideout.closest('.pdm-menu-mobile');
+            if (mobileNav) {
+                const toggle = mobileNav.querySelector('.menu-toggle');
+                if (toggle) {
+                    toggle.checked = false;
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    });
 });

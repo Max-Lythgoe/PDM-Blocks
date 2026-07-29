@@ -87,6 +87,10 @@
     "mobileMenuPosition": {
       "type": "string",
       "default": "center"
+    },
+    "arrowStyle": {
+      "type": "string",
+      "default": "chevron"
     }
   },
   "example": {

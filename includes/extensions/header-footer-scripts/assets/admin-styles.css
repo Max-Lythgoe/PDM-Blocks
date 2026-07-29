@@ -142,6 +142,31 @@
 	border-bottom: none;
 }
 
+/* Checkbox column */
+.hfs-snippets-select-all {
+	display: flex;
+	align-items: center;
+	padding-right: 4px;
+}
+
+.hfs-snippet-checkbox {
+	display: flex;
+	align-items: flex-start;
+	flex-shrink: 0;
+}
+
+.hfs-checkbox-label {
+	display: block;
+	cursor: pointer;
+}
+
+.hfs-checkbox-label input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	cursor: pointer;
+}
+
 .hfs-snippet-info {
 	flex: 1;
 }
@@ -363,4 +388,89 @@ button .dashicons {
 .wp-core-ui .button.button-danger:hover {
 	color: #9e1313;
 	background: #cc18180a;
+}
+
+/* Import Preview Modal */
+#hfs-import-modal-body {
+	padding: 24px;
+}
+
+#hfs-import-modal-body p {
+	margin-top: 0;
+}
+
+#hfs-import-snippets-list {
+	max-height: 400px;
+	overflow-y: auto;
+	border: 1px solid #dcdcde;
+	margin-bottom: 8px;
+}
+
+.hfs-import-snippet-item {
+	padding: 14px 16px;
+	border-bottom: 1px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.hfs-import-snippet-item:last-child {
+	border-bottom: none;
+}
+
+.hfs-import-checkbox-label {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	cursor: pointer;
+}
+
+.hfs-import-checkbox-label input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	margin-top: 2px;
+	flex-shrink: 0;
+	cursor: pointer;
+}
+
+.hfs-import-snippet-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.hfs-import-snippet-info strong {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 14px;
+}
+
+.hfs-import-snippet-info .hfs-snippet-description {
+	margin: 4px 0;
+}
+
+.hfs-import-code-preview {
+	display: block;
+	margin-top: 6px;
+	padding: 8px 10px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+	font-size: 12px;
+	color: #50575e;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
+.hfs-import-select-all {
+	padding-bottom: 4px;
+}
+
+.hfs-import-select-all label {
+	font-weight: 600;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.hfs-import-select-all input[type="checkbox"] {
+	margin-right: 6px;
 }

@@ -28,6 +28,7 @@
 
 .mc-media-image .mc-media img {
 	height: auto;
+	display: block;
 	max-height: var(--imageMaxHeight, 500px);
 	max-width: 100%;
 	object-fit: var(--imageFit, contain) !important;

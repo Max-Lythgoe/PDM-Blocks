@@ -63,6 +63,51 @@ add_action('save_post', 'pdm_hfs_save_meta_box_data', 20);
 add_action('after_setup_theme', 'pdm_hfs_execute_active_snippets', 1);
 
 /**
+ * AJAX handler for importing snippets.
+ */
+add_action('wp_ajax_pdm_hfs_import_snippets', 'pdm_hfs_ajax_import_snippets');
+
+function pdm_hfs_ajax_import_snippets()
+{
+    check_ajax_referer('pdm_hfs_import_snippets', 'nonce');
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(array('message' => 'You do not have permission to import snippets.'));
+    }
+
+    $snippets_json = isset($_POST['snippets']) ? wp_unslash($_POST['snippets']) : '';
+    $snippets = json_decode($snippets_json, true);
+
+    if (!is_array($snippets) || empty($snippets)) {
+        wp_send_json_error(array('message' => 'No valid snippets provided.'));
+    }
+
+    $imported = 0;
+    foreach ($snippets as $snippet) {
+        if (empty($snippet['name']) || empty($snippet['code'])) {
+            continue;
+        }
+
+        $name = sanitize_text_field($snippet['name']);
+        $code = $snippet['code']; // Raw PHP — will be eval'd, intentionally not sanitized as HTML
+        $description = isset($snippet['description']) ? sanitize_text_field($snippet['description']) : '';
+        $category = isset($snippet['category']) ? sanitize_text_field($snippet['category']) : 'General';
+
+        $new_id = pdm_hfs_save_snippet('', $name, $code, $description, $category);
+        if ($new_id) {
+            // Auto-activate imported snippet
+            pdm_hfs_toggle_snippet($new_id);
+            $imported++;
+        }
+    }
+
+    wp_send_json_success(array(
+        'count' => $imported,
+        'message' => sprintf('Successfully imported %d snippet(s).', $imported)
+    ));
+}
+
+/**
  * Enqueue admin assets
  */
 function pdm_hfs_enqueue_admin_assets($hook)
@@ -88,7 +133,9 @@ function pdm_hfs_enqueue_admin_assets($hook)
         );
 
         wp_localize_script('pdm-hfs-admin-scripts', 'hfsAdmin', array(
-            'ajaxUrl' => admin_url('admin-ajax.php')
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'importNonce' => wp_create_nonce('pdm_hfs_import_snippets'),
+            'exportNonce' => wp_create_nonce('pdm_hfs_export_snippets')
         ));
     }
 

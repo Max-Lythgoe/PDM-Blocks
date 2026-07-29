@@ -211,7 +211,7 @@ function pdm_hfs_execute_active_snippets()
             // phpcs:ignore Squiz.PHP.Eval.Discouraged
             eval($snippet['code']);
         } catch (\Throwable $e) {
-            $errored_ids[] = $snippet['id'];
+            $errored_ids[$snippet['id']] = $e->getMessage();
             continue;
         }
     }
@@ -220,7 +220,7 @@ function pdm_hfs_execute_active_snippets()
 
     // Auto-disable any snippets that threw errors
     if (!empty($errored_ids)) {
-        pdm_hfs_disable_snippets($errored_ids);
+        pdm_hfs_disable_snippets(array_keys($errored_ids), $errored_ids);
     }
 }
 
@@ -244,23 +244,29 @@ register_shutdown_function(function () {
     if ($last_error && in_array($last_error['type'], array(E_PARSE, E_COMPILE_ERROR, E_ERROR))) {
         $active = pdm_hfs_get_active_snippets();
         if (!empty($active)) {
-            pdm_hfs_disable_snippets($active);
+            // Store the fatal error message keyed by a special id for display
+            $error_msg = $last_error['message'] . ' (line ' . $last_error['line'] . ' in ' . $last_error['file'] . ')';
+            pdm_hfs_disable_snippets($active, array('_fatal_error' => $error_msg));
         }
     }
 });
 
 /**
  * Disable snippets and store error info for admin notice.
+ *
+ * @param array $ids         Snippet IDs to disable.
+ * @param array $error_msgs  Optional. Associative array of snippet_id => error_message.
  */
-function pdm_hfs_disable_snippets(array $ids)
+function pdm_hfs_disable_snippets(array $ids, array $error_msgs = array())
 {
     $active_snippets = pdm_hfs_get_active_snippets();
     $updated = array_diff($active_snippets, $ids);
     update_option('hfs_active_snippets', array_values($updated));
 
     update_option('hfs_snippet_errors', array(
-        'ids'  => $ids,
-        'time' => time(),
+        'ids'      => $ids,
+        'messages' => $error_msgs,
+        'time'     => time(),
     ));
 }
 
@@ -288,9 +294,33 @@ add_action('admin_notices', function () {
     }
 
     if (!empty($names)) {
+        $error_msgs = isset($errors['messages']) ? $errors['messages'] : array();
+
         echo '<div class="notice notice-error is-dismissible">';
         echo '<p><strong>PDM Blocks:</strong> The following PHP snippet(s) caused an error and have been automatically disabled:</p>';
-        echo '<p>' . implode(', ', $names) . '</p>';
+        echo '<ul style="list-style:disc;padding-left:20px;margin:0 0 8px;">';
+        foreach ($errors['ids'] as $id) {
+            $snippet_name = '';
+            foreach ($snippets as $s) {
+                if ($s['id'] === $id) {
+                    $snippet_name = $s['name'];
+                    break;
+                }
+            }
+            if ($id === '_fatal_error') {
+                // Fatal error case — show the raw error
+                $msg = isset($error_msgs['_fatal_error']) ? $error_msgs['_fatal_error'] : 'Unknown fatal error';
+                echo '<li><strong>Fatal Error:</strong> <code>' . esc_html($msg) . '</code></li>';
+            } else {
+                $msg = isset($error_msgs[$id]) ? $error_msgs[$id] : '';
+                echo '<li><strong>' . esc_html($snippet_name ?: $id) . '</strong>';
+                if ($msg) {
+                    echo ': <code>' . esc_html($msg) . '</code>';
+                }
+                echo '</li>';
+            }
+        }
+        echo '</ul>';
         echo '<p>You can edit and re-enable them from <a href="' . admin_url('admin.php?page=custom-code&tab=php') . '">Custom Code → PHP Snippets</a>.</p>';
         echo '</div>';
     }
