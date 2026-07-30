@@ -82,6 +82,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         attributes.isPreview,
         attributes.interval,
         attributes.autoplay,
+        attributes.enableLightbox,
         attributes.pauseOnHover,
         attributes.pagination,
         attributes.arrows,
@@ -105,6 +106,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     <div className="splide" 
                         data-interval={attributes.interval}
                         data-autoplay={attributes.autoplay}
+                        data-enable-lightbox={attributes.enableLightbox}
                         data-pause-on-hover={attributes.pauseOnHover}
                         data-pagination={attributes.pagination}
                         data-arrows={attributes.arrows}
@@ -171,6 +173,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         label="Loop Slides"
                         checked={!!attributes.loop}
                         onChange={(val) => setAttributes({ loop: val })}
+                    />
+                    <ToggleControl
+                        label="Enable Lightbox"
+                        help="Opens images in a fullscreen lightbox on click"
+                        checked={!!attributes.enableLightbox}
+                        onChange={(val) => setAttributes({ enableLightbox: val })}
                     />
 					</PanelBody>
 					<PanelBody title="Autoplay Settings" initialOpen={false}>

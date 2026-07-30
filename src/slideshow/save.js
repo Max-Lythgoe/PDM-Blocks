@@ -7,6 +7,7 @@ export default function save({ attributes }) {
                 className="splide"
                 data-interval={attributes.interval}
                 data-autoplay={attributes.autoplay}
+                data-enable-lightbox={attributes.enableLightbox}
                 data-pause-on-hover={attributes.pauseOnHover}
                 data-pagination={attributes.pagination}
                 data-arrows={attributes.arrows}

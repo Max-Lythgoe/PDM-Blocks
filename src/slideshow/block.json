@@ -64,6 +64,10 @@
 		"slideRadius": {
 			"type": ["string", "object"],
 			"default": "0px"
+		},
+		"enableLightbox": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"keywords": [

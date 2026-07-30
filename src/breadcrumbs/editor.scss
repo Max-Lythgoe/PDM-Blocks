@@ -1,0 +1,17 @@
+.wp-block-pdm-breadcrumbs {
+	min-height: 1em;
+
+	a {
+		color: var(--wp--style--color--link, inherit);
+	}
+
+	.breadcrumb-preview {
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-items: center;
+
+		&__item {
+			white-space: nowrap;
+		}
+	}
+}

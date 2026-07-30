@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.7.3
+ * Version:           1.7.4
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
@@ -184,7 +184,7 @@ function pdm_blocks_localize_company_data()
 function pdm_disallowed_block_types($allowed_blocks, $editor_context)
 {
     $blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
-    unset($blocks['core/columns'], $blocks['core/accordion'], $blocks['core/gallery'], $blocks['core/media-text'], $blocks['core/tabs'], $blocks['core/icon']);
+    unset($blocks['core/columns'], $blocks['core/accordion'], $blocks['core/gallery'], $blocks['core/media-text'], $blocks['core/tabs'], $blocks['core/icon'], $blocks['core/breadcrumbs']);
     return array_keys($blocks);
 }
 add_filter('allowed_block_types_all', 'pdm_disallowed_block_types', 10, 2);

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pdm/breadcrumbs",
+  "version": "0.1.0",
+  "title": "Breadcrumbs",
+  "category": "pdm-blocks",
+  "description": "Rank Math breadcrumbs with automatic schema output.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "className": true,
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "fontStyle": true,
+      "fontWeight": true,
+      "letterSpacing": true,
+      "textTransform": true,
+      "textDecoration": true,
+      "textAlign": true
+    },
+    "color": {
+      "text": true,
+      "link": true,
+      "background": false
+    }
+  },
+  "textdomain": "breadcrumbs",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

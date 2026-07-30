@@ -12,6 +12,7 @@ const v1 = {
 		loop: { type: 'boolean' },
 		sliderHeight: { type: 'number' },
 		slideRadius: { type: ['string', 'object'], default: '0px' },
+		enableLightbox: { type: 'boolean' },
 	},
 	save( { attributes } ) {
 		return (
