@@ -183,6 +183,14 @@ function pdm_hfs_restore_default_snippet($snippet_id)
  */
 $pdm_hfs_executing_snippets = false;
 
+/**
+ * Holds the ID of the snippet currently being eval'd, so the shutdown
+ * handler can identify the culprit when a fatal error occurs.
+ *
+ * @var string|null
+ */
+$pdm_hfs_current_snippet_id = null;
+
 function pdm_hfs_execute_active_snippets()
 {
     // If the theme already defines this function, its snippet executor is active too.
@@ -191,7 +199,7 @@ function pdm_hfs_execute_active_snippets()
         return;
     }
 
-    global $pdm_hfs_executing_snippets;
+    global $pdm_hfs_executing_snippets, $pdm_hfs_current_snippet_id;
 
     $active_snippets = pdm_hfs_get_active_snippets();
     $all_snippets = pdm_hfs_get_all_snippets();
@@ -200,11 +208,16 @@ function pdm_hfs_execute_active_snippets()
     // Set flag so the shutdown handler only disables snippets if
     // the fatal error originated from within this eval loop.
     $pdm_hfs_executing_snippets = true;
+    $pdm_hfs_current_snippet_id = null;
 
     foreach ($all_snippets as $snippet) {
         if (!in_array($snippet['id'], $active_snippets) || empty($snippet['code'])) {
             continue;
         }
+
+        // Track which snippet is being evaluated so a fatal error can be
+        // attributed to the correct snippet (instead of disabling everything).
+        $pdm_hfs_current_snippet_id = $snippet['id'];
 
         // Wrap eval in error suppression to catch runtime errors
         try {
@@ -216,6 +229,7 @@ function pdm_hfs_execute_active_snippets()
         }
     }
 
+    $pdm_hfs_current_snippet_id = null;
     $pdm_hfs_executing_snippets = false;
 
     // Auto-disable any snippets that threw errors
@@ -226,14 +240,14 @@ function pdm_hfs_execute_active_snippets()
 
 /**
  * Shutdown handler: if a fatal error occurred during snippet eval,
- * auto-disable all active snippets so the site recovers on next request.
+ * auto-disable the offending snippet(s) so the site recovers on next request.
  *
  * Only acts when $pdm_hfs_executing_snippets is true — this prevents
  * unrelated PHP errors (plugin conflicts, memory limits, etc.) from
  * wiping all active snippets.
  */
 register_shutdown_function(function () {
-    global $pdm_hfs_executing_snippets;
+    global $pdm_hfs_executing_snippets, $pdm_hfs_current_snippet_id;
 
     // Bail if we weren't executing snippets when the error happened
     if (!$pdm_hfs_executing_snippets) {
@@ -241,13 +255,51 @@ register_shutdown_function(function () {
     }
 
     $last_error = error_get_last();
-    if ($last_error && in_array($last_error['type'], array(E_PARSE, E_COMPILE_ERROR, E_ERROR))) {
+    if (!$last_error || !in_array($last_error['type'], array(E_PARSE, E_COMPILE_ERROR, E_ERROR))) {
+        return;
+    }
+
+    $error_msg = $last_error['message'] . ' (line ' . $last_error['line'] . ' in ' . $last_error['file'] . ')';
+
+    // Try to identify the culprit snippet(s) instead of disabling everything:
+    $culprit_ids = array();
+
+    // 1. The snippet that was being evaluated when the fatal occurred.
+    if (!empty($pdm_hfs_current_snippet_id)) {
+        $culprit_ids[] = $pdm_hfs_current_snippet_id;
+    }
+
+    // 2. For "Cannot redeclare function" fatals, also disable any OTHER active
+    //    snippet that declares the same function (they'd fail on the next load).
+    //    Handles both "Cannot redeclare remove_comments()" and the older
+    //    "Cannot redeclare function remove_comments()" message formats.
+    if (preg_match('/Cannot redeclare\s+(?:function\s+)?(\w+)/', $last_error['message'], $m)) {
+        $func   = $m[1];
         $active = pdm_hfs_get_active_snippets();
-        if (!empty($active)) {
-            // Store the fatal error message keyed by a special id for display
-            $error_msg = $last_error['message'] . ' (line ' . $last_error['line'] . ' in ' . $last_error['file'] . ')';
-            pdm_hfs_disable_snippets($active, array('_fatal_error' => $error_msg));
+        foreach (pdm_hfs_get_all_snippets() as $snippet) {
+            if (!in_array($snippet['id'], $active)) {
+                continue;
+            }
+            if (preg_match('/function\s+' . preg_quote($func, '/') . '\s*\(/', $snippet['code'])) {
+                if (!in_array($snippet['id'], $culprit_ids)) {
+                    $culprit_ids[] = $snippet['id'];
+                }
+            }
         }
+    }
+
+    // 3. Fallback: if we couldn't determine the culprit, disable all active
+    //    snippets so the site stays usable (safest default).
+    if (empty($culprit_ids)) {
+        $culprit_ids = pdm_hfs_get_active_snippets();
+    }
+
+    if (!empty($culprit_ids)) {
+        $error_msgs = array();
+        foreach ($culprit_ids as $id) {
+            $error_msgs[$id] = $error_msg;
+        }
+        pdm_hfs_disable_snippets($culprit_ids, $error_msgs);
     }
 });
 
@@ -295,8 +347,9 @@ add_action('admin_notices', function () {
 
     if (!empty($names)) {
         $error_msgs = isset($errors['messages']) ? $errors['messages'] : array();
+        $dismiss_nonce = wp_create_nonce('pdm_hfs_dismiss_snippet_error');
 
-        echo '<div class="notice notice-error is-dismissible">';
+        echo '<div class="notice notice-error is-dismissible" data-pdm-hfs-snippet-error="1">';
         echo '<p><strong>PDM Blocks:</strong> The following PHP snippet(s) caused an error and have been automatically disabled:</p>';
         echo '<ul style="list-style:disc;padding-left:20px;margin:0 0 8px;">';
         foreach ($errors['ids'] as $id) {
@@ -322,6 +375,12 @@ add_action('admin_notices', function () {
         }
         echo '</ul>';
         echo '<p>You can edit and re-enable them from <a href="' . admin_url('admin.php?page=custom-code&tab=php') . '">Custom Code → PHP Snippets</a>.</p>';
+        // Remember the dismissal so the notice doesn't reappear on every page load.
+        echo '<script type="text/javascript">';
+        echo 'jQuery(function($){$(document).on("click","[data-pdm-hfs-snippet-error] .notice-dismiss",function(){$.post(';
+        echo wp_json_encode(admin_url('admin-ajax.php'));
+        echo ',{action:"pdm_hfs_dismiss_snippet_error",nonce:' . wp_json_encode($dismiss_nonce) . '});});});';
+        echo '</script>';
         echo '</div>';
     }
 });

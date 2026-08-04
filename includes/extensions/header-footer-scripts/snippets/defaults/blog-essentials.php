@@ -11,10 +11,10 @@
  * Native Gutenberg SEO Guardrail
  * Uses the official Dispatcher to show a standard editor notice.
  */
-add_action('admin_footer-post.php', 'wp_pro_native_notice_seo_guardrail');
-add_action('admin_footer-post-new.php', 'wp_pro_native_notice_seo_guardrail');
+add_action('admin_footer-post.php', 'pdm_snippets_blog_seo_guardrail');
+add_action('admin_footer-post-new.php', 'pdm_snippets_blog_seo_guardrail');
 
-function wp_pro_native_notice_seo_guardrail()
+function pdm_snippets_blog_seo_guardrail()
 {
     $screen = get_current_screen();
     if ($screen->post_type !== 'post') return;

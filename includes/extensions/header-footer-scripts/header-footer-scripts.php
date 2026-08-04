@@ -108,6 +108,24 @@ function pdm_hfs_ajax_import_snippets()
 }
 
 /**
+ * AJAX handler for dismissing the "snippets disabled" admin notice.
+ * Deletes the stored error so the notice won't reappear on page load.
+ */
+add_action('wp_ajax_pdm_hfs_dismiss_snippet_error', 'pdm_hfs_ajax_dismiss_snippet_error');
+
+function pdm_hfs_ajax_dismiss_snippet_error()
+{
+    check_ajax_referer('pdm_hfs_dismiss_snippet_error', 'nonce');
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error();
+    }
+
+    delete_option('hfs_snippet_errors');
+    wp_send_json_success();
+}
+
+/**
  * Enqueue admin assets
  */
 function pdm_hfs_enqueue_admin_assets($hook)

@@ -9,18 +9,18 @@
 /**
  * Register a custom Welcome Dashboard Widget for PDM
  */
-add_action('wp_dashboard_setup', 'pdm_custom_dashboard_widget');
+add_action('wp_dashboard_setup', 'pdm_snippets_custom_dashboard_widget');
 
-function pdm_custom_dashboard_widget()
+function pdm_snippets_custom_dashboard_widget()
 {
     wp_add_dashboard_widget(
         'pdm_welcome_widget',                 // Widget slug
         'Performance Driven Marketing',       // Widget title
-        'pdm_welcome_widget_display'          // Display function
+        'pdm_snippets_welcome_widget_display' // Display function
     );
 }
 
-function pdm_welcome_widget_display()
+function pdm_snippets_welcome_widget_display()
 {
     $logo_url = plugin_dir_url(dirname(__FILE__, 4)) . 'assets/img/pdm-logo.svg';
 ?>

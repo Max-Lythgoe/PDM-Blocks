@@ -9,15 +9,15 @@
 if (!defined('ABSPATH')) exit;
 
 // Remove comments from admin bar
-function remove_comments()
+function pdm_snippets_remove_comments()
 {
     global $wp_admin_bar;
     $wp_admin_bar->remove_menu('comments');
 }
-add_action('wp_before_admin_bar_render', 'remove_comments');
+add_action('wp_before_admin_bar_render', 'pdm_snippets_remove_comments');
 
 // Disable comments on all post types
-function df_disable_comments_post_types_support()
+function pdm_snippets_disable_comments_post_types_support()
 {
     $post_types = get_post_types();
     foreach ($post_types as $post_type) {
@@ -27,33 +27,33 @@ function df_disable_comments_post_types_support()
         }
     }
 }
-add_action('admin_init', 'df_disable_comments_post_types_support');
+add_action('admin_init', 'pdm_snippets_disable_comments_post_types_support');
 
 // Close comments on the front-end
-function df_disable_comments_status()
+function pdm_snippets_disable_comments_status()
 {
     return false;
 }
-add_filter('comments_open', 'df_disable_comments_status', 20, 2);
-add_filter('pings_open', 'df_disable_comments_status', 20, 2);
+add_filter('comments_open', 'pdm_snippets_disable_comments_status', 20, 2);
+add_filter('pings_open', 'pdm_snippets_disable_comments_status', 20, 2);
 
 // Hide existing comments
-function df_disable_comments_hide_existing_comments($comments)
+function pdm_snippets_disable_comments_hide_existing_comments($comments)
 {
     $comments = array();
     return $comments;
 }
-add_filter('comments_array', 'df_disable_comments_hide_existing_comments', 10, 2);
+add_filter('comments_array', 'pdm_snippets_disable_comments_hide_existing_comments', 10, 2);
 
 // Remove comments page in menu
-function df_disable_comments_admin_menu()
+function pdm_snippets_disable_comments_admin_menu()
 {
     remove_menu_page('edit-comments.php');
 }
-add_action('admin_menu', 'df_disable_comments_admin_menu');
+add_action('admin_menu', 'pdm_snippets_disable_comments_admin_menu');
 
 // Redirect any user trying to access comments page
-function df_disable_comments_admin_menu_redirect()
+function pdm_snippets_disable_comments_admin_menu_redirect()
 {
     global $pagenow;
     if ($pagenow === 'edit-comments.php') {
@@ -61,4 +61,4 @@ function df_disable_comments_admin_menu_redirect()
         exit;
     }
 }
-add_action('admin_init', 'df_disable_comments_admin_menu_redirect');
+add_action('admin_init', 'pdm_snippets_disable_comments_admin_menu_redirect');
