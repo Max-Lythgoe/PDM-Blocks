@@ -5,6 +5,7 @@
  */
 
 .wp-block-pdm-gallery {
+
 	/* Gallery grid in editor */
 	.gallery-grid {
 		display: grid;
@@ -18,7 +19,7 @@
 		border-radius: var(--gallery-radius, 0);
 		aspect-ratio: var(--gallery-aspect, 1/1);
 		background: #f0f0f0;
-		
+
 		img {
 			width: 100%;
 			height: 100%;
@@ -41,7 +42,7 @@
 			margin-bottom: 16px;
 			aspect-ratio: auto;
 			page-break-inside: avoid;
-			
+
 			img {
 				height: auto;
 				object-fit: contain;
@@ -56,12 +57,43 @@
 		gap: 8px;
 	}
 
+	/* Single image remove button (matches ImageBlockControl remove-image-button) */
+	.gallery-item-remove {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 20;
+		background: rgba(0, 0, 0, 0.7);
+		border: none;
+		cursor: pointer;
+		padding: 8px;
+		border-radius: 4px;
+		color: white;
+		fill: white;
+		transition: background 0.2s ease, opacity 0.2s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 36px;
+		height: 36px;
+		opacity: 0;
+	}
+
+	.gallery-item:hover .gallery-item-remove {
+		opacity: 1;
+	}
+
+	.gallery-item-remove:hover {
+		background: #fd3b3b;
+		color: white;
+	}
+
 	/* Responsive adjustments in editor */
 	@media (max-width: 1024px) {
 		.gallery-grid {
 			grid-template-columns: repeat(3, 1fr);
 		}
-		
+
 		&.is-masonry .gallery-grid {
 			column-count: 3;
 		}
@@ -72,7 +104,7 @@
 			grid-template-columns: repeat(2, 1fr);
 			gap: 12px;
 		}
-		
+
 		&.is-masonry .gallery-grid {
 			column-count: 2;
 			column-gap: 12px;
@@ -83,7 +115,7 @@
 		.gallery-grid {
 			grid-template-columns: repeat(1, 1fr);
 		}
-		
+
 		&.is-masonry .gallery-grid {
 			column-count: 1;
 		}

@@ -5,9 +5,9 @@
  * Replace them with your own styles or remove the file completely.
  */
 .pdm-cards {
-    display: flex;
+	display: flex;
 	flex-wrap: wrap;
-    gap: var(--desktop-gap);
+	gap: var(--desktop-gap);
 }
 
 .pdm-cards>.wp-block-pdm-card {
@@ -16,40 +16,47 @@
 }
 
 // bottom alignment for last block
-.pdm-cards>.wp-block-pdm-card>:last-child {
-    margin-top: var(--align-bottom);
+.pdm-cards>.wp-block-pdm-card>:last-child:not(.content-wrapper),
+.pdm-cards>.wp-block-pdm-card>.content-wrapper:last-child>:last-child {
+	margin-top: var(--align-bottom);
 }
 
 // justification
 .wp-block-pdm-cards.is-justified-left {
 	justify-content: flex-start;
 }
+
 .wp-block-pdm-cards.is-justified-center {
 	justify-content: center;
 }
+
 .wp-block-pdm-cards.is-justified-right {
 	justify-content: flex-end;
 }
+
 .wp-block-pdm-cards.is-justified-space-between {
 	justify-content: space-between;
 }
 
 // vertical alignment
 .wp-block-pdm-cards.is-vertically-aligned-top {
-    align-items: flex-start;
+	align-items: flex-start;
 }
+
 .wp-block-pdm-cards.is-vertically-aligned-center {
-    align-items: center;
+	align-items: center;
 }
+
 .wp-block-pdm-cards.is-vertically-aligned-bottom {
-    align-items: flex-end;
+	align-items: flex-end;
 }
+
 .wp-block-pdm-cards.is-vertically-aligned-stretch {
-    align-items: stretch;
+	align-items: stretch;
 }
 
 @media (max-width: 1024px) {
-    .pdm-cards>.wp-block-pdm-card {
+	.pdm-cards>.wp-block-pdm-card {
 		width: calc((100% / var(--tablet-columns, 3)) - (var(--tablet-gap) - (var(--tablet-gap) / var(--tablet-columns, 3))));
 	}
 
@@ -59,7 +66,7 @@
 }
 
 @media (max-width: 768px) {
-    .pdm-cards>.wp-block-pdm-card {
+	.pdm-cards>.wp-block-pdm-card {
 		width: calc((100% / var(--mobile-columns, 3)) - (var(--mobile-gap) - (var(--mobile-gap) / var(--mobile-columns, 3))));
 	}
 

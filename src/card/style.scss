@@ -11,12 +11,13 @@
 	display: flex;
 	flex-direction: column;
 
-	// Full-size overlay link — sits behind content, makes entire card clickable
-	// without wrapping block-level children in <a> (invalid HTML)
+	// Full-size overlay link — sits above non-interactive content, makes the
+	// entire card clickable without wrapping block-level children in <a>
+	// (invalid HTML). Interactive children use a higher z-index to stay clickable.
 	.pdm-card-link {
 		position: absolute;
 		inset: 0;
-		z-index: 0;
+		z-index: 1;
 		cursor: pointer;
 	}
 
@@ -27,7 +28,13 @@
 	.wp-block-button,
 	.wp-block-buttons {
 		position: relative;
-		z-index: 1;
+		z-index: 2;
+	}
+
+	// Content wrapper — lifted above the background (mirrors the Section block).
+	// No z-index here so interactive children still stack above the overlay link.
+	.content-wrapper {
+		position: relative;
 	}
 
 	&.is-vertically-aligned-top {
@@ -48,5 +55,25 @@
 
 	.pdm-card-image {
 		width: 100%;
+	}
+
+	// Background image/video layer (shared with Section block components).
+	// Absolutely positioned with NO negative z-index; the .content-wrapper above
+	// is position: relative so it paints on top, same as the Section block.
+	.section-background {
+		position: absolute;
+		inset: 0;
+		height: 100%;
+		width: 100%;
+		pointer-events: none;
+		border-radius: inherit;
+		overflow: hidden;
+	}
+
+	.section-background img,
+	.section-background video {
+		height: 100%;
+		width: 100%;
+		border: 0;
 	}
 }

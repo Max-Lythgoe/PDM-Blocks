@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps, InspectorControls, MediaUpload, MediaPlaceholder } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, ToggleControl, Button, SelectControl, TextControl } from '@wordpress/components';
+import { trash } from '@wordpress/icons';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -32,7 +33,7 @@ import './editor.scss';
  */
 export default function Edit({ attributes, setAttributes }) {
 
-	const { columns, borderRadius, enableLightbox, enableMasonry, aspectRatio, customAspectRatio, images } = attributes;
+	const { columns, borderRadius, enableLightbox, enableMasonry, aspectRatio, customAspectRatio, showCaption, images } = attributes;
 
 	// Handle adding images from gallery
 	const onSelectImages = (selectedImages) => {
@@ -40,7 +41,8 @@ export default function Edit({ attributes, setAttributes }) {
 			id: image.id,
 			url: image.url,
 			alt: image.alt || '',
-			title: image.title || ''
+			title: image.title || '',
+			caption: image.caption || ''
 		}));
 		setAttributes({ images: newImages });
 	};
@@ -48,6 +50,12 @@ export default function Edit({ attributes, setAttributes }) {
 	// Handle clearing all images
 	const onClearGallery = () => {
 		setAttributes({ images: [] });
+	};
+
+	// Handle removing a single image
+	const removeImage = (indexToRemove) => {
+		const newImages = images.filter((_, index) => index !== indexToRemove);
+		setAttributes({ images: newImages });
 	};
 
 	// Helper function to get effective aspect ratio
@@ -121,6 +129,12 @@ export default function Edit({ attributes, setAttributes }) {
 					checked={ enableLightbox }
 					onChange={ ( value ) => setAttributes( { enableLightbox: value } ) }
 				/>
+				<ToggleControl
+					label={ __( 'Show Captions', 'pdm-blocks' ) }
+					help={ __( 'Display image captions at the bottom of each image.', 'pdm-blocks' ) }
+					checked={ showCaption }
+					onChange={ ( value ) => setAttributes( { showCaption: value } ) }
+				/>
 			</PanelBody>
 		</InspectorControls>
 
@@ -150,6 +164,21 @@ export default function Edit({ attributes, setAttributes }) {
 					{ images.map((image, index) => (
 						<div key={ image.id } className="gallery-item">
 							<img src={ image.url } alt={ image.alt } />
+							{ showCaption && image.caption && (
+								<div className="gallery-caption">
+									{ image.caption }
+								</div>
+							) }
+							<Button
+								onClick={ ( e ) => {
+									e.stopPropagation();
+									removeImage( index );
+								} }
+								icon={ trash }
+								label={ __( 'Remove image', 'pdm-blocks' ) }
+								className="gallery-item-remove"
+								showTooltip
+							/>
 						</div>
 					)) }
 				</div>

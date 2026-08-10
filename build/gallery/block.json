@@ -37,6 +37,10 @@
       "type": "boolean",
       "default": true
     },
+    "showCaption": {
+      "type": "boolean",
+      "default": false
+    },
     "enableMasonry": {
       "type": "boolean",
       "default": false
@@ -51,7 +55,27 @@
     },
     "images": {
       "type": "array",
-      "default": []
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "textdomain": "gallery",

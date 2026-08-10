@@ -11,6 +11,7 @@ import { useState, useRef, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { link } from '@wordpress/icons';
 import './editor.scss';
+import BackgroundMediaEdit from '../../components/BackgroundMediaEdit';
 
 // Recursively check if any inner block has an actual link set on it.
 // Handles: core/button (url attr), linked images/files (href attr),
@@ -144,11 +145,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 },
                 className: `is-vertically-aligned-${verticalAlignment}`
             }) }>
-                <InnerBlocks 
-                    template={TEMPLATE} 
-                    templateLock={false} 
-                    renderAppender={InnerBlocks.ButtonBlockAppender} 
+                <BackgroundMediaEdit
+                    attributes={attributes}
+                    setAttributes={setAttributes}
                 />
+                <div className="content-wrapper">
+                    <InnerBlocks 
+                        template={TEMPLATE} 
+                        templateLock={false} 
+                        renderAppender={InnerBlocks.ButtonBlockAppender} 
+                    />
+                </div>
             </div>
         </>
     );

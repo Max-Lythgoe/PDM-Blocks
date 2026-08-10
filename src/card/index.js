@@ -18,10 +18,11 @@ import './style.scss';
  * Internal dependencies
  */
 import Edit from './edit';
+import save from './save';
 import metadata from './block.json';
 import deprecated from './deprecated';
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import icon from './icon';
+import { backgroundMediaAttributes } from '../../components/backgroundMediaAttributes';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -29,33 +30,16 @@ import icon from './icon';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( metadata.name, {
+	...metadata,
+	attributes: {
+		...metadata.attributes,
+		...backgroundMediaAttributes,
+	},
 	/**
 	 * @see ./edit.js
 	 */
 	icon: icon.svg,
 	edit: Edit,
+	save,
 	deprecated,
-	save: ({ attributes }) => {
-		const { url, linkTarget, rel, verticalAlignment } = attributes;
-
-		const blockProps = useBlockProps.save({
-			className: `is-vertically-aligned-${verticalAlignment || 'top'}`
-		});
-
-		return (
-			<div { ...blockProps }>
-				{url && (
-					<a
-						className="pdm-card-link"
-						href={url}
-						{...(linkTarget && { target: linkTarget })}
-						{...(rel && { rel: rel })}
-						aria-hidden="true"
-						tabIndex="-1"
-					/>
-				)}
-				<InnerBlocks.Content />
-			</div>
-		);
-	}
 } );
