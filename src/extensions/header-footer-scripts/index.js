@@ -3,77 +3,97 @@
  * Migrated from PDM Accelerate theme.
  */
 const { registerPlugin } = wp.plugins;
-const { PluginDocumentSettingPanel } = wp.editPost;
+// Not deprecated since WP 6.6: the edit-post export moved to wp.editor.
+const { PluginDocumentSettingPanel } = wp.editor;
 const { useSelect, useDispatch } = wp.data;
 const { TextControl, TextareaControl, Button } = wp.components;
-const { useState, useEffect, createElement, Fragment } = wp.element;
+const { useState, useEffect, useRef, createElement } = wp.element;
+
+const DEFAULT_SCRIPTS = [{ name: '', code: '' }];
+
+const parseScripts = (value) => {
+    if (!value) return null;
+    try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map((script) => ({
+                name: typeof script.name === 'string' ? script.name : '',
+                code: typeof script.code === 'string' ? script.code : '',
+            }));
+        }
+    } catch (e) {}
+    return null;
+};
 
 const CustomCodePanel = () => {
-    const meta = useSelect((select) => ({
-        meta: select('core/editor').getEditedPostAttribute('meta'),
-    }));
-
+    const meta = useSelect((select) =>
+        select('core/editor').getEditedPostAttribute('meta')
+    );
     const { editPost } = useDispatch('core/editor');
 
-    const [headerScripts, setHeaderScripts] = useState([{ name: '', code: '' }]);
-    const [footerScripts, setFooterScripts] = useState([{ name: '', code: '' }]);
+    const [headerScripts, setHeaderScripts] = useState(DEFAULT_SCRIPTS);
+    const [footerScripts, setFooterScripts] = useState(DEFAULT_SCRIPTS);
 
+    // Load saved scripts into the panel once the editor has hydrated the meta.
+    const initializedRef = useRef(false);
     useEffect(() => {
-        if (meta.meta && meta.meta._hfs_header_scripts) {
-            try {
-                const parsed = JSON.parse(meta.meta._hfs_header_scripts);
-                if (parsed && parsed.length > 0) {
-                    setHeaderScripts(parsed);
-                }
-            } catch (e) {}
+        if (initializedRef.current || !meta) {
+            return;
         }
-
-        if (meta.meta && meta.meta._hfs_footer_scripts) {
-            try {
-                const parsed = JSON.parse(meta.meta._hfs_footer_scripts);
-                if (parsed && parsed.length > 0) {
-                    setFooterScripts(parsed);
-                }
-            } catch (e) {}
+        initializedRef.current = true;
+        const header = parseScripts(meta._hfs_header_scripts);
+        const footer = parseScripts(meta._hfs_footer_scripts);
+        if (header) {
+            setHeaderScripts(header);
         }
-    }, []);
+        if (footer) {
+            setFooterScripts(footer);
+        }
+    }, [meta]);
 
+    // Persist to the editor store on every change. This is a client-side store
+    // update only (no database writes until the post is saved), and it marks
+    // the post "dirty" so the editor's Update button is enabled.
     const updateHeaderScript = (index, field, value) => {
-        const newScripts = [...headerScripts];
-        newScripts[index][field] = value;
-        setHeaderScripts(newScripts);
-        editPost({ meta: { _hfs_header_scripts: JSON.stringify(newScripts) } });
+        const next = headerScripts.map((script, i) =>
+            i === index ? { ...script, [field]: value } : script
+        );
+        setHeaderScripts(next);
+        editPost({ meta: { _hfs_header_scripts: JSON.stringify(next) } });
     };
 
     const updateFooterScript = (index, field, value) => {
-        const newScripts = [...footerScripts];
-        newScripts[index][field] = value;
-        setFooterScripts(newScripts);
-        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(newScripts) } });
+        const next = footerScripts.map((script, i) =>
+            i === index ? { ...script, [field]: value } : script
+        );
+        setFooterScripts(next);
+        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(next) } });
     };
 
     const addHeaderScript = () => {
-        const newScripts = [...headerScripts, { name: '', code: '' }];
-        setHeaderScripts(newScripts);
-        editPost({ meta: { _hfs_header_scripts: JSON.stringify(newScripts) } });
+        const next = [...headerScripts, { name: '', code: '' }];
+        setHeaderScripts(next);
+        editPost({ meta: { _hfs_header_scripts: JSON.stringify(next) } });
     };
 
     const addFooterScript = () => {
-        const newScripts = [...footerScripts, { name: '', code: '' }];
-        setFooterScripts(newScripts);
-        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(newScripts) } });
+        const next = [...footerScripts, { name: '', code: '' }];
+        setFooterScripts(next);
+        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(next) } });
     };
 
     const removeHeaderScript = (index) => {
-        const newScripts = headerScripts.filter((_, i) => i !== index);
-        setHeaderScripts(newScripts.length > 0 ? newScripts : [{ name: '', code: '' }]);
-        editPost({ meta: { _hfs_header_scripts: JSON.stringify(newScripts) } });
+        const next = headerScripts.filter((_, i) => i !== index);
+        const result = next.length > 0 ? next : DEFAULT_SCRIPTS;
+        setHeaderScripts(result);
+        editPost({ meta: { _hfs_header_scripts: JSON.stringify(result) } });
     };
 
     const removeFooterScript = (index) => {
-        const newScripts = footerScripts.filter((_, i) => i !== index);
-        setFooterScripts(newScripts.length > 0 ? newScripts : [{ name: '', code: '' }]);
-        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(newScripts) } });
+        const next = footerScripts.filter((_, i) => i !== index);
+        const result = next.length > 0 ? next : DEFAULT_SCRIPTS;
+        setFooterScripts(result);
+        editPost({ meta: { _hfs_footer_scripts: JSON.stringify(result) } });
     };
 
     return createElement(

@@ -23,7 +23,6 @@ require_once PDM_HFS_PATH . 'includes/frontend-output.php';
 require_once PDM_HFS_PATH . 'includes/meta-box.php';
 require_once PDM_HFS_PATH . 'includes/snippet-manager.php';
 require_once PDM_HFS_PATH . 'includes/snippets-tab.php';
-require_once PDM_HFS_PATH . 'includes/slotfill.php';
 
 /**
  * Unhook theme's version (if active) so plugin takes priority.
@@ -55,7 +54,6 @@ add_action('init', function () {
 // Initialize the module (priority 20 so unhooking runs first)
 add_action('admin_menu', 'pdm_hfs_add_settings_page', 20);
 add_action('admin_enqueue_scripts', 'pdm_hfs_enqueue_admin_assets', 20);
-add_action('enqueue_block_editor_assets', 'pdm_hfs_enqueue_editor_assets', 20);
 add_action('wp_head', 'pdm_hfs_output_header_scripts', 999);
 add_action('wp_footer', 'pdm_hfs_output_footer_scripts', 999);
 add_action('add_meta_boxes', 'pdm_hfs_add_meta_boxes', 20);
@@ -173,32 +171,4 @@ function pdm_hfs_enqueue_admin_assets($hook)
             true
         );
     }
-}
-
-/**
- * Enqueue block editor assets
- */
-function pdm_hfs_enqueue_editor_assets()
-{
-    // Build the editor panel JS
-    $asset_file = PDM_HFS_PATH . '../../../build/header-footer-scripts.asset.php';
-
-    if (file_exists($asset_file)) {
-        $asset = include $asset_file;
-
-        wp_enqueue_script(
-            'pdm-hfs-editor-panel',
-            plugin_dir_url(__FILE__) . '../../../build/header-footer-scripts.js',
-            $asset['dependencies'],
-            $asset['version'],
-            true
-        );
-    }
-
-    wp_enqueue_style(
-        'pdm-hfs-editor-styles',
-        PDM_HFS_URL . 'assets/editor-styles.css',
-        array(),
-        '1.0.0'
-    );
 }
