@@ -5,7 +5,7 @@
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.7.61
+ * Version:           1.7.62
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
  * License:           GPL-2.0-or-later
@@ -44,6 +44,14 @@ $pdm_blocks_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buil
     __FILE__,
     'pdm-blocks'
 );
+
+// check github tokens 
+$pdm_blocks_token = defined('ECODRIVEN_GITHUB_TOKEN') && ECODRIVEN_GITHUB_TOKEN ? ECODRIVEN_GITHUB_TOKEN
+    : (defined('PDM_GITHUB_TOKEN') && PDM_GITHUB_TOKEN ? PDM_GITHUB_TOKEN
+        : get_option('pdm_github_token', ''));
+if (! empty($pdm_blocks_token)) {
+    $pdm_blocks_update_checker->setAuthentication($pdm_blocks_token);
+}
 
 add_filter('puc_request_info_result-pdm-blocks', function ($info) {
     if (is_object($info)) {
