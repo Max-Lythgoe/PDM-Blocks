@@ -2,7 +2,63 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import BackgroundMediaRender from '../../components/BackgroundMediaRender';
 import { backgroundMediaAttributes } from '../../components/backgroundMediaAttributes';
 
+const v4 = {
+	// Version 4: Content wrapped in .content-wrapper; background media is now
+	// decorative (aria-hidden). Reproduces the pre-aria-hidden markup so existing
+	// cards migrate cleanly to the new format.
+	attributes: {
+		...backgroundMediaAttributes,
+		url: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'a.pdm-card-link',
+			attribute: 'href'
+		},
+		linkTarget: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'a.pdm-card-link',
+			attribute: 'target'
+		},
+		rel: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'a.pdm-card-link',
+			attribute: 'rel'
+		},
+		verticalAlignment: {
+			type: 'string',
+			default: 'top'
+		}
+	},
+	save: ({ attributes }) => {
+		const { url, linkTarget, rel, verticalAlignment } = attributes;
+		const blockProps = useBlockProps.save({
+			className: `is-vertically-aligned-${verticalAlignment || 'top'}`
+		});
+		return (
+			<div { ...blockProps }>
+				<BackgroundMediaRender attributes={attributes} decorative={false} />
+				{url && (
+					<a
+						className="pdm-card-link"
+						href={url}
+						{...(linkTarget && { target: linkTarget })}
+						{...(rel && { rel: rel })}
+						aria-hidden="true"
+						tabIndex="-1"
+					/>
+				)}
+				<div className="content-wrapper">
+					<InnerBlocks.Content />
+				</div>
+			</div>
+		);
+	}
+};
+
 const deprecated = [
+	v4,
 	{
 		// Version 3: Link overlay (a.pdm-card-link) with optional background media.
 		// Content was rendered as direct children of the card (no .content-wrapper
@@ -39,7 +95,7 @@ const deprecated = [
 			});
 			return (
 				<div { ...blockProps }>
-					<BackgroundMediaRender attributes={attributes} />
+					<BackgroundMediaRender attributes={attributes} decorative={false} />
 					{url && (
 						<a
 							className="pdm-card-link"

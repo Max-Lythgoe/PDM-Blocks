@@ -1,7 +1,8 @@
+import { cloneElement } from '@wordpress/element';
 import { ICON_LIBRARY, getDefaultIcon } from './icon-library';
 
 // icon rendering
-export default function IconRender({ attributes = {}, defaultIcon = 'check', className = '' }) {
+export default function IconRender({ attributes = {}, defaultIcon = 'check', className = '', decorative = false }) {
 	const { selectedIcon, customIconUrl, customIconSvg, iconSize, iconColor, useCustomColor } = attributes;
 
 	const sizeValue = iconSize
@@ -9,6 +10,9 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 		: '30px';
 	// custom colorr
 	const color = useCustomColor ? (iconColor || 'currentColor') : undefined;
+
+	// Decorative icons are hidden from assistive tech.
+	const decorativeProps = decorative ? { 'aria-hidden': 'true' } : {};
 
 	let iconElement;
 	if (customIconUrl) {
@@ -18,6 +22,7 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 			iconElement = (
 				<span 
 					className={`custom-svg-inline ${useCustomColor ? 'use-custom-color' : ''}`}
+					{...decorativeProps}
 					dangerouslySetInnerHTML={{ __html: customIconSvg }}
 					style={{ 
 					width: sizeValue,
@@ -34,6 +39,7 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 				<img 
 					src={customIconUrl} 
 					alt="" 
+					{...decorativeProps}
 					style={{ 
 						width: sizeValue, 
 						height: sizeValue, 
@@ -44,7 +50,10 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 		}
 	} else {
 		const iconName = selectedIcon || defaultIcon;
-		iconElement = ICON_LIBRARY[iconName] || ICON_LIBRARY[defaultIcon];
+		const libIcon = ICON_LIBRARY[iconName] || ICON_LIBRARY[defaultIcon];
+		iconElement = decorative && libIcon
+			? cloneElement(libIcon, { 'aria-hidden': 'true', focusable: 'false' })
+			: libIcon;
 	}
 
 	const iconStyle = {
@@ -72,7 +81,7 @@ export default function IconRender({ attributes = {}, defaultIcon = 'check', cla
 }
 
 // dual icons 
-export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDefault = 'minus' }) {
+export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDefault = 'minus', openLabel, closeLabel }) {
 	const { iconOpen, customIconUrlOpen, customIconSvgOpen, iconClose, customIconUrlClose, customIconSvgClose, iconSize, iconColor, useCustomColor } = attributes;
 
 	const color = useCustomColor ? (iconColor || 'currentColor') : undefined;
@@ -89,13 +98,15 @@ export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDef
 	
 	const iconStyle = createIconStyle();
 
-	const renderIcon = (customUrl, customSvg, iconName, defaultIcon) => {
+	const renderIcon = (customUrl, customSvg, iconName, defaultIcon, label) => {
 		if (customUrl) {
 			const isSvg = customUrl.toLowerCase().endsWith('.svg');
 			if (isSvg && customSvg) {
 				return (
 					<span 
 						className={`custom-svg-inline ${useCustomColor ? 'use-custom-color' : ''}`}
+						role="img"
+						aria-label={label}
 						dangerouslySetInnerHTML={{ __html: customSvg }}
 						style={{ 
 							width: '100%',
@@ -107,9 +118,14 @@ export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDef
 					/>
 				);
 			}
-			return <img src={customUrl} alt="" />;
+			return <img src={customUrl} alt={label || ''} />;
 		}
-		return ICON_LIBRARY[iconName] || ICON_LIBRARY[defaultIcon];
+		const libIcon = ICON_LIBRARY[iconName] || ICON_LIBRARY[defaultIcon];
+		if (!libIcon) return null;
+		// Non-decorative icons get a proper accessible name; other consumers stay unchanged.
+		return label
+			? cloneElement(libIcon, { role: 'img', 'aria-label': label })
+			: libIcon;
 	};
 
 	const iconClass = useCustomColor ? 'use-custom-color' : '';
@@ -120,7 +136,7 @@ export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDef
 				className={`icon-open ${iconClass}`}
 				style={iconStyle}
 			>
-				{renderIcon(customIconUrlOpen, customIconSvgOpen, iconOpen, openDefault)}
+				{renderIcon(customIconUrlOpen, customIconSvgOpen, iconOpen, openDefault, openLabel)}
 			</span>
 		),
 		closeIcon: (
@@ -128,7 +144,7 @@ export function DualIconRender({ attributes = {}, openDefault = 'plus', closeDef
 				className={`icon-close ${iconClass}`}
 				style={iconStyle}
 			>
-				{renderIcon(customIconUrlClose, customIconSvgClose, iconClose, closeDefault)}
+				{renderIcon(customIconUrlClose, customIconSvgClose, iconClose, closeDefault, closeLabel)}
 			</span>
 		)
 	};

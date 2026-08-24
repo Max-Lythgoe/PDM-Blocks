@@ -1,6 +1,6 @@
 // background image render component
 
-export default function BackgroundMediaRender({ attributes }) {
+export default function BackgroundMediaRender({ attributes, decorative = true }) {
 	const {
 		opacity,
 		mixBlendMode,
@@ -23,6 +23,11 @@ export default function BackgroundMediaRender({ attributes }) {
 	const title = customTitle || defaultTitle || '';
 	const hasBackground = videoURL || imageURL || useFeaturedImage;
 
+	// Background media is decorative; hide it from assistive tech. Deprecated
+	// saves pass decorative={ false } to reproduce the pre-aria-hidden markup
+	// so existing blocks migrate cleanly.
+	const ariaHidden = decorative ? { 'aria-hidden': 'true' } : {};
+
 	if (!hasBackground) {
 		return null;
 	}
@@ -31,6 +36,7 @@ export default function BackgroundMediaRender({ attributes }) {
 		return (
 			<div 
 				className="section-background" 
+				{...ariaHidden}
 				data-use-featured-image="true"
 				data-opacity={opacity}
 				data-mix-blend-mode={mixBlendMode}
@@ -56,7 +62,7 @@ export default function BackgroundMediaRender({ attributes }) {
 	}
 
 	return (
-		<div className="section-background">
+		<div className="section-background" {...ariaHidden}>
 			{videoURL ? (
 				<video
 					autoPlay

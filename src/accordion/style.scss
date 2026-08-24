@@ -1,18 +1,12 @@
-/**
- * The following styles get applied both on the front of your site
- * and in the editor.
- *
- * Replace them with your own styles or remove the file completely.
- */
- .wp-block-pdm-accordion {
-	border-radius: var(--accordion-radius, 20px);
-	overflow: clip;
+.wp-block-pdm-accordion {
+  border-radius: var(--accordion-radius, 20px);
+  overflow: clip;
   height: fit-content;
 }
 
- .accord-title {
-	padding: 10px 20px;
-	cursor: pointer;
+.accord-title {
+  padding: 10px 20px;
+  cursor: pointer;
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -21,38 +15,45 @@
   font-size: var(--wp--preset--font-size--small, 1rem);
 }
 
-.accord-title::before, .accord-title::after {
+.accord-title::before,
+.accord-title::after {
   content: none;
 }
 
 .accord-panel {
-    padding: 10px 20px;
+  padding: 10px 20px;
 }
 
 .accord-panel>*:last-of-type {
-  margin-bottom: 0px!important;
+  margin-bottom: 0px !important;
 }
 
 .wp-block-pdm-accordion .accord-title {
-    background: var(--pdm-toggle-bg);
-    color: var(--pdm-toggle-color);
+  background: var(--pdm-toggle-bg);
+  color: var(--pdm-toggle-color);
 }
 
 .wp-block-pdm-accordion .accord-panel {
-    background: var(--pdm-panel-bg);
-    color: var(--pdm-panel-color);
+  background: var(--pdm-panel-bg);
+  color: var(--pdm-panel-color);
 }
 
 // hide default icon 
 
 .wp-block-pdm-accordion .accord-title::marker {
-  content:none!important;
+  content: none !important;
+  list-style: none !important;
+}
+
+.wp-block-pdm-accordion .accord-title::-webkit-details-marker {
+  display: none !important;
 }
 
 // Force SVG fills to use currentColor for custom uploaded SVGs - only when custom color is enabled
 .wp-block-pdm-accordion .custom-svg-inline.use-custom-color svg,
 .wp-block-pdm-accordion .icon-open.use-custom-color svg,
 .wp-block-pdm-accordion .icon-close.use-custom-color svg {
+
   path,
   circle,
   rect,
@@ -121,16 +122,16 @@
 // animation 
 
 :root {
-	interpolate-size: allow-keywords;
+  interpolate-size: allow-keywords;
 }
 
 .wp-block-pdm-accordion::details-content {
-	height: 0;
-	transition: height 0.3s ease,
-      content-visibility 0.3s ease allow-discrete;
-	overflow: clip;
+  height: 0;
+  transition: height 0.3s ease,
+    content-visibility 0.3s ease allow-discrete;
+  overflow: clip;
 }
 
 .wp-block-pdm-accordion[open]::details-content {
-	height: auto;
+  height: auto;
 }

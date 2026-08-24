@@ -108,10 +108,28 @@ switch ($info_type) {
 					'frameborder' => array(),
 					'allowfullscreen' => array(),
 					'loading' => array(),
-					'referrerpolicy' => array()
+					'referrerpolicy' => array(),
+					'title' => array(),
+					'aria-label' => array(),
 				)
 			);
-			$output .= '<div class="company-map ' . esc_attr($map_width) . '">' . wp_kses($current_location['map'], $allowed_html) . '</div>';
+
+			$map_html = $current_location['map'];
+
+			// Give the iframe an accessible name for screen readers, unless the
+			// pasted embed already provides one.
+			if (preg_match('/<iframe\b[^>]*\btitle\s*=/i', $map_html) !== 1) {
+				$map_title = !empty($current_location['name'])
+					? sprintf(
+						/* translators: %s: location name */
+						__('Map of %s', 'pdm-blocks'),
+						$current_location['name']
+					)
+					: __('Map', 'pdm-blocks');
+				$map_html = preg_replace('/<iframe\b/i', '<iframe title="' . esc_attr($map_title) . '"', $map_html, 1);
+			}
+
+			$output .= '<div class="company-map ' . esc_attr($map_width) . '">' . wp_kses($map_html, $allowed_html) . '</div>';
 		}
 		break;
 }

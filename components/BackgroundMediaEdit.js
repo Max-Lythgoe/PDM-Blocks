@@ -367,7 +367,7 @@ export default function BackgroundMediaEdit({ attributes, setAttributes }) {
                     </PanelBody>
                 </InspectorControls>
 
-            <div className="section-background">
+            <div className="section-background" aria-hidden="true">
                 {videoURL ? (
                     <video
                         autoPlay

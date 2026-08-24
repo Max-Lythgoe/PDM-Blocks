@@ -1,6 +1,62 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import IconRender from '../../components/IconRender';
 
+// v3: current format — icon SVG marked as decorative (aria-hidden) for screen readers
+const v3 = {
+	attributes: {
+		selectedIcon: { type: 'string', default: 'check' },
+		customIconUrl: { type: 'string' },
+		customIconSvg: { type: 'string' },
+		iconSize: { type: 'string', default: '75px' },
+		iconColor: { type: 'string', default: 'currentColor' },
+		useCustomColor: { type: 'boolean', default: false },
+		iconAlign: { type: 'string', default: 'center' },
+		url: { type: 'string', source: 'attribute', selector: 'a', attribute: 'href' },
+		linkTarget: { type: 'string', source: 'attribute', selector: 'a', attribute: 'target' },
+		rel: { type: 'string', source: 'attribute', selector: 'a', attribute: 'rel' },
+	},
+	save( { attributes } ) {
+		const { iconAlign, url, linkTarget, rel } = attributes;
+
+		const getJustifyContent = ( alignment ) => {
+			switch ( alignment ) {
+				case 'left': return 'flex-start';
+				case 'right': return 'flex-end';
+				case 'center':
+				default: return 'center';
+			}
+		};
+
+		const wrapperProps = useBlockProps.save( {
+			style: {
+				display: 'flex',
+				justifyContent: getJustifyContent( iconAlign ),
+			},
+		} );
+
+		const content = (
+			<IconRender
+				attributes={ attributes }
+				defaultIcon="check"
+				className="pdm-icon-display"
+				decorative
+			/>
+		);
+
+		if ( url ) {
+			const linkProps = {
+				...wrapperProps,
+				href: url,
+				...( linkTarget && { target: linkTarget } ),
+				...( rel && { rel: rel } ),
+			};
+			return <a { ...linkProps }>{ content }</a>;
+		}
+
+		return <div { ...wrapperProps }>{ content }</div>;
+	},
+};
+
 // v2: iconSize stored as number — migrated to string with unit
 const v2 = {
 	attributes: {
@@ -114,4 +170,4 @@ const v1 = {
 	},
 };
 
-export default [ v2, v1 ];
+export default [ v3, v2, v1 ];

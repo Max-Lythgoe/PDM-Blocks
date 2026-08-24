@@ -4,7 +4,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import BackgroundMediaRender from '../../components/BackgroundMediaRender';
 
 /**
@@ -39,6 +39,10 @@ export default function save({ attributes }) {
         className: `${hasBackground ? 'has-bg-image' : ''} ${moveBehindHeader ? 'move-behind-header' : ''} ${verticalAlignment ? `is-vertically-aligned-${verticalAlignment}` : ''} ${uniqueResponsiveClass} ${contentOrder === 'above' ? 'content-above' : ''} ${moveBehindHeader && responsiveIgnoreHeader ? 'responsive-ignore-header' : ''}`.trim(),
         style: useMinHeight ? { minHeight: `${minHeight}vh` } : {},
     });
+
+	const innerBlocksProps = useInnerBlocksProps.save({
+		className: 'content-wrapper',
+	});
 
 	const Tag = attributes.htmlElement || 'div';
 	return (
@@ -86,9 +90,7 @@ export default function save({ attributes }) {
 			<Tag { ...blockProps }>
 				<div className={`section-flex-container ${contentOrder === 'above' ? 'content-first' : 'content-last'}`}>
 					<BackgroundMediaRender attributes={attributes} />
-					<div className="content-wrapper"> 
-						<InnerBlocks.Content />
-					</div>
+					<div { ...innerBlocksProps } />
 				</div>
 			</Tag>
 		</>

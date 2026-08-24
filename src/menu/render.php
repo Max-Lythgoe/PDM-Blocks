@@ -148,9 +148,20 @@ if (!class_exists('Desktop_Menu_Walker')) {
 				}
 			}
 			$title = apply_filters('the_title', $item->title, $item->ID);
+			$title_plain = wp_strip_all_tags($title);
+
+			// Mark the current item for assistive tech and styling
+			if (!empty($item->current)) {
+				$link_attr .= ' aria-current="page"';
+			}
+
+			// Announce submenus on parent links
+			if (in_array('menu-item-has-children', $classes, true)) {
+				$link_attr .= ' aria-haspopup="true" aria-expanded="false"';
+			}
 
 			if (!empty($image_url)) {
-				$link_content = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr(wp_strip_all_tags($title)) . '" class="menu-item-image" style="max-width:var(--menu-item-image-max-width,100px);height:auto;display:block;" />';
+				$link_content = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($title_plain) . '" class="menu-item-image" style="max-width:var(--menu-item-image-max-width,100px);height:auto;display:block;" />';
 			} else {
 				$link_content = esc_html($title);
 			}
@@ -171,13 +182,9 @@ if (!class_exists('Mobile_Menu_Walker')) {
 		public function start_lvl(&$output, $depth = 0, $args = null)
 		{
 			$indent = str_repeat("\t", $depth);
-			$output .= "\n$indent<ul class=\"sub-menu\">\n";
-		}
-
-		public function end_lvl(&$output, $depth = 0, $args = null)
-		{
-			$indent = str_repeat("\t", $depth);
-			$output .= "$indent</ul>\n";
+			// Tie this <ul> to its toggle button via aria-controls
+			$submenu_id = !empty($this->current_item_id) ? ' id="pdm-submenu-' . intval($this->current_item_id) . '"' : '';
+			$output .= "\n$indent<ul class=\"sub-menu\"" . $submenu_id . ">\n";
 		}
 
 		public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
@@ -197,6 +204,9 @@ if (!class_exists('Mobile_Menu_Walker')) {
 
 			$output .= $indent . '<li' . $class_names . '>';
 
+			// Track the parent item so start_lvl can tie the <ul> to its button
+			$this->current_item_id = $item->ID;
+
 			// Menu link
 			$link_attr = !empty($item->url) ? ' href="' . esc_url($item->url) . '"' : '';
 			if (!empty($item->target)) {
@@ -206,9 +216,15 @@ if (!class_exists('Mobile_Menu_Walker')) {
 				}
 			}
 			$title = apply_filters('the_title', $item->title, $item->ID);
+			$title_plain = wp_strip_all_tags($title);
+
+			// Mark the current item for assistive tech and styling
+			if (!empty($item->current)) {
+				$link_attr .= ' aria-current="page"';
+			}
 
 			if (!empty($image_url)) {
-				$link_content = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr(wp_strip_all_tags($title)) . '" class="menu-item-image" style="max-width:var(--menu-item-image-max-width,100px);height:auto;display:block;" />';
+				$link_content = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($title_plain) . '" class="menu-item-image" style="max-width:var(--menu-item-image-max-width,100px);height:auto;display:block;" />';
 			} else {
 				$link_content = esc_html($title);
 			}
@@ -217,14 +233,15 @@ if (!class_exists('Mobile_Menu_Walker')) {
 
 			// Add submenu toggle only if item has children
 			if (in_array('menu-item-has-children', $classes)) {
-				// Generate a unique ID for each mobile submenu toggle
-				$toggle_id = 'mobile-submenu-toggle-' . $item->ID;
+				$submenu_id = 'pdm-submenu-' . $item->ID;
+				$toggle_label = sprintf(
+					/* translators: %s: menu item title */
+					__('Toggle submenu for %s', 'pdm-blocks'),
+					$title_plain
+				);
 
-				// Checkbox toggle
-				$output .= '<input type="checkbox" id="' . esc_attr($toggle_id) . '" class="submenu-toggle" hidden>';
-
-				// Toggle button label (clickable)
-				$output .= '<label for="' . esc_attr($toggle_id) . '" class="block-sub-menu-toggle" aria-label="Toggle submenu"></label>';
+				// Real button (keyboard accessible); open state toggled by view.js
+				$output .= '<button type="button" class="block-sub-menu-toggle" aria-expanded="false" aria-controls="' . esc_attr($submenu_id) . '" aria-label="' . esc_attr($toggle_label) . '"></button>';
 			}
 		}
 
@@ -237,6 +254,7 @@ if (!class_exists('Mobile_Menu_Walker')) {
 
 // Generate unique menu toggle ID for this block instance
 $menu_toggle_id = 'menu-toggle-' . $block->parsed_block['blockName'] . '-' . wp_unique_id();
+$menu_panel_id = 'menu-panel-' . wp_unique_id();
 $block_instance_id = 'pdm-menu-block-' . wp_unique_id();
 $id = esc_attr($block_instance_id);
 $bp_min = intval($desktop_breakpoint);
@@ -251,7 +269,7 @@ echo "<style>
 	@media (max-width: {$bp_max}px) {
 		#{$id} .pdm-menu-desktop { display: none !important; }
 		#{$id} .pdm-menu-mobile { display: block; }
-		#{$id} .pdm-menu-mobile > .block-menu-toggle { display: flex !important; justify-content: var(--mobile-toggle-justify, center); margin-inline: var(--mobile-toggle-margin, auto); }
+		#{$id} .pdm-menu-mobile > .menu-open-toggle-wrap { display: flex !important; justify-content: var(--mobile-toggle-justify, center); }
 	}
 </style>";
 $wrapper_classes = 'menu-block pdm-block';
@@ -277,32 +295,36 @@ if ($mobile_image_first) {
 		</nav>
 
 		<!-- Mobile Menu -->
-		<nav class="pdm-menu pdm-menu-mobile">
+		<nav class="pdm-menu pdm-menu-mobile" aria-label="<?php echo esc_attr__('Mobile navigation', 'pdm-blocks'); ?>">
 
-			<input type="checkbox" id="<?php echo esc_attr($menu_toggle_id); ?>" class="menu-toggle" style="display:none;" />
-
-			<label for="<?php echo esc_attr($menu_toggle_id); ?>" id="open-menu-toggle-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-label="open menu button">
-				<?php if ($custom_icon_open): ?>
-					<img src="<?php echo esc_url($custom_icon_open); ?>" alt="Open menu" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
-				<?php else: ?>
-					<span style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
-						<?php echo pdm_get_icon_svg($icon_open); ?>
-					</span>
-				<?php endif; ?> </label>
-			<label for="<?php echo esc_attr($menu_toggle_id); ?>" class="menu-overlay-label">
-				<div class="menu-overlay"></div>
-			</label>
-
-			<div class="menu-slideout" style="<?php echo esc_attr($style_string); ?>">
-
-				<label for="<?php echo esc_attr($menu_toggle_id); ?>" id="close-menu-toggle-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-label="close menu button">
-					<?php if ($custom_icon_close): ?>
-						<img src="<?php echo esc_url($custom_icon_close); ?>" alt="Close menu" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
+			<div class="menu-open-toggle-wrap">
+				<button type="button" id="open-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle menu-open-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-expanded="false" aria-controls="<?php echo esc_attr($menu_panel_id); ?>" aria-label="<?php echo esc_attr__('Open menu', 'pdm-blocks'); ?>">
+					<?php if ($custom_icon_open): ?>
+						<img src="<?php echo esc_url($custom_icon_open); ?>" alt="" aria-hidden="true" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
 					<?php else: ?>
-						<span style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
-							<?php echo pdm_get_icon_svg($icon_close); ?>
+						<span aria-hidden="true" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
+							<?php echo pdm_get_icon_svg($icon_open); ?>
 						</span>
-					<?php endif; ?> </label>
+					<?php endif; ?>
+				</button>
+			</div>
+			<div class="menu-overlay-label" aria-hidden="true">
+				<div class="menu-overlay"></div>
+			</div>
+
+			<div id="<?php echo esc_attr($menu_panel_id); ?>" class="menu-slideout" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr__('Menu', 'pdm-blocks'); ?>" style="<?php echo esc_attr($style_string); ?>">
+
+				<div class="menu-slideout-toggle-wrap">
+					<button type="button" id="close-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle menu-close-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-expanded="false" aria-controls="<?php echo esc_attr($menu_panel_id); ?>" aria-label="<?php echo esc_attr__('Close menu', 'pdm-blocks'); ?>">
+						<?php if ($custom_icon_close): ?>
+							<img src="<?php echo esc_url($custom_icon_close); ?>" alt="" aria-hidden="true" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>;" />
+						<?php else: ?>
+							<span aria-hidden="true" style="width: <?php echo esc_attr($icon_size); ?>; height: <?php echo esc_attr($icon_size); ?>; color: <?php echo esc_attr($icon_color); ?>; display: inline-flex; align-items: center; justify-content: center;">
+								<?php echo pdm_get_icon_svg($icon_close); ?>
+							</span>
+						<?php endif; ?>
+					</button>
+				</div>
 				<?php
 				wp_nav_menu(array(
 					'menu'           => $menu_id,

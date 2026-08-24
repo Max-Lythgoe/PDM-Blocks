@@ -107,6 +107,7 @@ export default function Edit({ attributes, setAttributes }) {
 					attributes={attributes}
 					defaultIcon="check"
 					className="pdm-icon-display"
+					decorative
 				/>
 			</div>
 		</>

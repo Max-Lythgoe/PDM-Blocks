@@ -24,7 +24,7 @@ const v1 = {
 
 		return (
 			<li { ...blockProps }>
-				<BackgroundMediaRender attributes={ attributes } />
+				<BackgroundMediaRender attributes={ attributes } decorative={ false } />
 				<div { ...innerBlocksProps } />
 			</li>
 		);

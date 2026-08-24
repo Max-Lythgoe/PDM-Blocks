@@ -5,6 +5,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 import { DualIconRender } from '../../components/IconRender';
 
 /**
@@ -22,7 +23,9 @@ export default function save( { attributes } ) {
     const { openIcon, closeIcon } = DualIconRender({
         attributes,
         openDefault: 'plus',
-        closeDefault: 'minus'
+        closeDefault: 'minus',
+        openLabel: __('Open accordion', 'pdm-blocks'),
+        closeLabel: __('Close accordion', 'pdm-blocks')
     });
     
     return (

@@ -52,7 +52,7 @@
     position: fixed;
     transform: translateY(5px);
     transition: .2s;
-    visibility: collapse;
+    visibility: hidden;
     width: 200px;
     z-index: 50
 }
@@ -119,7 +119,8 @@
     transform: rotate(-90deg)
 }
 
-.menu-desktop .menu-item-has-children:hover>.sub-menu {
+.menu-desktop .menu-item-has-children:hover>.sub-menu,
+.menu-desktop .menu-item-has-children:focus-within>.sub-menu {
     opacity: 1;
     pointer-events: all;
     transform: translateY(0);
@@ -131,13 +132,13 @@
     color: var(--submenu-text-color);
     display: flex;
     font-size: var(--wp--preset--font-size--x-small);
-    padding: 10px 20px;
-    width: 100%
+    padding: 10px;
+    width: 100%;
 }
 
 .menu-desktop .sub-menu>.menu-item:hover>a {
-    background: var(--submenu-hover-bg-color);
-    color: var(--submenu-hover-text-color)
+    background: var(--submenu-hover-bg-color, var(--wp--preset--color--primary));
+    color: var(--submenu-hover-text-color, #fff)
 }
 
 .menu-desktop .sub-menu .menu-item:first-of-type a {
@@ -188,7 +189,7 @@
         cubic-bezier(0.66, 0, 0.34, 1)
 }
 
-.menu-toggle:checked~.menu-slideout {
+.pdm-menu-mobile.is-open .menu-slideout {
     transform: translateX(0);
     visibility: visible
 }
@@ -206,7 +207,7 @@
     z-index: 99999
 }
 
-.menu-toggle:checked~.menu-overlay-label {
+.pdm-menu-mobile.is-open .menu-overlay-label {
     opacity: 1;
     pointer-events: all;
     visibility: visible
@@ -214,9 +215,24 @@
 
 .block-menu-toggle {
     align-items: center;
+    background: none;
+    border: none;
+    color: inherit;
     cursor: pointer;
     display: none;
-    justify-content: var(--mobile-toggle-justify, center)
+    font: inherit;
+    justify-content: var(--mobile-toggle-justify, center);
+    line-height: 0;
+    margin: 0;
+    padding: 0
+}
+
+.menu-open-toggle-wrap {
+    display: none;
+}
+
+.menu-open-toggle-wrap .block-menu-toggle {
+    display: flex;
 }
 
 .block-menu-toggle svg {
@@ -240,15 +256,20 @@
     z-index: 20
 }
 
-.pdm-menu:has(.menu-toggle:checked) {
+.pdm-menu-mobile.is-open {
     z-index: 1000001
+}
+
+.menu-slideout-toggle-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 }
 
 .menu-slideout .block-menu-toggle {
     cursor: pointer;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 10px;
 }
 
 .menu-mobile {
@@ -298,27 +319,29 @@
 .menu-mobile .sub-menu .menu-item a {
     background-color: color-mix(in srgb, var(--submenu-hover-bg-color), #000 15%);
     font-size: var(--wp--preset--font-size--small);
-    padding-left: 15px
+    padding-left: 10px
 }
 
 .menu-mobile .menu-item-has-children {
     position: relative
 }
 
-.menu-mobile input.submenu-toggle {
-    display: none
-}
+/* Submenu toggles are <button> elements (see .block-sub-menu-toggle below) */
 
 .menu-mobile .block-sub-menu-toggle {
     align-items: center;
+    appearance: none;
     background: none;
     border: none;
     color: inherit;
     cursor: pointer;
     display: flex;
+    font: inherit;
     height: 38px;
     justify-content: center;
     line-height: 1;
+    margin: 0;
+    padding: 0;
     position: absolute;
     right: 0;
     top: 0;
@@ -329,9 +352,9 @@
     z-index: 10
 }
 
-.menu-mobile .menu-item:has(>input.submenu-toggle:checked) {
-    background: var(--submenu-hover-bg-color);
-    color: var(--submenu-hover-text-color)
+.menu-mobile .menu-item-has-children.is-open {
+    background: var(--submenu-hover-bg-color, var(--wp--preset--color--primary));
+    color: var(--submenu-hover-text-color, #fff)
 }
 
 .menu-mobile .menu-item-has-children {
@@ -354,23 +377,20 @@
     width: 1.4em
 }
 
-.menu-mobile input.submenu-toggle:checked+.block-sub-menu-toggle:before {
+.menu-mobile .menu-item-has-children.is-open>.block-sub-menu-toggle:before {
     transform: rotate(180deg)
 }
 
-.menu-mobile input.submenu-toggle:checked~.sub-menu {
+.menu-mobile .menu-item-has-children.is-open>.sub-menu {
     height: auto;
-    visibility: visible
-}
-
-.menu-mobile .menu-item-has-children input.submenu-toggle:checked~.sub-menu {
+    visibility: visible;
     border-radius: 0 0 var(--menu-radius, 8px) var(--menu-radius, 8px)
 }
 
-.menu-mobile input.submenu-toggle:checked~a {
-    background: var(--main);
+.menu-mobile .menu-item-has-children.is-open>a {
+    background: var(--submenu-hover-bg-color, var(--wp--preset--color--primary));
     border-radius: var(--menu-radius, 8px);
-    color: #fff;
+    color: var(--submenu-hover-text-color, #fff);
     padding: 10px
 }
 
@@ -378,13 +398,13 @@
     border-radius: 0 0 var(--menu-radius, 8px) var(--menu-radius, 8px)
 }
 
-.menu-mobile input.submenu-toggle:checked~.sub-menu .sub-menu a {
+.menu-mobile .menu-item-has-children.is-open>.sub-menu .sub-menu a {
     background-color: color-mix(in srgb, var(--submenu-hover-bg-color), #000 25%);
     color: var(--submenu-hover-text-color);
     padding-left: 20px;
 }
 
-.menu-mobile input.submenu-toggle:checked~.sub-menu input.submenu-toggle:checked~.sub-menu .sub-menu a {
+.menu-mobile .menu-item-has-children.is-open>.sub-menu .menu-item-has-children.is-open>.sub-menu .sub-menu a {
     background-color: color-mix(in srgb, var(--submenu-hover-bg-color), #000 35%);
     padding-left: 30px;
 }
@@ -404,7 +424,7 @@
         display: none;
     }
 
-    .menu-toggle:checked~.menu-overlay-label {
+    .pdm-menu-mobile.is-open .menu-overlay-label {
         display: none;
     }
 }
@@ -442,7 +462,8 @@
         z-index: 50
     }
 
-    .menu-desktop .menu-item-has-children:hover>.sub-menu {
+    .menu-desktop .menu-item-has-children:hover>.sub-menu,
+    .menu-desktop .menu-item-has-children:focus-within>.sub-menu {
         opacity: 1;
         pointer-events: all;
         visibility: visible
@@ -450,5 +471,23 @@
 
     .menu-desktop ul.sub-menu .sub-menu {
         margin: -36px 0 0 199px
+    }
+}
+
+/* Accessible focus indicators */
+.menu-desktop .menu-item a:focus-visible,
+.block-menu-toggle:focus-visible,
+.block-sub-menu-toggle:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .menu-desktop ul.sub-menu,
+    .menu-slideout,
+    .menu-overlay-label {
+        transition: none !important
     }
 }

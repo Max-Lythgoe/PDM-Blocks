@@ -16,6 +16,7 @@
     background: hsla(0, 0%, 100%, .2);
     border: 2px solid hsla(0, 0%, 100%, .5);
     backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
@@ -57,6 +58,7 @@
 .wp-block-pdm-slideshow .splide__pagination {
     bottom: 12px;
     gap: 6px;
+    padding-bottom: 0px !important;
 }
 
 .wp-block-pdm-slideshow .splide__pagination__page {
@@ -125,6 +127,8 @@
     align-items: center;
     background: hsla(0, 0%, 100%, .1);
     border: 2px solid hsla(0, 0%, 100%, .5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: 50%;
     color: #fff;
     cursor: pointer;

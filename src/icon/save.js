@@ -28,6 +28,7 @@ export default function save({ attributes }) {
 			attributes={attributes}
 			defaultIcon="check"
 			className="pdm-icon-display"
+			decorative
 		/>
 	);
 

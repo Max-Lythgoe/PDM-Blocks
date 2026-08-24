@@ -84,7 +84,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
     const { openIcon, closeIcon } = DualIconRender({
         attributes,
         openDefault: 'plus',
-        closeDefault: 'minus'
+        closeDefault: 'minus',
+        openLabel: __('Open accordion', 'pdm-blocks'),
+        closeLabel: __('Close accordion', 'pdm-blocks')
     });
 
     return (
