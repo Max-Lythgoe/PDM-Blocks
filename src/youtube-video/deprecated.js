@@ -2,12 +2,12 @@ import { useBlockProps } from '@wordpress/block-editor';
 
 function isYouTubeUrl( url ) {
 	if ( ! url ) return false;
-	return /(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|\w+\?v=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/i.test( url );
+	return /(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/i.test( url );
 }
 
 function extractYouTubeId( url ) {
 	if ( ! url ) return null;
-	const matches = url.match( /(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|\w+\?v=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/i );
+	const matches = url.match( /(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/i );
 	return matches ? matches[ 1 ] : null;
 }
 

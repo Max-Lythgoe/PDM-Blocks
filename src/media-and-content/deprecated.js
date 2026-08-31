@@ -2,7 +2,7 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 function extractYouTubeId( url ) {
 	if ( ! url ) return null;
-	const regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|\w+\?v=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/i;
+	const regex = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/i;
 	const matches = url.match( regex );
 	return matches ? matches[ 1 ] : null;
 }
