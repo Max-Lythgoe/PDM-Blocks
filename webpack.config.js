@@ -11,7 +11,9 @@ const extensionEntries = {
     'button-icon-extension': resolve(__dirname, 'src/extensions/button-icon-extension.js'),
     'heading-balance': resolve(__dirname, 'src/extensions/heading-balance.js'),
     'query-loop-drafts': resolve(__dirname, 'src/extensions/query-loop-drafts.js'),
-    'header-footer-scripts': resolve(__dirname, 'src/extensions/header-footer-scripts/index.js'),
+    // NOTE: header-footer-scripts is built from webpack.extension.config.js
+    // because it uses @wordpress/* imports, which the experimental modules
+    // build (WP_EXPERIMENTAL_MODULES) cannot externalise.
 };
 
 function mergeConfig(cfg) {

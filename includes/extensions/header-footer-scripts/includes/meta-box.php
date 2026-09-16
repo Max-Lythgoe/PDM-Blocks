@@ -2,6 +2,14 @@
 
 /**
  * Meta Box for Per-Page Scripts
+ *
+ * LEGACY FALLBACK ONLY.
+ *
+ * The per-page scripts are edited from the block editor panel (see
+ * src/extensions/header-footer-scripts/index.js). This meta box is kept so that
+ * classic-editor screens keep a working UI, and it writes to the exact same
+ * meta keys using the exact same helpers, so both UIs stay in sync.
+ *
  * Migrated from PDM Accelerate theme.
  *
  * @package PDM_Blocks
@@ -12,13 +20,38 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Whether the legacy meta box should be registered for a post type.
+ *
+ * It is skipped whenever the post type uses the block editor, because the
+ * block editor panel already covers it (showing both would be confusing and
+ * two save paths writing one field is a recipe for trouble).
+ *
+ * @param string $post_type Post type name.
+ * @return bool
+ */
+function pdm_hfs_legacy_meta_box_enabled($post_type)
+{
+    $enabled = !(function_exists('use_block_editor_for_post_type') && use_block_editor_for_post_type($post_type));
+
+    /**
+     * Filters whether the legacy per-page scripts meta box is registered.
+     *
+     * @param bool   $enabled   Whether the meta box is enabled.
+     * @param string $post_type Post type name.
+     */
+    return (bool) apply_filters('pdm_hfs_legacy_meta_box', $enabled, $post_type);
+}
+
+/**
  * Add meta boxes
  */
 function pdm_hfs_add_meta_boxes()
 {
-    $post_types = get_post_types(array('public' => true), 'names');
+    foreach (pdm_hfs_supported_post_types() as $post_type) {
+        if (!pdm_hfs_legacy_meta_box_enabled($post_type)) {
+            continue;
+        }
 
-    foreach ($post_types as $post_type) {
         add_meta_box(
             'pdm_hfs_page_scripts',
             'Custom Code - Page Scripts',
@@ -34,15 +67,9 @@ function pdm_hfs_render_meta_box($post)
 {
     wp_nonce_field('pdm_hfs_save_meta_box', 'pdm_hfs_meta_box_nonce');
 
-    $header_scripts = get_post_meta($post->ID, '_hfs_header_scripts', true);
-    $footer_scripts = get_post_meta($post->ID, '_hfs_footer_scripts', true);
-
-    if (!is_array($header_scripts)) {
-        $header_scripts = array();
-    }
-    if (!is_array($footer_scripts)) {
-        $footer_scripts = array();
-    }
+    // Reads legacy serialized arrays and current JSON strings alike.
+    $header_scripts = pdm_hfs_get_post_scripts($post->ID, 'header', true);
+    $footer_scripts = pdm_hfs_get_post_scripts($post->ID, 'footer', true);
 ?>
     <div class="hfs-meta-box">
         <p class="description">Add custom scripts specific to this page. These will be output in addition to any global scripts.</p>
@@ -132,29 +159,59 @@ function pdm_hfs_save_meta_box_data($post_id)
         return;
     }
 
-    $header_scripts = array();
-    if (isset($_POST['hfs_meta_header_scripts']) && is_array($_POST['hfs_meta_header_scripts'])) {
-        foreach ($_POST['hfs_meta_header_scripts'] as $script) {
-            if (!empty($script['name']) || !empty($script['code'])) {
-                $header_scripts[] = array(
-                    'name' => sanitize_text_field($script['name']),
-                    'code' => wp_unslash($script['code'])
-                );
-            }
-        }
-    }
-    update_post_meta($post_id, '_hfs_header_scripts', $header_scripts);
+    // Note: $_POST is slashed by WordPress and `update_post_meta()` unslashes it
+    // again, so the values are passed through as-is. Unslashing them here would
+    // strip backslashes out of the script code.
+    update_post_meta(
+        $post_id,
+        pdm_hfs_meta_key('header'),
+        pdm_hfs_collect_posted_scripts('hfs_meta_header_scripts')
+    );
 
-    $footer_scripts = array();
-    if (isset($_POST['hfs_meta_footer_scripts']) && is_array($_POST['hfs_meta_footer_scripts'])) {
-        foreach ($_POST['hfs_meta_footer_scripts'] as $script) {
-            if (!empty($script['name']) || !empty($script['code'])) {
-                $footer_scripts[] = array(
-                    'name' => sanitize_text_field($script['name']),
-                    'code' => wp_unslash($script['code'])
-                );
-            }
-        }
+    update_post_meta(
+        $post_id,
+        pdm_hfs_meta_key('footer'),
+        pdm_hfs_collect_posted_scripts('hfs_meta_footer_scripts')
+    );
+}
+
+/**
+ * Collect the script rows submitted by the meta box.
+ *
+ * The returned value is normalised to a JSON string by the meta
+ * `sanitize_callback` registered in includes/meta-registration.php, so the meta
+ * box and the block editor always end up storing the same shape.
+ *
+ * @param string $field Name of the $_POST field holding the rows.
+ * @return array<int, array{name: string, code: string}>
+ */
+function pdm_hfs_collect_posted_scripts($field)
+{
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked by the caller.
+    if (!isset($_POST[$field]) || !is_array($_POST[$field])) {
+        return array();
     }
-    update_post_meta($post_id, '_hfs_footer_scripts', $footer_scripts);
+
+    $scripts = array();
+
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce checked by the caller; script code is intentionally raw.
+    foreach ($_POST[$field] as $script) {
+        if (!is_array($script)) {
+            continue;
+        }
+
+        $name = isset($script['name']) ? sanitize_text_field($script['name']) : '';
+        $code = isset($script['code']) ? (string) $script['code'] : '';
+
+        if ('' === $name && '' === trim($code)) {
+            continue;
+        }
+
+        $scripts[] = array(
+            'name' => $name,
+            'code' => $code,
+        );
+    }
+
+    return $scripts;
 }

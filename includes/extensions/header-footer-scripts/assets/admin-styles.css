@@ -14,8 +14,7 @@
 	border-bottom: 1px solid #c3c4c7;
 }
 
-.hfs-script-row,
-.hfs-meta-script-row {
+.hfs-script-row {
 	background: #f6f7f7;
 	border: 1px solid #c3c4c7;
 	padding: 15px;
@@ -36,8 +35,7 @@
 	font-weight: 600;
 }
 
-.hfs-remove-script,
-.hfs-remove-meta-script {
+.hfs-remove-script {
 	flex-shrink: 0;
 	display: inline-flex !important;
 	align-items: center;
@@ -50,21 +48,6 @@
 	font-family: Consolas, Monaco, monospace;
 	font-size: 13px;
 	resize: vertical;
-}
-
-.hfs-meta-box {
-	padding: 10px 0;
-}
-
-.hfs-meta-section {
-	margin-bottom: 20px;
-}
-
-.hfs-meta-section h3 {
-	margin-top: 0;
-	margin-bottom: 12px;
-	font-size: 14px;
-	font-weight: 600;
 }
 
 .hfs-tab-content {

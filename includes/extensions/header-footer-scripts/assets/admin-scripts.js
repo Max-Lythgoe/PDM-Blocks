@@ -8,8 +8,6 @@ jQuery(document).ready(function($) {
     var snippetEditor = null;
     var headerCounter = $('.hfs-script-row input[name*="hfs_header_scripts"]').length;
     var footerCounter = $('.hfs-script-row input[name*="hfs_footer_scripts"]').length;
-    var metaHeaderCounter = $('.hfs-meta-script-row input[name*="hfs_meta_header_scripts"]').length;
-    var metaFooterCounter = $('.hfs-meta-script-row input[name*="hfs_meta_footer_scripts"]').length;
 
     // Add script row - Settings Page
     $(document).on('click', '.hfs-add-script', function(e) {
@@ -46,38 +44,7 @@ jQuery(document).ready(function($) {
     });
 
     // Add script row - Meta Box
-    $(document).on('click', '.hfs-add-meta-script', function(e) {
-        e.preventDefault();
-        var type = $(this).data('type');
-        var container = $('#hfs-meta-' + type + '-scripts');
-        var index = type === 'header' ? metaHeaderCounter++ : metaFooterCounter++;
-        
-        var row = '<div class="hfs-meta-script-row">' +
-            '<div class="hfs-script-header">' +
-            '<input type="text" name="hfs_meta_' + type + '_scripts[' + index + '][name]" value="" ' +
-            'placeholder="Script Name" class="hfs-script-name" />' +
-            '<button type="button" class="button hfs-remove-meta-script" title="Remove">' +
-            '<span class="dashicons dashicons-trash"></span>' +
-            '</button>' +
-            '</div>' +
-            '<textarea name="hfs_meta_' + type + '_scripts[' + index + '][code]" ' +
-            'placeholder="Enter script code..." class="hfs-script-code" rows="6"></textarea>' +
-            '</div>';
-        
-        container.append(row);
-    });
-
-    // Remove script row - Meta Box
-    $(document).on('click', '.hfs-remove-meta-script', function(e) {
-        e.preventDefault();
-        var row = $(this).closest('.hfs-meta-script-row');
-        
-        if (confirm('Are you sure you want to remove this script?')) {
-            row.fadeOut(300, function() {
-                $(this).remove();
-            });
-        }
-    });
+    // (removed: per-page scripts are now edited from the block editor sidebar)
 
     // PHP Snippets Functionality
     function initCodeMirror() {

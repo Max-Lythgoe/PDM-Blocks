@@ -1,0 +1,121 @@
+/**
+ * Custom Code — block editor sidebar panel styles.
+ */
+
+.pdm-hfs-panel__intro {
+	margin: 0 0 12px;
+	color: #757575;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.pdm-hfs-panel__notice {
+	margin: 0 0 16px;
+	padding: 8px 10px;
+	border-left: 3px solid var(--wp-admin-theme-color, #3858e9);
+	background: #f0f0f0;
+	color: #1e1e1e;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.pdm-hfs-section {
+	padding-top: 4px;
+}
+
+.pdm-hfs-section + .pdm-hfs-section {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.pdm-hfs-section__title {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0 0 10px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #1e1e1e;
+}
+
+.pdm-hfs-section__count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border-radius: 9px;
+	background: #e0e0e0;
+	color: #1e1e1e;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+.pdm-hfs-row {
+	margin-bottom: 12px;
+	padding: 10px;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.pdm-hfs-row__header {
+	display: flex;
+	align-items: flex-start;
+	gap: 4px;
+	margin-bottom: 8px;
+}
+
+.pdm-hfs-row__header .components-base-control {
+	flex: 1 1 auto;
+	margin-bottom: 0;
+}
+
+.pdm-hfs-row__header .components-text-control__input {
+	width: 100%;
+}
+
+.pdm-hfs-row__remove.components-button.is-small {
+	flex: 0 0 auto;
+	min-width: 32px;
+	height: 32px;
+	padding: 0;
+}
+
+.pdm-hfs-row .components-textarea-control__input {
+	min-height: 96px;
+	font-family: Menlo, Consolas, monaco, monospace;
+	font-size: 12px;
+	line-height: 1.6;
+	tab-size: 2;
+}
+
+.pdm-hfs-row .components-base-control__help {
+	margin-top: 6px;
+	margin-bottom: 0;
+}
+
+.pdm-hfs-empty {
+	margin: 0 0 12px;
+	color: #757575;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.pdm-hfs-section__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.pdm-hfs-global-link {
+	display: inline-block;
+	margin-top: 16px;
+	font-size: 12px;
+}
