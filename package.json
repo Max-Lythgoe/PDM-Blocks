@@ -1,6 +1,6 @@
 {
 	"name": "pdm-blocks",
-	"version": "0.1.0",
+	"version": "1.9.0",
 	"description": "A collection of custom Gutenberg blocks.",
 	"author": "Max Lythgoe - Performance Driven Marketing",
 	"license": "GPL-2.0-or-later",
