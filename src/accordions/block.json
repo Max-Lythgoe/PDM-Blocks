@@ -96,6 +96,10 @@
 			"type": "number",
 			"default": 1
 		},
+		"titleFontSize": {
+			"type": "string",
+			"default": "small"
+		},
 		"cornerRadius": {
 			"type": "object",
 			"default": {

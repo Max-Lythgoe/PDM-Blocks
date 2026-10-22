@@ -20,6 +20,10 @@
   content: none;
 }
 
+.accord-title-text {
+  font-size: var(--pdm-title-font-size, var(--wp--preset--font-size--small, 1rem));
+}
+
 .accord-panel {
   padding: 10px 20px;
 }

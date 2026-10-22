@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InnerBlocks, InspectorControls, PanelColorSettings, __experimentalColorGradientSettingsDropdown as ColorGradientSettingsDropdown, __experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients, __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, ToggleControl, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption, } from '@wordpress/components';
+import { useBlockProps, InnerBlocks, InspectorControls, PanelColorSettings, __experimentalColorGradientSettingsDropdown as ColorGradientSettingsDropdown, __experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients, __experimentalBorderRadiusControl as BorderRadiusControl, useSettings } from '@wordpress/block-editor';
+import { PanelBody, RangeControl, ToggleControl, FontSizePicker, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption, } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -23,6 +23,7 @@ import { PanelBody, RangeControl, ToggleControl, __experimentalToggleGroupContro
 import './editor.scss';
 
 import { DualIconEdit } from '../../components/IconEdit';
+import { resolveFontSizeValue } from '../utils/fontSize';
 
 
 export default function Edit({ attributes, setAttributes, clientId }) {
@@ -30,6 +31,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         maxWidth,
         cornerRadius,
         columns,
+        titleFontSize,
         iconPosition,
         toggleBg,
         toggleGradient,
@@ -49,7 +51,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         '--accordion-radius': typeof cornerRadius === 'object' 
             ? `${cornerRadius.topLeft || '0px'} ${cornerRadius.topRight || '0px'} ${cornerRadius.bottomRight || '0px'} ${cornerRadius.bottomLeft || '0px'}`
             : (cornerRadius || '20px'),
-        '--pdm-shadow': shadowEnabled ? 'rgba(0,0,0,.5) 0px 3px 8px' : 'none'
+        '--pdm-shadow': shadowEnabled ? 'rgba(0,0,0,.5) 0px 3px 8px' : 'none',
+        '--pdm-title-font-size': resolveFontSizeValue(titleFontSize)
     };
     
 
@@ -59,6 +62,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
     });
 
     const colorGradientSettings = useMultipleOriginColorsAndGradients();
+    const [fontSizes] = useSettings('typography.fontSizes');
 
     return (
         <>
@@ -79,11 +83,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         label="Columns"
                         help="Select the number of columns for the accordions"
                         value={String(columns)}
-                        onChange={ ( value ) => setAttributes( { columns: value } ) }
+                        onChange={ ( value ) => setAttributes( { columns: parseInt( value, 10 ) } ) }
                     >
                         <ToggleGroupControlOption value="1" label="1" />
                         <ToggleGroupControlOption value="2" label="2" />
                     </ToggleGroupControl>
+                </PanelBody>
+
+                <PanelBody title={__('Title Font Size', 'pdm-blocks')} initialOpen={false}>
+                    <FontSizePicker
+                        value={titleFontSize}
+                        valueMode="slug"
+                        onChange={(value, selectedItem) => setAttributes({ titleFontSize: selectedItem?.slug || value || 'small' })}
+                        fontSizes={fontSizes || []}
+                        fallbackFontSize={16}
+                    />
                 </PanelBody>
 
                 <PanelBody title={__('Bottom Border Styles', 'pdm-blocks')} initialOpen={false}>

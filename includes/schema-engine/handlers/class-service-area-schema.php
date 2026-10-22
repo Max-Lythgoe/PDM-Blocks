@@ -230,8 +230,12 @@ class PDM_Service_Area_Schema
 
         // Check if this is a Service Area post type
         if (!$this->should_generate_for_post($post)) {
-            // If disabled, clean up any auto-generated schemas
-            $this->cleanup_post_schemas($post_id);
+            // If disabled, clean up any auto-generated schemas.
+            // Only ever touch Service Area posts — cleanup must never remove
+            // schema from other post types (e.g. recent-projects).
+            if ('service-areas' === $post->post_type) {
+                $this->cleanup_post_schemas($post_id);
+            }
             return;
         }
 
@@ -565,11 +569,12 @@ class PDM_Service_Area_Schema
         }
 
         // Secondary check: Look for our auto-generated title pattern
-        if (
-            isset($schema['metadata']['title']) && strpos($schema['metadata']['title'], 'Place') !== false ||
-            strpos($schema['metadata']['title'], 'Organization') !== false
-        ) {
-            return true;
+        if (!empty($schema['metadata']['title'])) {
+            $title = (string) $schema['metadata']['title'];
+
+            if (strpos($title, 'Place') !== false || strpos($title, 'Organization') !== false) {
+                return true;
+            }
         }
 
         return false;

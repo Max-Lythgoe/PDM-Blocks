@@ -16,8 +16,10 @@
  */
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
+import { resolveFontSizeValue } from '../utils/fontSize';
+
 export default function save({ attributes }) {
-	const columnsClass = `accord-columns-${attributes.columns || 1}`;
+	const columnsClass = `accord-columns-${Number(attributes.columns) || 1}`;
     const className = `pdm-accordions ${columnsClass}`;
 
 	const cornerRadius = attributes.cornerRadius || {};
@@ -28,6 +30,7 @@ export default function save({ attributes }) {
         '--pdm-panel-bg': attributes.panelGradient || attributes.panelBg || '',
         '--pdm-panel-color': attributes.panelColor || '',
 		'--accordion-max-width': attributes.maxWidth ? attributes.maxWidth + 'px' : '',
+		'--pdm-title-font-size': resolveFontSizeValue(attributes.titleFontSize),
 		'--accordion-radius': typeof cornerRadius === 'object'
 			? `${cornerRadius.topLeft || '20px'} ${cornerRadius.topRight || '20px'} ${cornerRadius.bottomRight || '20px'} ${cornerRadius.bottomLeft || '20px'}`
 			: (cornerRadius || '20px'),
