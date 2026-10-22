@@ -23,14 +23,80 @@ if (!defined('ABSPATH')) {
 define('PDM_HFS_PATH', plugin_dir_path(__FILE__));
 define('PDM_HFS_URL', plugin_dir_url(__FILE__));
 
-// Include required files
+// Include required files — needed on every request.
 require_once PDM_HFS_PATH . 'includes/scripts-data.php';
 require_once PDM_HFS_PATH . 'includes/meta-registration.php';
-require_once PDM_HFS_PATH . 'includes/migration.php';
-require_once PDM_HFS_PATH . 'includes/settings-page.php';
 require_once PDM_HFS_PATH . 'includes/frontend-output.php';
 require_once PDM_HFS_PATH . 'includes/snippet-manager.php';
-require_once PDM_HFS_PATH . 'includes/snippets-tab.php';
+
+// Admin UI and the one-time migration are only needed in an admin context.
+if (pdm_blocks_is_admin_context()) {
+    require_once PDM_HFS_PATH . 'includes/migration.php';
+    require_once PDM_HFS_PATH . 'includes/settings-page.php';
+    require_once PDM_HFS_PATH . 'includes/snippets-tab.php';
+
+    // Priority 20 so the theme's versions are unhooked before these run.
+    add_action('admin_menu', 'pdm_hfs_add_settings_page', 20);
+    add_action('admin_enqueue_scripts', 'pdm_hfs_enqueue_admin_assets', 20);
+
+    // One-time conversion of legacy (serialized array) script meta to JSON.
+    add_action('admin_init', 'pdm_hfs_migrate_legacy_scripts_meta', 5);
+
+    // One-time move of the script options out of the autoloaded options blob.
+    add_action('admin_init', 'pdm_hfs_set_script_options_autoload');
+}
+
+/**
+ * Move the header/footer script options off autoload.
+ *
+ * Both options hold raw script markup and are only read when rendering the
+ * head/footer. Existing sites are converted once: `update_option()` ignores the
+ * autoload flag when the value is unchanged, so the core helper (WP 6.4+) or a
+ * direct column update is used instead.
+ */
+function pdm_hfs_set_script_options_autoload()
+{
+    if (get_option('pdm_hfs_autoload_migrated')) {
+        return;
+    }
+
+    $options = array(
+        'hfs_header_scripts' => false,
+        'hfs_footer_scripts' => false,
+    );
+
+    if (function_exists('wp_set_option_autoload_values')) {
+        wp_set_option_autoload_values($options);
+    } else {
+        global $wpdb;
+
+        $changed = false;
+
+        foreach ($options as $option_name => $autoload) {
+            if (false === get_option($option_name, false)) {
+                continue;
+            }
+
+            $wpdb->update(
+                $wpdb->options,
+                array('autoload' => $autoload ? 'yes' : 'no'),
+                array('option_name' => $option_name)
+            );
+
+            $changed = true;
+        }
+
+        if ($changed) {
+            wp_cache_delete('alloptions', 'options');
+
+            foreach (array_keys($options) as $option_name) {
+                wp_cache_delete($option_name, 'options');
+            }
+        }
+    }
+
+    update_option('pdm_hfs_autoload_migrated', 1, false);
+}
 
 /**
  * Unhook theme's version (if active) so plugin takes priority.
@@ -53,15 +119,10 @@ add_action('init', function () {
     }
 }, 1);
 
-// Initialize the module (priority 20 so unhooking runs first)
-add_action('admin_menu', 'pdm_hfs_add_settings_page', 20);
-add_action('admin_enqueue_scripts', 'pdm_hfs_enqueue_admin_assets', 20);
+// Initialize the module
 add_action('wp_head', 'pdm_hfs_output_header_scripts', 999);
 add_action('wp_footer', 'pdm_hfs_output_footer_scripts', 999);
 add_action('after_setup_theme', 'pdm_hfs_execute_active_snippets', 1);
-
-// One-time conversion of legacy (serialized array) script meta to JSON.
-add_action('admin_init', 'pdm_hfs_migrate_legacy_scripts_meta', 5);
 
 /**
  * AJAX handler for importing snippets.

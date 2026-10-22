@@ -1,7 +1,24 @@
 // button-icon-extension.js - Rich text format for inserting SVG icons into button blocks
 // Migrated from PDM Accelerate theme - identical implementation
 
-import { ICON_LIBRARY } from '../../components/icon-library';
+// The icon library is ~45 KB of SVG definitions and is only needed once a picker
+// opens, so it is loaded on demand instead of being shipped in the
+// always-enqueued editor bundle.
+let iconLibraryPromise = null;
+
+const getIconLibrary = () => {
+    if (!iconLibraryPromise) {
+        iconLibraryPromise = import('../../components/icon-library')
+            .then((module) => module.ICON_LIBRARY)
+            .catch((error) => {
+                iconLibraryPromise = null;
+                console.error('Error loading the icon library:', error);
+                return {};
+            });
+    }
+
+    return iconLibraryPromise;
+};
 
 const { Fragment, useState, renderToString, createElement, cloneElement, useEffect } = wp.element;
 const { Button, Modal, Popover, ToolbarButton, ToolbarGroup, SearchControl, ColorPalette, FontSizePicker } = wp.components;
@@ -68,6 +85,26 @@ function IconPickerModal({ isOpen, onClose, onSelect, currentIconName = '', curr
     const [selectedFontSize, setSelectedFontSize] = useState('1.25em');
     const [customIcons, setCustomIcons] = useState(externalCustomIcons);
     const [loadingCustomIcons, setLoadingCustomIcons] = useState(false);
+    const [iconLibrary, setIconLibrary] = useState({});
+
+    // Built-in icons are loaded on demand the first time the modal opens.
+    useEffect(() => {
+        if (!isOpen) {
+            return undefined;
+        }
+
+        let cancelled = false;
+
+        getIconLibrary().then((library) => {
+            if (!cancelled) {
+                setIconLibrary(library);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isOpen]);
     
     // Load custom SVG icons from media library
     const loadCustomIcons = async () => {
@@ -128,7 +165,7 @@ function IconPickerModal({ isOpen, onClose, onSelect, currentIconName = '', curr
     
     // Combine built-in and custom icons for filtering
     const allIcons = { 
-        ...ICON_LIBRARY, 
+        ...iconLibrary, 
         ...Object.fromEntries(
             Object.entries(customIcons).map(([key, { element }]) => [key, element])
         )
@@ -329,7 +366,7 @@ function IconPickerModal({ isOpen, onClose, onSelect, currentIconName = '', curr
             }, filteredIcons.map(iconName => {
                 const iconElement = allIcons[iconName];
                 const isSelected = iconName === selectedIconName;
-                const isCustom = !ICON_LIBRARY[iconName];
+                const isCustom = !iconLibrary[iconName];
                 
                 return createElement('button', {
                     key: iconName,
@@ -445,7 +482,7 @@ function InlineIconControls({ value, onChange, contentRef, customIcons = {}, onC
     });
 
     // Font Awesome's changeValue pattern
-    const changeValue = (newAttributes) => {
+    const changeValue = async (newAttributes) => {
         if (!newAttributes || !newAttributes.iconName) {
             return;
         }
@@ -457,7 +494,8 @@ function InlineIconControls({ value, onChange, contentRef, customIcons = {}, onC
             const iconData = customIcons[newAttributes.iconName];
             iconElement = iconData?.element;
         } else {
-            iconElement = ICON_LIBRARY[newAttributes.iconName];
+            const iconLibrary = await getIconLibrary();
+            iconElement = iconLibrary[newAttributes.iconName];
         }
         
         if (!iconElement) {
@@ -617,7 +655,8 @@ function Edit(props) {
             const attachmentId = iconName.replace('media_', '');
             iconElement = await getCustomIconFromAttachment(parseInt(attachmentId));
         } else {
-            iconElement = ICON_LIBRARY[iconName];
+            const iconLibrary = await getIconLibrary();
+            iconElement = iconLibrary[iconName];
         }
         
         if (!iconElement) return;

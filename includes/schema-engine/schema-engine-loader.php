@@ -41,19 +41,23 @@ function pdm_blocks_maybe_load_schema_engine()
 
     $base = plugin_dir_path(__FILE__);
 
-    // 1. PDM Settings admin page (registers all settings / sections / fields).
-    require_once $base . 'pdm-settings.php';
-
-    // 2. Schema handlers.
+    // 1. Schema handlers (front-end schema output + save_post generation).
     require_once $base . 'handlers/class-faq-schema.php';
     require_once $base . 'handlers/class-author-schema.php';
     require_once $base . 'handlers/class-article-schema.php';
     require_once $base . 'handlers/class-service-area-schema.php';
 
-    // 3. Schema manager (auto-discovers and instantiates all handlers above).
+    // 2. Schema manager (auto-discovers and instantiates all handlers above).
     require_once $base . 'class-schema-manager.php';
     new PDM_Schema_Manager();
 
-    // 4. Author E-E-A-T module (user fields, admin UI, shortcodes, front-end).
+    // 3. Author E-E-A-T module (shortcodes + front-end display; admin UI is
+    //    loaded conditionally inside author-eeat.php).
     require_once $base . 'author-eeat/author-eeat.php';
+
+    // 4. PDM Settings admin page (menus, settings fields and AJAX handlers).
+    //    Admin-only: it registers no front-end hooks.
+    if (pdm_blocks_is_admin_context()) {
+        require_once $base . 'pdm-settings.php';
+    }
 }

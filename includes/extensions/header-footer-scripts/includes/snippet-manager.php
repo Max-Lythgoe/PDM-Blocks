@@ -11,33 +11,75 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Parse the shipped default snippets, caching the result.
+ *
+ * The defaults only change when the plugin is updated, so the parsed list is
+ * cached against the defaults directory mtime instead of being re-read
+ * (glob + one file read per snippet) on every request.
+ *
+ * @return array<string, array> Snippet data keyed by snippet id.
+ */
+function pdm_hfs_get_default_snippets()
+{
+    static $defaults = null;
+
+    if (null !== $defaults) {
+        return $defaults;
+    }
+
+    $defaults    = array();
+    $default_dir = PDM_HFS_PATH . 'snippets/defaults/';
+
+    if (!is_dir($default_dir)) {
+        return $defaults;
+    }
+
+    $cache_key = 'pdm_hfs_default_snippets_' . md5($default_dir . (string) @filemtime($default_dir));
+    $cached    = get_transient($cache_key);
+
+    if (is_array($cached)) {
+        $defaults = $cached;
+
+        return $defaults;
+    }
+
+    foreach ((array) glob($default_dir . '*.php') as $file) {
+        $snippet_data = pdm_hfs_parse_snippet_file($file);
+
+        if (!$snippet_data) {
+            continue;
+        }
+
+        $snippet_data['file'] = basename($file);
+
+        $snippet_id = 'default_' . sanitize_title($snippet_data['name']);
+        $snippet_data['id'] = $snippet_id;
+        $snippet_data['type'] = 'default';
+
+        $defaults[$snippet_id] = $snippet_data;
+    }
+
+    set_transient($cache_key, $defaults, WEEK_IN_SECONDS);
+
+    return $defaults;
+}
+
 function pdm_hfs_get_all_snippets()
 {
     $snippets = array();
     $custom_snippets = get_option('hfs_custom_snippets', array());
 
-    $default_dir = PDM_HFS_PATH . 'snippets/defaults/';
-    if (is_dir($default_dir)) {
-        $files = glob($default_dir . '*.php');
-        foreach ($files as $file) {
-            $snippet_data = pdm_hfs_parse_snippet_file($file);
-            if ($snippet_data) {
-                $snippet_data['file'] = basename($file);
-                $snippet_id = 'default_' . sanitize_title($snippet_data['name']);
-
-                if (isset($custom_snippets[$snippet_id])) {
-                    $snippet_data['name'] = $custom_snippets[$snippet_id]['name'];
-                    $snippet_data['description'] = $custom_snippets[$snippet_id]['description'];
-                    $snippet_data['category'] = $custom_snippets[$snippet_id]['category'];
-                    $snippet_data['code'] = $custom_snippets[$snippet_id]['code'];
-                    $snippet_data['modified'] = true;
-                }
-
-                $snippet_data['id'] = $snippet_id;
-                $snippet_data['type'] = 'default';
-                $snippets[] = $snippet_data;
-            }
+    foreach (pdm_hfs_get_default_snippets() as $snippet_id => $snippet_data) {
+        if (isset($custom_snippets[$snippet_id])) {
+            $snippet_data['name'] = $custom_snippets[$snippet_id]['name'];
+            $snippet_data['description'] = $custom_snippets[$snippet_id]['description'];
+            $snippet_data['category'] = $custom_snippets[$snippet_id]['category'];
+            $snippet_data['code'] = $custom_snippets[$snippet_id]['code'];
+            $snippet_data['modified'] = true;
         }
+
+        $snippets[] = $snippet_data;
     }
 
     foreach ($custom_snippets as $id => $snippet) {
@@ -202,6 +244,12 @@ function pdm_hfs_execute_active_snippets()
     global $pdm_hfs_executing_snippets, $pdm_hfs_current_snippet_id;
 
     $active_snippets = pdm_hfs_get_active_snippets();
+
+    // Nothing active: skip building the snippet list (file reads) entirely.
+    if (empty($active_snippets)) {
+        return;
+    }
+
     $all_snippets = pdm_hfs_get_all_snippets();
     $errored_ids = array();
 

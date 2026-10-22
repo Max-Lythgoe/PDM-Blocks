@@ -178,7 +178,9 @@ function pdm_hfs_save_settings()
             }
         }
     }
-    update_option('hfs_header_scripts', $header_scripts);
+    // Not autoloaded: these hold raw script markup and are only read when the
+    // head/footer is rendered.
+    update_option('hfs_header_scripts', $header_scripts, false);
 
     $footer_scripts = array();
     if (isset($_POST['hfs_footer_scripts']) && is_array($_POST['hfs_footer_scripts'])) {
@@ -191,5 +193,5 @@ function pdm_hfs_save_settings()
             }
         }
     }
-    update_option('hfs_footer_scripts', $footer_scripts);
+    update_option('hfs_footer_scripts', $footer_scripts, false);
 }

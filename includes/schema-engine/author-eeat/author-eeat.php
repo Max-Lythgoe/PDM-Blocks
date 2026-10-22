@@ -31,13 +31,15 @@ function pdm_is_author_eeat_enabled()
  */
 function pdm_author_eeat_init()
 {
-    // Always load admin fields (so users can configure them).
-    require_once PDM_AUTHOR_EEAT_DIR . 'admin/user-fields.php';
-    require_once PDM_AUTHOR_EEAT_DIR . 'admin/admin-fields.php';
-    require_once PDM_AUTHOR_EEAT_DIR . 'admin/settings-tab.php';
-
-    // Always load frontend display (for shortcode registration).
+    // Frontend display (shortcodes, author box) is needed on every request.
     require_once PDM_AUTHOR_EEAT_DIR . 'frontend/frontend-display.php';
+
+    // Profile fields and the settings tab are admin-only.
+    if (pdm_blocks_is_admin_context()) {
+        require_once PDM_AUTHOR_EEAT_DIR . 'admin/user-fields.php';
+        require_once PDM_AUTHOR_EEAT_DIR . 'admin/admin-fields.php';
+        require_once PDM_AUTHOR_EEAT_DIR . 'admin/settings-tab.php';
+    }
 
     // Only enqueue styles if enabled.
     if (pdm_is_author_eeat_enabled()) {

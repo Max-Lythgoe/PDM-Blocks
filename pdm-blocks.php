@@ -19,6 +19,22 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Whether the current request needs admin/editor code.
+ *
+ * Keeps admin-only modules (settings pages, profile fields, snippet UI) out of
+ * the front-end bootstrap. WP-CLI counts as admin so CLI option updates behave
+ * like their admin equivalents.
+ *
+ * @return bool
+ */
+if (! function_exists('pdm_blocks_is_admin_context')) {
+    function pdm_blocks_is_admin_context()
+    {
+        return is_admin() || wp_doing_ajax() || (defined('WP_CLI') && WP_CLI);
+    }
+}
+
 // -----------------------------------------------------------------------
 // Dependency: requires PDM Plugins Manager
 // -----------------------------------------------------------------------
@@ -62,8 +78,13 @@ add_filter('puc_request_info_result-pdm-blocks', function ($info) {
     return $info;
 });
 
-// company info settings
-require_once plugin_dir_path(__FILE__) . 'includes/company-info-settings.php';
+// company info data (getters, Service Areas CPT/taxonomies) — needed everywhere
+require_once plugin_dir_path(__FILE__) . 'includes/company-info-data.php';
+
+// company info settings UI — admin only
+if (pdm_blocks_is_admin_context()) {
+    require_once plugin_dir_path(__FILE__) . 'includes/company-info-settings.php';
+}
 
 // WordPress Abilities API integration for company info
 require_once plugin_dir_path(__FILE__) . 'includes/company-info-abilities.php';
