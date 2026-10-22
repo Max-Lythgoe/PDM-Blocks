@@ -1,6 +1,8 @@
 /**
  * Lightweight lightbox functionality for gallery block
  */
+import { setupLightboxA11y } from '../utils/lightbox-a11y';
+
 document.addEventListener('DOMContentLoaded', function() {
 	// Find all gallery lightbox triggers
 	const triggers = document.querySelectorAll('.gallery-lightbox-trigger');
@@ -38,18 +40,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	const closeButton = lightbox.querySelector('.gallery-lightbox-close');
 	const prevButton = lightbox.querySelector('.gallery-lightbox-prev');
 	const nextButton = lightbox.querySelector('.gallery-lightbox-next');
+	const a11y = setupLightboxA11y(lightbox, 'Image lightbox');
 	
 	let currentGallery = null;
 	let currentIndex = 0;
 	
 	// Open lightbox
-	function openLightbox(gallery, index) {
+	function openLightbox(gallery, index, trigger) {
 		currentGallery = gallery;
 		currentIndex = index;
 		showImage();
 		lightbox.classList.add('active');
 		document.body.style.overflow = 'hidden';
 		updateArrowsVisibility();
+		a11y.onOpen(trigger);
 	}
 	
 	// Show current image
@@ -104,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function closeLightbox() {
 		lightbox.classList.remove('active');
 		document.body.style.overflow = '';
+		a11y.onClose();
 		// Clear image after animation
 		setTimeout(() => {
 			lightboxImage.src = '';
@@ -118,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			e.preventDefault();
 			const gallery = this.closest('.wp-block-pdm-gallery');
 			const index = parseInt(this.getAttribute('data-lightbox-index'), 10);
-			openLightbox(gallery, index);
+			openLightbox(gallery, index, this);
 		});
 	});
 	

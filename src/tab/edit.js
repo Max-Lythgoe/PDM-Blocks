@@ -168,8 +168,8 @@ export default function Edit( {
 	 */
 	const innerBlocksProps = useInnerBlocksProps( {
 		className: 'pdm-tab-content',
-		'aria-labelledby': `tab-${ attributes.tabId }`,
-		id: `tab-${ attributes.tabId }`,
+		'aria-labelledby': `tab-${ attributes.tabId }-tab`,
+		id: `tab-${ attributes.tabId }-panel`,
 		role: 'tabpanel',
 		tabIndex: isTabSelected ? 0 : -1,
 	} );
@@ -203,14 +203,14 @@ export default function Edit( {
 			<div { ...blockProps }>
 				<TabFill tabsClientId={ tabsClientId }>
 					<div
-						id={ attributes.tabId }
+						id={ `tab-${ attributes.tabId }-tab` }
 						className={ clsx( 'pdm-tab-btn', {
 							'is-bbb-active-tab': isTabSelected,
 						} ) }
 						role="tab"
 						tabIndex={ 0 }
 						aria-selected={ isTabSelected }
-						aria-controls={ attributes.tabId }
+						aria-controls={ `tab-${ attributes.tabId }-panel` }
 						onClick={ () => selectBlock( clientId ) }
 						onKeyDown={ ( e ) => {
 							if ( e.key === 'Enter' || e.key === ' ' ) {

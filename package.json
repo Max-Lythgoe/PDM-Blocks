@@ -23,7 +23,6 @@
 		"block.json",
 		"build",
 		"components",
-		"helpers.php",
 		"includes",
 		"patterns",
 		"pdm-blocks.php",

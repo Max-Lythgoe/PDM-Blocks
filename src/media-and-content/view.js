@@ -1,6 +1,8 @@
 /**
  * Lightweight lightbox and video facade functionality for media-and-content block
  */
+import { setupLightboxA11y } from '../utils/lightbox-a11y';
+
 document.addEventListener('DOMContentLoaded', function() {
 	// Handle video facade functionality
 	const facadeTriggers = document.querySelectorAll('.mc-video-facade-trigger');
@@ -49,19 +51,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	const lightboxImage = lightbox.querySelector('.mc-lightbox-image');
 	const closeButton = lightbox.querySelector('.mc-lightbox-close');
+	const a11y = setupLightboxA11y(lightbox, 'Image lightbox');
 	
 	// Open lightbox
-	function openLightbox(imageUrl, imageAlt) {
+	function openLightbox(imageUrl, imageAlt, trigger) {
 		lightboxImage.src = imageUrl;
 		lightboxImage.alt = imageAlt || '';
 		lightbox.classList.add('active');
 		document.body.style.overflow = 'hidden';
+		a11y.onOpen(trigger);
 	}
 	
 	// Close lightbox
 	function closeLightbox() {
 		lightbox.classList.remove('active');
 		document.body.style.overflow = '';
+		a11y.onClose();
 		// Clear image after animation
 		setTimeout(() => {
 			lightboxImage.src = '';
@@ -75,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const imageUrl = this.getAttribute('data-lightbox-url');
 			const img = this.querySelector('img');
 			const imageAlt = img ? img.getAttribute('alt') : '';
-			openLightbox(imageUrl, imageAlt);
+			openLightbox(imageUrl, imageAlt, this);
 		});
 	});
 	

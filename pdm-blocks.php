@@ -4,7 +4,7 @@
  * Plugin Name:       PDM Blocks
  * Description:       A collection of essential PDM blocks.
  * Requires at least: 6.1
- * Requires PHP:      7.0
+ * Requires PHP:      8.0
  * Version:           1.8.2
  * Author: Performance Driven Marketing
  * Author URI: https://performancedrivenmarketing.com
@@ -77,8 +77,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/menu-item-image.php';
 // Schema engine + PDM Settings page (loads only when PDM Accelerate theme is NOT active)
 require_once plugin_dir_path(__FILE__) . 'includes/schema-engine/schema-engine-loader.php';
 
-// tabs block helpers
-require_once plugin_dir_path(__FILE__) . 'helpers.php';
+// heading anchor helpers (shared by the_content + Table of Contents block)
+require_once plugin_dir_path(__FILE__) . 'includes/heading-anchors.php';
 
 // -----------------------------------------------------------------------
 // Extensions (migrated from PDM Accelerate theme)
@@ -121,17 +121,7 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links)
 
 
 // Add IDs to headings for TOC anchor links
-add_filter('the_content', function ($content) {
-    if (empty($content)) return $content;
-
-    return preg_replace_callback('/<h([2-5])([^>]*)>(.*?)<\/h\1>/is', function ($m) {
-        // Already has an id — leave it alone
-        if (preg_match('/\bid=["\']/', $m[2])) return $m[0];
-
-        $id = sanitize_title(wp_strip_all_tags($m[3]));
-        return '<h' . $m[1] . $m[2] . ' id="' . esc_attr($id) . '">' . $m[3] . '</h' . $m[1] . '>';
-    }, $content);
-});
+add_filter('the_content', 'pdm_blocks_add_heading_ids');
 
 add_action('init', 'pdm_blocks_register_blocks');
 function pdm_blocks_register_blocks()
@@ -236,44 +226,6 @@ add_filter('block_categories_all', 'custom_block_category', 10, 2);
 function accelerate_block_styles()
 {
     register_block_style(
-        'core/heading',
-        array(
-            'name'         => 'line-after-title',
-            'label'        => __('Line After Title', 'accelerate'),
-            'inline_style' => "
-				.is-style-line-after-title {
-                    position: relative;
-                }
-
-                .is-style-line-after-title.is-highlighted::after {
-                    position: relative!important;
-                }
-
-                .is-style-line-after-title.is-highlighted {
-                    outline: 2px solid var(--wp-admin-theme-color)!important;
-                }
-
-                .is-style-line-after-title::after {
-                    content: ' ';
-                    display:block;
-                    max-width: 300px;
-                    width: 100%;
-                    height: 5px;
-                    background: var(--main);
-                    border-radius: calc(var(--radius) / 3);
-                    margin-top: 10px;
-                }
-                
-                .has-text-align-center.is-style-line-after-title::after {
-                    margin-inline: auto;
-                }
-                    
-                .has-text-align-right.is-style-line-after-title::after {
-                    margin-left: auto;
-                }",
-        )
-    );
-    register_block_style(
         'pdm/tabs',
         array(
             'name'  => 'pointing-tabs',
@@ -343,8 +295,10 @@ add_action('init', 'pdm_blocks_register_bottom_buttons_style');
 add_action('enqueue_block_editor_assets', 'pdm_tabs_enqueue_editor_assets');
 function pdm_tabs_enqueue_editor_assets()
 {
+    // Published on a registered core handle: the tabs block templates read this
+    // global and `wp-block-editor` is always enqueued before they run.
     wp_localize_script(
-        'pdm-tabs-editor-script',
+        'wp-block-editor',
         'PdmTabsData',
         array(
             'assetsUrl' => plugin_dir_url(__FILE__) . 'assets',

@@ -312,7 +312,7 @@ if ($mobile_image_first) {
 				<div class="menu-overlay"></div>
 			</div>
 
-			<div id="<?php echo esc_attr($menu_panel_id); ?>" class="menu-slideout" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr__('Menu', 'pdm-blocks'); ?>" style="<?php echo esc_attr($style_string); ?>">
+			<div id="<?php echo esc_attr($menu_panel_id); ?>" class="menu-slideout" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr__('Menu', 'pdm-blocks'); ?>" aria-hidden="true" style="<?php echo esc_attr($style_string); ?>">
 
 				<div class="menu-slideout-toggle-wrap">
 					<button type="button" id="close-<?php echo esc_attr($menu_toggle_id); ?>" class="block-menu-toggle menu-close-toggle<?php echo $use_custom_color ? ' use-custom-color' : ''; ?>" aria-expanded="false" aria-controls="<?php echo esc_attr($menu_panel_id); ?>" aria-label="<?php echo esc_attr__('Close menu', 'pdm-blocks'); ?>">

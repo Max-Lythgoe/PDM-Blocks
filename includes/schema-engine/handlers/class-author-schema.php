@@ -191,50 +191,30 @@ class PDM_Author_Schema
      */
     private function is_auto_generated_schema($schema)
     {
-        // Add debug logging
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('Author Schema Detection - Checking schema: ' . print_r($schema, true));
-        }
-
         if (!is_array($schema)) {
             return false;
         }
 
         // Primary check: Look for our unique marker
         if (isset($schema['metadata']['pdm_auto_generated']) && $schema['metadata']['pdm_auto_generated'] === true) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('Author Schema Detection - Found pdm_auto_generated marker: AUTO-GENERATED');
-            }
             return true;
         }
 
         // Secondary check: Look for our auto-generated title pattern
         if (isset($schema['metadata']['title']) && strpos($schema['metadata']['title'], 'Auto-Generated') !== false) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('Author Schema Detection - Found Auto-Generated in metadata title: AUTO-GENERATED');
-            }
             return true;
         }
 
         // Fallback checks for different RankMath storage formats
         if (isset($schema['name']) && strpos($schema['name'], 'Auto-Generated') !== false) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('Author Schema Detection - Found Auto-Generated in name: AUTO-GENERATED');
-            }
             return true;
         }
 
         if (isset($schema['title']) && strpos($schema['title'], 'Auto-Generated') !== false) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('Author Schema Detection - Found Auto-Generated in title: AUTO-GENERATED');
-            }
             return true;
         }
 
         // No auto-generated markers found - assume manual
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('Author Schema Detection - No auto-generated markers found: MANUAL');
-        }
         return false;
     }
 

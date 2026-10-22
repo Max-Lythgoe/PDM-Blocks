@@ -969,6 +969,35 @@ function pdm_blocks_register_counties_taxonomy()
 }
 add_action('init', 'pdm_blocks_register_counties_taxonomy');
 
+/**
+ * Flag a rewrite flush when the Service Areas option is toggled.
+ *
+ * The post type and taxonomies are only registered while the option is on, and
+ * the option is saved after `init` has already run, so the rules can't be
+ * rebuilt in the same request. Flag it and flush on the next request instead.
+ */
+add_action('update_option_pdm_blocks_company_info', function ($old_value, $new_value) {
+    $was_enabled = ! empty($old_value['enable_service_areas']);
+    $is_enabled  = ! empty($new_value['enable_service_areas']);
+
+    if ($was_enabled === $is_enabled) {
+        return;
+    }
+
+    update_option('pdm_blocks_flush_rewrite_rules', 1, false);
+}, 10, 2);
+
+add_action('init', function () {
+    if (! get_option('pdm_blocks_flush_rewrite_rules')) {
+        return;
+    }
+
+    delete_option('pdm_blocks_flush_rewrite_rules');
+
+    // Priority 99: the post type and taxonomies are registered by then.
+    flush_rewrite_rules(false);
+}, 99);
+
 // metabox 
 function pdm_blocks_county_radio_meta_box($post, $box)
 {

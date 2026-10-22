@@ -63,10 +63,13 @@ const { state } = store( STORE_NAME, {
 		 */
 		get activeTabIndex() {
 			const { attributes } = getElement();
-			const tabId = attributes?.id || null;
-			if ( ! tabId ) {
+			const elementId = attributes?.id || null;
+			if ( ! elementId ) {
 				return null;
 			}
+			// This getter runs on both the tab button and the panel, and their
+			// element ids carry a `-tab` / `-panel` suffix; compare without it.
+			const tabId = elementId.replace( /-(tab|panel)$/, '' );
 			const { tabs } = getContext();
 			const tabIndex = tabs.findIndex( ( t ) => t.id === tabId );
 			return tabIndex;
@@ -89,7 +92,8 @@ const { state } = store( STORE_NAME, {
 		 * @type {false|string}
 		 */
 		get tabIndex() {
-			return state.isActive ? -1 : 0;
+			// Roving tabindex: only the active tab is in the tab order.
+			return state.isActive ? 0 : -1;
 		},
 	},
 	actions: {
@@ -131,7 +135,7 @@ const { state } = store( STORE_NAME, {
 			// After updating activeTab, move keyboard focus to the new button.
 			/* eslint-env browser */
 			requestAnimationFrame( () => {
-				const newBtn = document.getElementById( tabs[ newIndex ].id );
+				const newBtn = document.getElementById( tabs[ newIndex ].buttonId );
 				newBtn?.focus();
 			} );
 		} ),
@@ -190,7 +194,7 @@ const { state } = store( STORE_NAME, {
 
 			// Apply styles to all tabs
 			tabs.forEach( ( tab, index ) => {
-				const tabElement = document.getElementById( tab.id );
+				const tabElement = document.getElementById( tab.buttonId );
 				if ( ! tabElement ) {
 					return;
 				}

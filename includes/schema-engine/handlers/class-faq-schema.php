@@ -81,17 +81,12 @@ class PDM_FAQ_Schema
                     // Manual schema exists - remove auto-generated ones and stop generating
                     if ($has_auto) {
                         $this->remove_auto_schemas_only($post_id);
-                        error_log("DEBUG FAQ: Removed auto-generated schemas - manual schema takes precedence for post $post_id");
                     }
-                    error_log("DEBUG FAQ: Manual schema detected - stopping auto-generation for post $post_id");
                     return;
                 }
             } else {
-                // Single schema
-                $is_auto = $this->is_auto_generated_schema($existing_schemas);
-                error_log("DEBUG FAQ: Post $post_id has single schema. Is auto-generated: " . ($is_auto ? 'YES' : 'NO'));
-                if (!$is_auto) {
-                    error_log("DEBUG FAQ: Manual schema detected - stopping auto-generation for post $post_id");
+                // Single schema - leave manual schemas alone
+                if (!$this->is_auto_generated_schema($existing_schemas)) {
                     return;
                 }
             }
@@ -262,11 +257,8 @@ class PDM_FAQ_Schema
     private function save_to_rankmath($post_id, $schema_data)
     {
         if (!$schema_data) {
-            error_log("DEBUG FAQ Save: No schema data for post $post_id");
             return false;
         }
-
-        error_log("DEBUG FAQ Save: Attempting to save schema for post $post_id");
 
         // Get existing schemas to preserve manual ones
         $existing_schemas = get_post_meta($post_id, 'rank_math_schema_FAQPage', true);
@@ -280,17 +272,11 @@ class PDM_FAQ_Schema
             }
             // Add our new auto-generated schema
             $existing_schemas['pdm-auto-' . uniqid()] = $schema_data;
-            $result = update_post_meta($post_id, 'rank_math_schema_FAQPage', $existing_schemas);
-            error_log("DEBUG FAQ Save: Multiple schemas - update result: " . ($result ? 'SUCCESS' : 'FAILED'));
+            update_post_meta($post_id, 'rank_math_schema_FAQPage', $existing_schemas);
         } else {
             // Single schema or no existing schemas
-            $result = update_post_meta($post_id, 'rank_math_schema_FAQPage', $schema_data);
-            error_log("DEBUG FAQ Save: Single schema - update result: " . ($result ? 'SUCCESS' : 'FAILED'));
+            update_post_meta($post_id, 'rank_math_schema_FAQPage', $schema_data);
         }
-
-        // Verify it was saved
-        $saved_schema = get_post_meta($post_id, 'rank_math_schema_FAQPage', true);
-        error_log("DEBUG FAQ Save: Verification - schema exists: " . (!empty($saved_schema) ? 'YES' : 'NO'));
 
         return true;
     }
@@ -361,8 +347,6 @@ class PDM_FAQ_Schema
                 delete_post_meta($post_id, 'rank_math_schema_FAQPage');
             }
         }
-
-        error_log("DEBUG FAQ Remove: Cleaned up FAQ schemas for post $post_id");
     }
 
     /**
@@ -615,8 +599,7 @@ function pdm_faq_modify_json_ld($data, $jsonld)
 add_filter('rank_math/json_ld', 'pdm_faq_modify_json_ld', 99, 2);
 
 /**
- * Clean up malformed schemas when FAQ option changes
- * This runs when the FAQ option is enabled/disabled to fix any JavaScript errors
+ * Queue a malformed-schema cleanup when the FAQ option is turned on.
  */
 function pdm_cleanup_schemas_on_option_change($old_value, $new_value, $option)
 {
@@ -624,57 +607,61 @@ function pdm_cleanup_schemas_on_option_change($old_value, $new_value, $option)
         return;
     }
 
-    // Check if FAQ option was toggled
-    $old_faq = isset($old_value['auto_faq_schema']) ? $old_value['auto_faq_schema'] : false;
-    $new_faq = isset($new_value['auto_faq_schema']) ? $new_value['auto_faq_schema'] : false;
+    $was_enabled = !empty($old_value['auto_faq_schema']);
+    $is_enabled  = !empty($new_value['auto_faq_schema']);
 
-    // If FAQ option was enabled (including when first enabled), run cleanup
-    if ($new_faq && (!$old_faq || $old_faq !== $new_faq)) {
-        // Load the schema manager and run cleanup
-        if (class_exists('PDM_Schema_Manager')) {
-            $fixed_count = PDM_Schema_Manager::cleanup_malformed_schemas();
-            if ($fixed_count > 0) {
-                error_log("PDM Schema Cleanup: Fixed $fixed_count malformed schemas after FAQ option toggle");
-            }
-        }
+    if ($is_enabled && !$was_enabled) {
+        delete_transient('pdm_schema_cleanup_done');
+        pdm_schedule_schema_cleanup(true);
     }
 }
 add_action('updated_option', 'pdm_cleanup_schemas_on_option_change', 10, 3);
 
 /**
- * Clean up malformed schemas that might be causing JavaScript errors
- * This runs on admin_init to fix any existing bad schemas (lightweight version)
+ * Schedule the cleanup as a single cron event.
+ *
+ * The repair scans the whole postmeta table, so it must never run inline during
+ * a request. It is throttled to once per day.
+ *
+ * @param bool $force Queue the event even if it already ran today.
+ * @return void
  */
-function pdm_cleanup_malformed_schemas()
+function pdm_schedule_schema_cleanup($force = false)
 {
-    // Only run in admin and not on every page load
-    if (!is_admin() || wp_doing_ajax()) {
-        return;
-    }
-
-    // Run this cleanup only once per day to avoid performance issues
-    if (get_transient('pdm_schema_cleanup_done')) {
-        return;
-    }
-
-    // Only run cleanup if FAQ is enabled
     $options = get_option('pdm_settings');
+
     if (empty($options['auto_faq_schema'])) {
         return;
     }
 
-    // Load the schema manager and run cleanup
-    if (class_exists('PDM_Schema_Manager')) {
-        $fixed_count = PDM_Schema_Manager::cleanup_malformed_schemas();
-        if ($fixed_count > 0) {
-            error_log("PDM Schema Cleanup: Fixed $fixed_count malformed schemas during admin_init");
-        }
+    if (wp_next_scheduled('pdm_cleanup_malformed_schemas')) {
+        return;
     }
 
-    // Set transient to avoid running this again for 24 hours
-    set_transient('pdm_schema_cleanup_done', true, DAY_IN_SECONDS);
+    if (!$force && get_transient('pdm_schema_cleanup_done')) {
+        return;
+    }
+
+    wp_schedule_single_event(time(), 'pdm_cleanup_malformed_schemas');
 }
-add_action('admin_init', 'pdm_cleanup_malformed_schemas');
+add_action('init', 'pdm_schedule_schema_cleanup');
+
+/**
+ * Repair legacy Rank Math schema meta that is missing its `metadata` wrapper.
+ *
+ * @return void
+ */
+function pdm_cleanup_malformed_schemas()
+{
+    set_transient('pdm_schema_cleanup_done', 1, DAY_IN_SECONDS);
+
+    if (!class_exists('PDM_Schema_Manager')) {
+        return;
+    }
+
+    PDM_Schema_Manager::cleanup_malformed_schemas();
+}
+add_action('pdm_cleanup_malformed_schemas', 'pdm_cleanup_malformed_schemas');
 
 // Initialize the FAQ handler
 new PDM_FAQ_Schema();

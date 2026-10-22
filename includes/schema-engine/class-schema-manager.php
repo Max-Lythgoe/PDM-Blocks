@@ -89,24 +89,44 @@ class PDM_Schema_Manager
 
     /**
      * Static helper to clean up malformed RankMath schema meta entries.
-     * Called by FAQ / other handlers when needed.
+     *
+     * Rows are read in batches so a large postmeta table can't exhaust the
+     * request's time or memory limit. Only malformed rows are written back.
+     *
+     * @param int $batch_size Number of meta rows to read per query.
+     * @return int Number of repaired meta rows.
      */
-    public static function cleanup_malformed_schemas()
+    public static function cleanup_malformed_schemas($batch_size = 200)
     {
         global $wpdb;
 
-        $schema_metas = $wpdb->get_results(
-            "SELECT post_id, meta_key, meta_value
-             FROM $wpdb->postmeta
-             WHERE meta_key LIKE 'rank_math_schema_%'"
-        );
-
+        $batch_size  = max(1, (int) $batch_size);
+        $offset      = 0;
         $fixed_count = 0;
 
-        foreach ($schema_metas as $meta) {
-            $schema_data = maybe_unserialize($meta->meta_value);
+        do {
+            $schema_metas = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT post_id, meta_key, meta_value
+                     FROM {$wpdb->postmeta}
+                     WHERE meta_key LIKE %s
+                     ORDER BY meta_id ASC
+                     LIMIT %d OFFSET %d",
+                    $wpdb->esc_like('rank_math_schema_') . '%',
+                    $batch_size,
+                    $offset
+                )
+            );
 
-            if (is_array($schema_data)) {
+            $found = is_array($schema_metas) ? count($schema_metas) : 0;
+
+            foreach ($schema_metas as $meta) {
+                $schema_data = maybe_unserialize($meta->meta_value);
+
+                if (!is_array($schema_data)) {
+                    continue;
+                }
+
                 if (!isset($schema_data['metadata']) || !is_array($schema_data['metadata'])) {
                     $schema_data['metadata'] = array(
                         'title'     => (isset($schema_data['@type']) ? $schema_data['@type'] : 'Unknown') . ' Schema',
@@ -114,21 +134,25 @@ class PDM_Schema_Manager
                         'isPrimary' => false,
                         'shortcode' => uniqid('s-'),
                     );
-                    update_post_meta($meta->post_id, $meta->meta_key, $schema_data);
-                    $fixed_count++;
                 } elseif (!isset($schema_data['metadata']['isPrimary'])) {
                     $schema_data['metadata']['isPrimary'] = false;
+
                     if (!isset($schema_data['metadata']['type'])) {
                         $schema_data['metadata']['type'] = 'template';
                     }
                     if (!isset($schema_data['metadata']['shortcode'])) {
                         $schema_data['metadata']['shortcode'] = uniqid('s-');
                     }
-                    update_post_meta($meta->post_id, $meta->meta_key, $schema_data);
-                    $fixed_count++;
+                } else {
+                    continue;
                 }
+
+                update_post_meta($meta->post_id, $meta->meta_key, $schema_data);
+                $fixed_count++;
             }
-        }
+
+            $offset += $batch_size;
+        } while ($found === $batch_size);
 
         return $fixed_count;
     }

@@ -15,12 +15,14 @@ if (! defined('ABSPATH')) {
 }
 
 $wrapper_attributes = get_block_wrapper_attributes([
-    'id' => esc_attr('tab-' . $attributes['tabId']),
+    // The panel and the tab button must not share an id: `-panel` pairs with the
+    // button's `-tab` id so aria-controls/aria-labelledby resolve correctly.
+    'id' => esc_attr('tab-' . $attributes['tabId'] . '-panel'),
     'class' => esc_attr('pdm-tab-content'),
     'role' => "tabpanel",
     'tabindex' => "0",
     'data-wp-bind--hidden' => "!state.isActive",
-    'aria-labelledby' => esc_attr('tab-' . $attributes['tabId'])
+    'aria-labelledby' => esc_attr('tab-' . $attributes['tabId'] . '-tab')
 ]);
 ?>
 <div <?php echo wp_kses_data($wrapper_attributes); ?>>

@@ -174,9 +174,12 @@
 					btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 				});
 				if (open) {
+					slideout.setAttribute('aria-hidden', 'false');
 					closeBtn.focus();
 				} else {
+					// Move focus out of the panel before hiding it from assistive tech.
 					openBtn.focus();
+					slideout.setAttribute('aria-hidden', 'true');
 				}
 			};
 

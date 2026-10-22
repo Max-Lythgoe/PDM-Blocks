@@ -14,7 +14,7 @@ if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-require plugin_dir_path(dirname(__DIR__)) . '/helpers.php';
+require_once dirname(__DIR__, 2) . '/includes/blocks/tabs/helpers.php';
 
 // Extract tabs data.
 $all_tabs = pdm_tabs_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
@@ -85,9 +85,9 @@ $data_context = [
             $icon = $block->parsed_block['innerBlocks'][$index]['attrs']['tabIcon'] ?? '';
         ?>
             <li class="pdm-tab-btn"
-                id="<?php echo esc_attr($tab['id']); ?>"
+                id="<?php echo esc_attr($tab['buttonId']); ?>"
                 role="tab"
-                aria-controls="<?php echo esc_attr($tab['id']); ?>"
+                aria-controls="<?php echo esc_attr($tab['panelId']); ?>"
                 data-wp-bind--tabindex="state.tabIndex"
                 data-wp-bind--aria-selected="state.isActive"
                 data-wp-on--click="actions.setActiveTab"

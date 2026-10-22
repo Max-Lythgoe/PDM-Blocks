@@ -29,7 +29,7 @@ function pdm_blocks_get_dynamic_healthcare_disclaimer_template()
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>While we strive to keep the information on our website accurate and up-to-date, [dynamic_content type="sitename"] makes no warranties or representations regarding the accuracy, completeness, or suitability of the information contained herein. Reliance on any information provided by this website is solely at your own risk. VIP Smiles Dental disclaims any liability for any errors or omissions in the content of this site or for any actions taken based on the information provided.</p>
+<p>While we strive to keep the information on our website accurate and up-to-date, [dynamic_content type="sitename"] makes no warranties or representations regarding the accuracy, completeness, or suitability of the information contained herein. Reliance on any information provided by this website is solely at your own risk. [dynamic_content type="sitename"] disclaims any liability for any errors or omissions in the content of this site or for any actions taken based on the information provided.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->

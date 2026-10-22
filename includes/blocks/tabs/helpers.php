@@ -20,8 +20,13 @@ if (! function_exists('pdm_tabs_extract_tab_data')) {
         return array_map(static function ($inner_block, $index) {
             $attrs = $inner_block['attrs'] ?? [];
             $hasInnerblock = !empty($inner_block['innerBlocks']);
+            $tab_id = 'tab-' . ($attrs['tabId'] ?? $index);
             return [
-                'id'            => 'tab-' . ($attrs['tabId'] ?? $index),
+                // `id` is the logical id shared by the button and its panel; the
+                // DOM ids append `-tab` / `-panel` so the two never collide.
+                'id'            => $tab_id,
+                'buttonId'      => $tab_id . '-tab',
+                'panelId'       => $tab_id . '-panel',
                 'label'         => $attrs['tabname'] ?? '',
                 'hasInnerblock' => $hasInnerblock,
             ];

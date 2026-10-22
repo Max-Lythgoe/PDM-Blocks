@@ -1,5 +1,6 @@
 import Splide from '@splidejs/splide';
 import '@splidejs/splide/css';
+import { setupLightboxA11y } from '../utils/lightbox-a11y';
 
 function initSplide() {
   const splides = document.querySelectorAll('.splide');
@@ -69,6 +70,7 @@ function initSlideshowLightbox(splideContainer) {
   const closeButton = lightbox.querySelector('.slideshow-lightbox-close');
   const prevButton = lightbox.querySelector('.slideshow-lightbox-prev');
   const nextButton = lightbox.querySelector('.slideshow-lightbox-next');
+  const a11y = setupLightboxA11y(lightbox, 'Image lightbox');
 
   let currentIndex = 0;
 
@@ -86,7 +88,7 @@ function initSlideshowLightbox(splideContainer) {
   }
 
   // Open lightbox at given index
-  function openLightbox(index) {
+  function openLightbox(index, trigger) {
     const images = getSlideImages();
     if (!images.length || !images[index]) return;
 
@@ -95,6 +97,7 @@ function initSlideshowLightbox(splideContainer) {
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
     updateArrowsVisibility(images);
+    a11y.onOpen(trigger);
   }
 
   // Show current image
@@ -135,6 +138,7 @@ function initSlideshowLightbox(splideContainer) {
   function closeLightbox() {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
+    a11y.onClose();
     setTimeout(() => {
       lightboxImage.src = '';
       currentIndex = 0;
@@ -170,7 +174,7 @@ function initSlideshowLightbox(splideContainer) {
         const images = getSlideImages();
         let imgIndex = index;
         if (imgIndex < images.length) {
-          openLightbox(imgIndex);
+          openLightbox(imgIndex, slide);
         }
       }
     }

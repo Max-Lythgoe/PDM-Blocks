@@ -1,6 +1,8 @@
 /**
  * Lightweight lightbox and facade functionality for YouTube video block
  */
+import { setupLightboxA11y } from '../utils/lightbox-a11y';
+
 document.addEventListener('DOMContentLoaded', function() {
 	// Handle facade functionality
 	const facadeTriggers = document.querySelectorAll('.youtube-facade-trigger');
@@ -44,9 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	const lightboxPlayer = lightbox.querySelector('.youtube-lightbox-player');
 	const closeButton = lightbox.querySelector('.youtube-lightbox-close');
+	const a11y = setupLightboxA11y(lightbox, 'Video lightbox');
 	
 	// Open lightbox with YouTube video
-	function openLightbox(videoId, autoplay) {
+	function openLightbox(videoId, autoplay, trigger) {
 		const autoplayParam = autoplay === '1' ? '&autoplay=1&mute=1' : '&autoplay=1';
 		const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0${autoplayParam}`;
 		
@@ -62,12 +65,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		lightbox.classList.add('active');
 		document.body.style.overflow = 'hidden';
+		a11y.onOpen(trigger);
 	}
 	
 	// Close lightbox
 	function closeLightbox() {
 		lightbox.classList.remove('active');
 		document.body.style.overflow = '';
+		a11y.onClose();
 		// Clear iframe after animation to stop video
 		setTimeout(() => {
 			lightboxPlayer.innerHTML = '';
@@ -80,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			e.preventDefault();
 			const videoId = this.getAttribute('data-video-id');
 			const autoplay = this.getAttribute('data-autoplay');
-			openLightbox(videoId, autoplay);
+			openLightbox(videoId, autoplay, this);
 		});
 	});
 	
